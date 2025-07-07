@@ -12,11 +12,11 @@ const menuItems = [
     href: "/",
     icon: LayoutDashboard,
   },
-  {
-    title: "Gestión",
-    href: "/gestion",
-    icon: Settings,
-  },
+  // {
+  //   title: "Gestión",
+  //   href: "/gestion",
+  //   icon: Settings,
+  // },
   {
     title: "Departamentos",
     href: "/departamentos",
