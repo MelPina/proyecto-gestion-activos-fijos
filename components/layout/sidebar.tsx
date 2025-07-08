@@ -50,7 +50,7 @@ export function Sidebar() {
       <div className="flex items-center justify-between p-4 border-b border-gray-700">
         {!collapsed && (
           <div className="flex items-center space-x-2">
-            <Package className="h-6 w-6 text-blue-400" />
+            {/* <Package className="h-6 w-6 text-blue-400" /> */}
             <span className="font-semibold text-white">Gestión Activo Fijo</span>
           </div>
         )}
