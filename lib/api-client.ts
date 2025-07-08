@@ -132,3 +132,11 @@ export interface TipoPersonaStatsDto {
   tipo: string
   cantidad: number
 }
+
+export interface CreateDepreciacionDto {
+  nombre: string
+  cedula: string
+  departamentoId: number
+  tipoPersona: number
+  fechaIngreso: string
+}
