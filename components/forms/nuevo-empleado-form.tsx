@@ -7,8 +7,9 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ArrowLeft, Save, User } from "lucide-react"
+import { ArrowLeft, Save, User, AlertCircle } from "lucide-react"
 import { createEmpleado, getDepartamentos } from "@/lib/actions/empleados"
+import { validationCedula, formatCedula } from "@/lib/validations/cedula"
 import type { Departamento } from "@/lib/database"
 
 export function NuevoEmpleadoForm() {
@@ -17,6 +18,8 @@ export function NuevoEmpleadoForm() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
+  const [cedulaError, setCedulaError] = useState("")
+  const [cedula, setCedula] = useState("")
 
   useEffect(() => {
     async function loadDepartamentos() {
@@ -28,10 +31,45 @@ export function NuevoEmpleadoForm() {
     loadDepartamentos()
   }, [])
 
+  function handleCedulaChange(value: string) {
+    // Permitir solo números y guiones
+    const cleanValue = value.replace(/[^\d-]/g, "")
+    setCedula(cleanValue)
+
+    // Validar cédula si tiene suficientes dígitos
+    const numbersOnly = cleanValue.replace(/[-\s]/g, "")
+    if (numbersOnly.length === 11) {
+      if (validationCedula(cleanValue)) {
+        setCedulaError("")
+      } else {
+        setCedulaError("La cédula ingresada no es válida")
+      }
+    } else if (numbersOnly.length > 0) {
+      setCedulaError("La cédula debe tener 11 dígitos")
+    } else {
+      setCedulaError("")
+    }
+  }
+
+  function handleCedulaBlur() {
+    if (cedula) {
+      const formatted = formatCedula(cedula)
+      setCedula(formatted)
+    }
+  }
+
   async function handleSubmit(formData: FormData) {
     setLoading(true)
     setError("")
     setSuccess("")
+
+    // Validar cédula antes de enviar
+    const cedulaValue = formData.get("cedula") as string
+    if (!validationCedula(cedulaValue)) {
+      setError("La cédula ingresada no es válida")
+      setLoading(false)
+      return
+    }
 
     const result = await createEmpleado(formData)
 
@@ -91,9 +129,20 @@ export function NuevoEmpleadoForm() {
                   id="cedula"
                   name="cedula"
                   required
-                  className="bg-gray-700 border-gray-600 text-white"
-                  placeholder="Ingrese la cédula"
+                  value={cedula}
+                  onChange={(e) => handleCedulaChange(e.target.value)}
+                  onBlur={handleCedulaBlur}
+                  className={`bg-gray-700 border-gray-600 text-white ${cedulaError ? "border-red-500" : ""}`}
+                  placeholder="XXX-XXXXXXX-X"
+                  maxLength={13}
                 />
+                {cedulaError && (
+                  <div className="flex items-center space-x-1 text-red-400 text-sm">
+                    <AlertCircle className="h-4 w-4" />
+                    <span>{cedulaError}</span>
+                  </div>
+                )}
+                <p className="text-xs text-gray-400">Formato: XXX-XXXXXXX-X (11 dígitos)</p>
               </div>
 
               <div className="space-y-2">
@@ -156,7 +205,7 @@ export function NuevoEmpleadoForm() {
             )}
 
             <div className="flex space-x-4">
-              <Button type="submit" disabled={loading} className="bg-blue-600 hover:bg-blue-700">
+              <Button type="submit" disabled={loading || !!cedulaError} className="bg-blue-600 hover:bg-blue-700">
                 <Save className="h-4 w-4 mr-2" />
                 {loading ? "Guardando..." : "Guardar Empleado"}
               </Button>
