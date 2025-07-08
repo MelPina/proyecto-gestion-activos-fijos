@@ -145,7 +145,7 @@ export function EmpleadosPage() {
         <div className="mt-6">
           <Link href="/debug">
             <Button variant="outline" className="bg-transparent">
-              🔧 Ir a Herramientas de Debug
+               Ir a Herramientas de Debug
             </Button>
           </Link>
         </div>
@@ -158,12 +158,12 @@ export function EmpleadosPage() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-white">Empleados</h1>
-          <p className="text-gray-400 mt-1">Gestión del personal de la empresa</p>
+          <p className="text-gray-400 mt-1">Gestión del personal</p>
         </div>
         <div className="flex space-x-2">
           <Link href="/debug">
             <Button variant="outline" size="sm" className="bg-transparent">
-              🔧 Debug
+              Debug
             </Button>
           </Link>
           <Link href="/empleados/nuevo">
@@ -182,12 +182,12 @@ export function EmpleadosPage() {
             <div className="text-sm text-gray-400">Total Empleados</div>
           </CardContent>
         </Card>
-        <Card className="bg-gray-800 border-gray-700">
+        {/* <Card className="bg-gray-800 border-gray-700">
           <CardContent className="p-4">
             <div className="text-2xl font-bold text-green-400">{stats.total}</div>
             <div className="text-sm text-gray-400">Activos</div>
           </CardContent>
-        </Card>
+        </Card> */}
         <Card className="bg-gray-800 border-gray-700">
           <CardContent className="p-4">
             <div className="text-2xl font-bold text-blue-400">{departamentos.length}</div>
@@ -219,8 +219,7 @@ export function EmpleadosPage() {
                 <SelectValue placeholder="Filtrar por departamento" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="0">Todos los departamentos</SelectItem> // Updated value prop to be a non-empty
-                string
+                <SelectItem value="0">Todos los departamentos</SelectItem> 
                 {departamentos.map((dept) => (
                   <SelectItem key={dept.id} value={dept.id.toString()}>
                     {dept.descripcion}
@@ -286,7 +285,7 @@ export function EmpleadosPage() {
                 No se encontraron empleados
                 <div className="mt-2 text-sm">
                   <Link href="/debug" className="text-blue-400 hover:text-blue-300">
-                    🔧 Ejecutar diagnósticos
+                    Ejecutar diagnósticos
                   </Link>
                 </div>
               </div>

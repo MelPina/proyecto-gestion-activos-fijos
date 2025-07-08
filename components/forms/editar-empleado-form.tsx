@@ -34,7 +34,7 @@ export function EditarEmpleadoForm({ empleadoId }: Props) {
       }
 
       if (departamentosResult.success) {
-        setDepartamentos(departamentosResult.data)
+        setDepartamentos(departamentosResult.data!)
       }
     }
     loadData()
@@ -122,7 +122,11 @@ export function EditarEmpleadoForm({ empleadoId }: Props) {
                 <Label htmlFor="departamento_id" className="text-gray-300">
                   Departamento *
                 </Label>
-                <Select name="departamento_id" required defaultValue={empleado.departamento_id.toString()}>
+                <Select
+                  name="departamento_id"
+                  required
+                  defaultValue={empleado.departamento_id?.toString() ?? ""}
+                >
                   <SelectTrigger className="bg-gray-700 border-gray-600 text-white">
                     <SelectValue placeholder="Seleccione un departamento" />
                   </SelectTrigger>
@@ -140,7 +144,7 @@ export function EditarEmpleadoForm({ empleadoId }: Props) {
                 <Label htmlFor="tipo_persona" className="text-gray-300">
                   Tipo de Persona *
                 </Label>
-                <Select name="tipo_persona" required defaultValue={empleado.tipo_persona.toString()}>
+                <Select name="tipo_persona" required defaultValue={empleado.tipo_persona?.toString() ?? ""}>
                   <SelectTrigger className="bg-gray-700 border-gray-600 text-white">
                     <SelectValue placeholder="Seleccione el tipo" />
                   </SelectTrigger>
