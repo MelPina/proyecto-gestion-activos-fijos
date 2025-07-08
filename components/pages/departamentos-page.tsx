@@ -1,29 +1,114 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Plus, Search, Edit, Trash2, Building2 } from "lucide-react"
-
-const departamentos = [
-  { id: 1, nombre: "Recursos Humanos", codigo: "RH001", responsable: "María García", empleados: 8, activos: 15 },
-  { id: 2, nombre: "Tecnología", codigo: "TI001", responsable: "Carlos López", empleados: 12, activos: 45 },
-  { id: 3, nombre: "Contabilidad", codigo: "CT001", responsable: "Ana Martínez", empleados: 6, activos: 12 },
-  { id: 4, nombre: "Ventas", codigo: "VT001", responsable: "Pedro Rodríguez", empleados: 15, activos: 28 },
-  { id: 5, nombre: "Marketing", codigo: "MK001", responsable: "Laura Sánchez", empleados: 9, activos: 22 },
-  { id: 6, nombre: "Operaciones", codigo: "OP001", responsable: "Miguel Torres", empleados: 20, activos: 65 },
-]
+import { Badge } from "@/components/ui/badge"
+import { Plus, Search, Edit, Trash2, Building2, AlertCircle, RefreshCw } from "lucide-react"
+import { getDepartamentos } from "@/lib/actions/departamentos"
+import { DeleteDepartamentoModal } from "@/components/modals/delete-departamento-modal"
+import { NuevoDepartamentoModal } from "@/components/modals/nuevo-departamento-modal"
+import { EditarDepartamentoModal } from "@/components/modals/editar-departamento-modal"
+import type { DepartamentoDto } from "@/lib/api-client"
 
 export function DepartamentosPage() {
+  const [departamentos, setDepartamentos] = useState<DepartamentoDto[]>([])
   const [searchTerm, setSearchTerm] = useState("")
-  const [showModal, setShowModal] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [deleteModal, setDeleteModal] = useState<{ open: boolean; departamento: DepartamentoDto | null }>({
+    open: false,
+    departamento: null,
+  })
+  const [nuevoModal, setNuevoModal] = useState(false)
+  const [editarModal, setEditarModal] = useState<{ open: boolean; departamento: DepartamentoDto | null }>({
+    open: false,
+    departamento: null,
+  })
 
-  const filteredDepartamentos = departamentos.filter(
-    (dept) =>
-      dept.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      dept.codigo.toLowerCase().includes(searchTerm.toLowerCase()),
+  useEffect(() => {
+    loadData()
+  }, [])
+
+  async function loadData() {
+    console.log("🔄 Loading departamentos data...")
+    setLoading(true)
+    setError(null)
+
+    try {
+      const result = await getDepartamentos()
+      console.log("📊 Departamentos loaded:", result)
+
+      if (result.success && result.data) {
+        console.log(`✅ Setting ${result.data.length} departamentos`)
+        setDepartamentos(result.data)
+      } else {
+        console.error("❌ Failed to load departamentos:", result.error)
+        setError(`Error cargando departamentos: ${result.error}`)
+      }
+    } catch (err) {
+      console.error("🚨 Unexpected error loading departamentos:", err)
+      setError(`Error inesperado: ${err instanceof Error ? err.message : String(err)}`)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const filteredDepartamentos = departamentos.filter((dept) =>
+    dept.descripcion.toLowerCase().includes(searchTerm.toLowerCase()),
   )
+
+  function handleDeleteClick(departamento: DepartamentoDto) {
+    console.log("🗑️ Delete clicked for:", departamento)
+    setDeleteModal({ open: true, departamento })
+  }
+
+  function handleEditClick(departamento: DepartamentoDto) {
+    console.log("✏️ Edit clicked for:", departamento)
+    setEditarModal({ open: true, departamento })
+  }
+
+  function handleSuccess() {
+    console.log("✅ Operation successful, reloading data...")
+    // Close modals first
+    setDeleteModal({ open: false, departamento: null })
+    setEditarModal({ open: false, departamento: null })
+    setNuevoModal(false)
+    // Then reload data
+    loadData()
+  }
+
+  if (loading) {
+    return (
+      <div className="p-6">
+        <div className="flex items-center space-x-2 text-white">
+          <RefreshCw className="h-5 w-5 animate-spin" />
+          <span>Cargando departamentos...</span>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="p-6 space-y-4">
+        <div className="flex items-center space-x-2 text-red-400">
+          <AlertCircle className="h-5 w-5" />
+          <span>Error de conexión</span>
+        </div>
+        <Card className="bg-red-900/20 border-red-700">
+          <CardContent className="p-4">
+            <p className="text-red-400">{error}</p>
+            <Button onClick={loadData} className="mt-4 bg-red-600 hover:bg-red-700">
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Reintentar
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
 
   return (
     <div className="p-6 space-y-6">
@@ -32,10 +117,39 @@ export function DepartamentosPage() {
           <h1 className="text-3xl font-bold text-white">Departamentos</h1>
           <p className="text-gray-400 mt-1">Gestión de departamentos organizacionales</p>
         </div>
-        <Button onClick={() => setShowModal(true)} className="bg-blue-600 hover:bg-blue-700">
+        <Button onClick={() => setNuevoModal(true)} className="bg-blue-600 hover:bg-blue-700">
           <Plus className="h-4 w-4 mr-2" />
           Nuevo Departamento
         </Button>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <Card className="bg-gray-800 border-gray-700">
+          <CardContent className="p-4">
+            <div className="text-2xl font-bold text-white">{departamentos.length}</div>
+            <div className="text-sm text-gray-400">Total Departamentos</div>
+          </CardContent>
+        </Card>
+        <Card className="bg-gray-800 border-gray-700">
+          <CardContent className="p-4">
+            <div className="text-2xl font-bold text-green-400">{departamentos.filter((d) => d.activo).length}</div>
+            <div className="text-sm text-gray-400">Activos</div>
+          </CardContent>
+        </Card>
+        <Card className="bg-gray-800 border-gray-700">
+          <CardContent className="p-4">
+            <div className="text-2xl font-bold text-red-400">{departamentos.filter((d) => !d.activo).length}</div>
+            <div className="text-sm text-gray-400">Inactivos</div>
+          </CardContent>
+        </Card>
+        <Card className="bg-gray-800 border-gray-700">
+          <CardContent className="p-4">
+            <div className="text-2xl font-bold text-blue-400">
+              {departamentos.reduce((sum, d) => sum + d.cantidadEmpleados, 0)}
+            </div>
+            <div className="text-sm text-gray-400">Total Empleados</div>
+          </CardContent>
+        </Card>
       </div>
 
       <Card className="bg-gray-800 border-gray-700">
@@ -50,6 +164,9 @@ export function DepartamentosPage() {
                 className="pl-10 bg-gray-700 border-gray-600 text-white"
               />
             </div>
+            <Button onClick={loadData} variant="outline" size="sm" className="bg-transparent">
+              <RefreshCw className="h-4 w-4" />
+            </Button>
           </div>
         </CardHeader>
         <CardContent>
@@ -57,33 +174,41 @@ export function DepartamentosPage() {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-gray-700">
-                  <th className="text-left py-3 px-4 text-gray-300">Código</th>
-                  <th className="text-left py-3 px-4 text-gray-300">Nombre</th>
-                  <th className="text-left py-3 px-4 text-gray-300">Responsable</th>
+                  <th className="text-left py-3 px-4 text-gray-300">ID</th>
+                  <th className="text-left py-3 px-4 text-gray-300">Departamento</th>
                   <th className="text-left py-3 px-4 text-gray-300">Empleados</th>
-                  <th className="text-left py-3 px-4 text-gray-300">Activos</th>
+                  <th className="text-left py-3 px-4 text-gray-300">Estado</th>
                   <th className="text-left py-3 px-4 text-gray-300">Acciones</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredDepartamentos.map((dept) => (
                   <tr key={dept.id} className="border-b border-gray-700 hover:bg-gray-700/50">
-                    <td className="py-3 px-4 text-white font-mono">{dept.codigo}</td>
+                    <td className="py-3 px-4 text-gray-400 font-mono">#{dept.id}</td>
                     <td className="py-3 px-4">
                       <div className="flex items-center space-x-2">
                         <Building2 className="h-4 w-4 text-blue-400" />
-                        <span className="text-white">{dept.nombre}</span>
+                        <span className="text-white">{dept.descripcion}</span>
                       </div>
                     </td>
-                    <td className="py-3 px-4 text-gray-300">{dept.responsable}</td>
-                    <td className="py-3 px-4 text-gray-300">{dept.empleados}</td>
-                    <td className="py-3 px-4 text-gray-300">{dept.activos}</td>
+                    <td className="py-3 px-4 text-gray-300">{dept.cantidadEmpleados}</td>
+                    <td className="py-3 px-4">
+                      <Badge variant={dept.activo ? "default" : "secondary"}>
+                        {dept.activo ? "Activo" : "Inactivo"}
+                      </Badge>
+                    </td>
                     <td className="py-3 px-4">
                       <div className="flex space-x-2">
-                        <Button variant="outline" size="sm">
+                        <Button variant="outline" size="sm" onClick={() => handleEditClick(dept)}>
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button variant="outline" size="sm" className="text-red-400 hover:text-red-300 bg-transparent">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleDeleteClick(dept)}
+                          className="text-red-400 hover:text-red-300 bg-transparent"
+                          disabled={dept.cantidadEmpleados > 0}
+                        >
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -92,9 +217,33 @@ export function DepartamentosPage() {
                 ))}
               </tbody>
             </table>
+            {filteredDepartamentos.length === 0 && (
+              <div className="text-center py-8 text-gray-400">
+                {searchTerm
+                  ? "No se encontraron departamentos que coincidan con la búsqueda"
+                  : "No hay departamentos registrados"}
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>
+
+      <DeleteDepartamentoModal
+        departamento={deleteModal.departamento!}
+        isOpen={deleteModal.open}
+        onClose={() => setDeleteModal({ ...deleteModal, open: false })}
+        onSuccess={handleSuccess}
+      />
+
+
+      <NuevoDepartamentoModal open={nuevoModal} onOpenChange={setNuevoModal} onSuccess={handleSuccess} />
+
+      <EditarDepartamentoModal
+        departamento={editarModal.departamento}
+        open={editarModal.open}
+        onOpenChange={(open) => setEditarModal({ ...editarModal, open })}
+        onSuccess={handleSuccess}
+      />
     </div>
   )
 }

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ActivosFijosAPI.Data;
 using ActivosFijosAPI.Services;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
@@ -10,7 +11,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+// Add logging
+builder.Services.AddLogging(logging =>
+{
+    logging.ClearProviders();
+    logging.AddConsole();
+    logging.AddDebug();
+});
 // Add Entity Framework with better error handling
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -28,12 +35,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 errorNumbersToAdd: null);
         }
     );
-    
+
     // Enable sensitive data logging in development
     if (builder.Environment.IsDevelopment())
     {
         options.EnableSensitiveDataLogging();
         options.EnableDetailedErrors();
+        options.LogTo(Console.WriteLine, LogLevel.Information);
+
     }
 });
 
@@ -91,7 +100,6 @@ if (app.Environment.IsDevelopment())
 // IMPORTANTE: Usar CORS antes de otros middlewares
 app.UseCors("AllowAll");
 
-// No usar HTTPS redirection en desarrollo para evitar problemas de certificados
 // app.UseHttpsRedirection();
 
 app.UseAuthorization();
