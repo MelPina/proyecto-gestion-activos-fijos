@@ -34,3 +34,25 @@ export interface Departamento {
   descripcion: string
   activo: boolean
 }
+
+export interface ActivoFijo {
+  id: number
+  descripcion: string
+  departamentoId: number | null
+  departamentoDescripcion?: string
+  tipoActivoId: number
+  tipoActivoDescripcion?: string
+  fechaAdquisicion: string // en formato YYYY-MM-DD
+  valor: number
+  depreciacionAcumulada: number
+  estado: number
+  estadoDescripcion?: string
+}
+
+export interface TipoActivo {
+  id: number;
+  descripcion: string;
+  cuenta_contable_compra: string;
+  cuenta_contable_depreciacion: string;
+  activo: boolean;
+}

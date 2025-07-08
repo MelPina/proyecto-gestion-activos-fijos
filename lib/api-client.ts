@@ -132,3 +132,51 @@ export interface TipoPersonaStatsDto {
   tipo: string
   cantidad: number
 }
+
+export interface ActivoFijoDto {
+  id: number
+  descripcion: string
+  departamentoId?: number
+  departamentoDescripcion: string
+  tipoActivoId: number
+  tipoActivoDescripcion: string
+  fechaAdquisicion: string // ISO string
+  valor: number
+  depreciacionAcumulada: number
+  estado: number
+  estadoDescripcion: string
+}
+
+export interface CreateActivoFijoDto {
+  descripcion: string
+  departamentoId?: number
+  tipoActivoId: number
+  fechaAdquisicion: string // ISO string
+  valor: number
+}
+
+export interface UpdateActivoFijoDto {
+  descripcion: string
+  departamentoId?: number
+  tipoActivoId: number
+  fechaAdquisicion: string // ISO string
+  valor: number
+  estado: number
+}
+
+export interface ActivoFijoStatsDto {
+  total: number
+  enUso: number
+  disponibles: number
+  enMantenimiento: number
+  valorTotal: number
+}
+
+export interface TipoActivoDto {
+  id: number
+  descripcion: string
+  cuenta_contable_compra: string
+  cuenta_contable_depreciacion: string
+  activo: boolean
+}
+
