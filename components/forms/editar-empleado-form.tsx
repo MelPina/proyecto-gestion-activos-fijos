@@ -28,16 +28,20 @@ export function EditarEmpleadoForm({ empleadoId }: Props) {
 
   useEffect(() => {
     async function loadData() {
-      const [empleadoResult, departamentosResult] = await Promise.all([getEmpleadoById(empleadoId), getDepartamentos()])
+      // No declaramos tipo explícito para evitar conflicto con ApiResponse vs Result
+      const [empleadoResult, departamentosResult] = await Promise.all([
+        getEmpleadoById(empleadoId),
+        getDepartamentos(),
+      ])
 
-      if (empleadoResult.success) {
+      if (empleadoResult.success && empleadoResult.data) {
         setEmpleado(empleadoResult.data)
         setCedula(empleadoResult.data.cedula)
       } else {
         setError("Empleado no encontrado")
       }
 
-      if (departamentosResult.success) {
+      if (departamentosResult.success && departamentosResult.data) {
         setDepartamentos(departamentosResult.data)
       }
     }
@@ -84,12 +88,12 @@ export function EditarEmpleadoForm({ empleadoId }: Props) {
     const result = await updateEmpleado(empleadoId, formData)
 
     if (result.success) {
-      setSuccess(result.message)
+      setSuccess(result.message ?? "Operación exitosa")
       setTimeout(() => {
         router.push("/empleados")
       }, 1500)
     } else {
-      setError(result.error)
+      setError(result.error ?? "Ocurrió un error desconocido")
     }
 
     setLoading(false)
