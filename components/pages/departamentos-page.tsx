@@ -202,7 +202,7 @@ export function DepartamentosPage() {
                         <Button variant="outline" size="sm" onClick={() => handleEditClick(dept)}>
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button
+                        {/* <Button
                           variant="outline"
                           size="sm"
                           onClick={() => handleDeleteClick(dept)}
@@ -210,7 +210,7 @@ export function DepartamentosPage() {
                           disabled={dept.cantidadEmpleados > 0}
                         >
                           <Trash2 className="h-4 w-4" />
-                        </Button>
+                        </Button> */}
                       </div>
                     </td>
                   </tr>
