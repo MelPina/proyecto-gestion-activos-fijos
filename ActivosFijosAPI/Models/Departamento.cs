@@ -17,6 +17,7 @@ namespace ActivosFijosAPI.Models
 
         // Navigation properties
         public virtual ICollection<Empleado> Empleados { get; set; } = new List<Empleado>();
-        public virtual ICollection<ActivoFijo>? activosFijos { get; set; }
+        public virtual ICollection<ActivoFijo>? ActivosFijos { get; set; }
+        
     }
 }

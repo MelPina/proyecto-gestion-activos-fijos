@@ -229,12 +229,11 @@ export function DepartamentosPage() {
       </Card>
 
       <DeleteDepartamentoModal
-        departamento={deleteModal.departamento!}
-        isOpen={deleteModal.open}
-        onClose={() => setDeleteModal({ ...deleteModal, open: false })}
+        departamento={deleteModal.departamento}
+        open={deleteModal.open}
+        onOpenChange={(open) => setDeleteModal({ ...deleteModal, open })}
         onSuccess={handleSuccess}
       />
-
 
       <NuevoDepartamentoModal open={nuevoModal} onOpenChange={setNuevoModal} onSuccess={handleSuccess} />
 

@@ -132,21 +132,21 @@ export function Dashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gray-800 border-gray-700">
+        {/* <Card className="bg-gray-800 border-gray-700">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-gray-300">Tipos de Activos</CardTitle>
             <Package className="h-4 w-4 text-yellow-400" />
           </CardHeader>
         
-        </Card>
+        </Card> */}
 
-        <Card className="bg-gray-800 border-gray-700">
+        {/* <Card className="bg-gray-800 border-gray-700">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-gray-300">Activos Fijos</CardTitle>
             <FileText className="h-4 w-4 text-purple-400" />
           </CardHeader>
          
-        </Card>
+        </Card> */}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -224,13 +224,13 @@ export function Dashboard() {
                 </p>
               </div>
             </div>
-            <div className="flex items-center space-x-4">
+            {/* <div className="flex items-center space-x-4">
               <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
               <div className="flex-1">
                 <p className="text-sm text-white">Inventario actualizado</p>
-                {/* <p className="text-xs text-gray-400">{stats.activosFijos.total} activos fijos registrados</p> */}
+                {/* <p className="text-xs text-gray-400">{stats.activosFijos.total} activos fijos registrados</p> 
               </div>
-            </div>
+            </div> */}
           </div>
         </CardContent>
       </Card>

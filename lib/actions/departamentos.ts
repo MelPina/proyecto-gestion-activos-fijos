@@ -96,8 +96,10 @@ export async function updateDepartamento(id: number, formData: FormData) {
 }
 
 export async function deleteDepartamento(id: number) {
+  debugger;
   try {
     console.log(`Deleting departamento ${id}`)
+    debugger;
     const result = await apiClient.delete(`/departamentos/${id}`)
     console.log("Delete departamento result:", result)
 

@@ -1,5 +1,7 @@
+// Cambiar la URL base para usar HTTP por defecto
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api"
 
+// Agregar logging más detallado
 export interface ApiResponse<T> {
   success: boolean
   data?: T
@@ -12,6 +14,12 @@ class ApiClient {
     try {
       const url = `${API_BASE_URL}${endpoint}`
       console.log(`🌐 API Request: ${options.method || "GET"} ${url}`)
+      console.log(`🔧 Using API_BASE_URL: ${API_BASE_URL}`)
+      console.log(`🔧 Environment variable: ${process.env.NEXT_PUBLIC_API_URL}`)
+
+      if (options.body) {
+        console.log(`📤 Request Body:`, JSON.parse(options.body as string))
+      }
 
       const response = await fetch(url, {
         headers: {
@@ -117,6 +125,15 @@ export interface DepartamentoDto {
   cantidadEmpleados: number
 }
 
+export interface CreateDepartamentoDto {
+  descripcion: string
+}
+
+export interface UpdateDepartamentoDto {
+  descripcion: string
+  activo: boolean
+}
+
 export interface EmpleadoStatsDto {
   total: number
   porDepartamento: DepartamentoStatsDto[]
@@ -131,4 +148,67 @@ export interface DepartamentoStatsDto {
 export interface TipoPersonaStatsDto {
   tipo: string
   cantidad: number
+}
+
+// Tipos de Activos
+export interface TipoActivoDto {
+  id: number
+  descripcion: string
+  cuentaContableCompra: string
+  cuentaContableDepreciacion: string
+  activo: boolean
+  cantidadActivos: number
+}
+
+export interface CreateTipoActivoDto {
+  descripcion: string
+  cuentaContableCompra: string
+  cuentaContableDepreciacion: string
+}
+
+export interface UpdateTipoActivoDto {
+  descripcion: string
+  cuentaContableCompra: string
+  cuentaContableDepreciacion: string
+  activo: boolean
+}
+
+// Activos Fijos
+export interface ActivoFijoDto {
+  id: number
+  descripcion: string
+  departamentoId?: number
+  departamentoDescripcion: string
+  tipoActivoId: number
+  tipoActivoDescripcion: string
+  fechaAdquisicion: string
+  valor: number
+  depreciacionAcumulada: number
+  estado: number
+  estadoDescripcion: string
+}
+
+export interface CreateActivoFijoDto {
+  descripcion: string
+  departamentoId?: number
+  tipoActivoId: number
+  fechaAdquisicion: string
+  valor: number
+}
+
+export interface UpdateActivoFijoDto {
+  descripcion: string
+  departamentoId?: number
+  tipoActivoId: number
+  fechaAdquisicion: string
+  valor: number
+  estado: number
+}
+
+export interface ActivoFijoStatsDto {
+  total: number
+  enUso: number
+  disponibles: number
+  enMantenimiento: number
+  valorTotal: number
 }
