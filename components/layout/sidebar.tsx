@@ -51,7 +51,7 @@ export function Sidebar() {
         {!collapsed && (
           <div className="flex items-center space-x-2">
             {/* <Package className="h-6 w-6 text-blue-400" /> */}
-            <span className="font-semibold text-white">Gestión Activo Fijo</span>
+            <span className="font-semibold text-white">PatriMonix</span>
           </div>
         )}
         <button
