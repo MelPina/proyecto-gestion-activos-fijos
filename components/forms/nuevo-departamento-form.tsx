@@ -21,7 +21,7 @@ export function NuevoDepartamentoModal({ open, onOpenChange, onSuccess }: Props)
 
   async function handleSubmit(formData: FormData) {
     const descripcion = formData.get("descripcion") as string
-    console.log("📝 Creating new departamento:", descripcion)
+    console.log("Creating new departamento:", descripcion)
 
     setLoading(true)
     setError("")

@@ -74,12 +74,12 @@ export function NuevoEmpleadoForm() {
     const result = await createEmpleado(formData)
 
     if (result.success) {
-      setSuccess(result.message)
+      setSuccess(result.message ?? "Operación exitosa")
       setTimeout(() => {
         router.push("/empleados")
       }, 1500)
     } else {
-      setError(result.error)
+      setError(result.error ?? "Ocurrió un error desconocido")
     }
 
     setLoading(false)
@@ -172,8 +172,8 @@ export function NuevoEmpleadoForm() {
                     <SelectValue placeholder="Seleccione el tipo" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="1">Empleado</SelectItem>
-                    <SelectItem value="2">Contratista</SelectItem>
+                    <SelectItem value="1">Física</SelectItem>
+                    <SelectItem value="2">Jurídica</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
