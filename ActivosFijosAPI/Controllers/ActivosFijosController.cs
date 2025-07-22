@@ -9,27 +9,26 @@ namespace ActivosFijosAPI.Controllers
     public class ActivosFijosController : ControllerBase
     {
         private readonly IActivoFijoService _activoFijoService;
+        private readonly ILogger<ActivosFijosController> _logger;
 
-        public ActivosFijosController(IActivoFijoService activoFijoService)
+        public ActivosFijosController(IActivoFijoService activoFijoService, ILogger<ActivosFijosController> logger)
         {
             _activoFijoService = activoFijoService;
+            _logger = logger;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ActivoFijoDto>>> GetActivosFijos(
-            [FromQuery] string? search = null,
-            [FromQuery] int? tipoActivoId = null,
-            [FromQuery] int? departamentoId = null,
-            [FromQuery] int? estado = null)
+        public async Task<ActionResult<IEnumerable<ActivoFijoDto>>> GetActivosFijos()
         {
             try
             {
-                var activos = await _activoFijoService.GetAllAsync(search, tipoActivoId, departamentoId, estado);
+                var activos = await _activoFijoService.GetAllAsync();
                 return Ok(activos);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "Error interno del servidor", error = ex.Message });
+                _logger.LogError(ex, "Error al obtener activos fijos");
+                return StatusCode(500, new { message = "Error interno del servidor" });
             }
         }
 
@@ -47,7 +46,8 @@ namespace ActivosFijosAPI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "Error interno del servidor", error = ex.Message });
+                _logger.LogError(ex, "Error al obtener activo fijo con ID {Id}", id);
+                return StatusCode(500, new { message = "Error interno del servidor" });
             }
         }
 
@@ -56,16 +56,22 @@ namespace ActivosFijosAPI.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
                 var activo = await _activoFijoService.CreateAsync(createDto);
                 return CreatedAtAction(nameof(GetActivoFijo), new { id = activo.Id }, activo);
             }
-            catch (InvalidOperationException ex)
+            catch (ArgumentException ex)
             {
                 return BadRequest(new { message = ex.Message });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "Error interno del servidor", error = ex.Message });
+                _logger.LogError(ex, "Error al crear activo fijo");
+                return StatusCode(500, new { message = "Error interno del servidor" });
             }
         }
 
@@ -75,15 +81,20 @@ namespace ActivosFijosAPI.Controllers
             try
             {
                 var activo = await _activoFijoService.UpdateAsync(id, updateDto);
+                if (activo == null)
+                {
+                    return NotFound(new { message = "Activo fijo no encontrado" });
+                }
                 return Ok(activo);
             }
-            catch (InvalidOperationException ex)
+            catch (ArgumentException ex)
             {
                 return BadRequest(new { message = ex.Message });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "Error interno del servidor", error = ex.Message });
+                _logger.LogError(ex, "Error al actualizar activo fijo con ID {Id}", id);
+                return StatusCode(500, new { message = "Error interno del servidor" });
             }
         }
 
@@ -101,7 +112,23 @@ namespace ActivosFijosAPI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "Error interno del servidor", error = ex.Message });
+                _logger.LogError(ex, "Error al eliminar activo fijo con ID {Id}", id);
+                return StatusCode(500, new { message = "Error interno del servidor" });
+            }
+        }
+
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<ActivoFijoDto>>> SearchActivosFijos([FromQuery] string term)
+        {
+            try
+            {
+                var activos = await _activoFijoService.SearchAsync(term ?? string.Empty);
+                return Ok(activos);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al buscar activos fijos");
+                return StatusCode(500, new { message = "Error interno del servidor" });
             }
         }
 
@@ -115,7 +142,38 @@ namespace ActivosFijosAPI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "Error interno del servidor", error = ex.Message });
+                _logger.LogError(ex, "Error al obtener estadísticas de activos fijos");
+                return StatusCode(500, new { message = "Error interno del servidor" });
+            }
+        }
+
+        [HttpGet("departamento/{departamentoId}")]
+        public async Task<ActionResult<IEnumerable<ActivoFijoDto>>> GetByDepartamento(int departamentoId)
+        {
+            try
+            {
+                var activos = await _activoFijoService.GetByDepartamentoAsync(departamentoId);
+                return Ok(activos);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al obtener activos fijos por departamento {DepartamentoId}", departamentoId);
+                return StatusCode(500, new { message = "Error interno del servidor" });
+            }
+        }
+
+        [HttpGet("tipo/{tipoActivoId}")]
+        public async Task<ActionResult<IEnumerable<ActivoFijoDto>>> GetByTipoActivo(int tipoActivoId)
+        {
+            try
+            {
+                var activos = await _activoFijoService.GetByTipoActivoAsync(tipoActivoId);
+                return Ok(activos);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al obtener activos fijos por tipo {TipoActivoId}", tipoActivoId);
+                return StatusCode(500, new { message = "Error interno del servidor" });
             }
         }
     }
