@@ -10,6 +10,13 @@ export interface ApiResponse<T> {
 }
 
 class ApiClient {
+  private getAuthToken(): string | null {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("auth_token")
+    }
+    return null
+  }
+
   private async request<T>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
     try {
       const url = `${API_BASE_URL}${endpoint}`
@@ -17,15 +24,22 @@ class ApiClient {
       console.log(`🔧 Using API_BASE_URL: ${API_BASE_URL}`)
       console.log(`🔧 Environment variable: ${process.env.NEXT_PUBLIC_API_URL}`)
 
+      const token = this.getAuthToken()
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+        ...(options.headers as Record<string, string>),
+      }
+
+      if (token) {
+        headers.Authorization = `Bearer ${token}`
+      }
+
       if (options.body) {
         console.log(`📤 Request Body:`, JSON.parse(options.body as string))
       }
 
       const response = await fetch(url, {
-        headers: {
-          "Content-Type": "application/json",
-          ...options.headers,
-        },
+        headers,
         ...options,
       })
 
@@ -173,7 +187,7 @@ export interface UpdateTipoActivoDto {
   activo: boolean
 }
 
-// Activos Fijos
+// Activos Fijos - Estructura corregida según la DB real
 export interface ActivoFijoDto {
   id: number
   descripcion: string
@@ -211,4 +225,35 @@ export interface ActivoFijoStatsDto {
   disponibles: number
   enMantenimiento: number
   valorTotal: number
+}
+
+// Usuarios y Autenticación - Corregido según la tabla real
+export interface UsuarioDto {
+  id: number
+  nombre: string
+  email: string
+  idSistemaAuxiliar: number
+  fechaCreacion: string
+}
+
+export interface LoginDto {
+  email: string
+  password: string
+}
+
+export interface RegisterDto {
+  nombre: string
+  email: string
+  password: string
+  idSistemaAuxiliar: number
+}
+
+export interface LoginResponseDto {
+  token: string
+  usuario: UsuarioDto
+}
+
+export interface ChangePasswordDto {
+  currentPassword: string
+  newPassword: string
 }
