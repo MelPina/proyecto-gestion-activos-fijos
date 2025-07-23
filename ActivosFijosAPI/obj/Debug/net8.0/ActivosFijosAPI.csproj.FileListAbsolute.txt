@@ -1,0 +1,323 @@
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosFijosAPI.csproj.AssemblyReference.cache
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosFijosAPI.GeneratedMSBuildEditorConfig.editorconfig
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosFijosAPI.AssemblyInfoInputs.cache
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosFijosAPI.AssemblyInfo.cs
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosFijosAPI.csproj.CoreCompileInputs.cache
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosFijosAPI.MvcApplicationPartsAssemblyInfo.cs
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosFijosAPI.MvcApplicationPartsAssemblyInfo.cache
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/appsettings.json
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ActivosFijosAPI.staticwebassets.endpoints.json
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ActivosFijosAPI
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ActivosFijosAPI.deps.json
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ActivosFijosAPI.runtimeconfig.json
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ActivosFijosAPI.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ActivosFijosAPI.pdb
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Humanizer.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.AspNetCore.OpenApi.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.Bcl.AsyncInterfaces.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.CodeAnalysis.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.CodeAnalysis.CSharp.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.CodeAnalysis.CSharp.Workspaces.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.CodeAnalysis.Workspaces.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.Abstractions.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.Design.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.Relational.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.Extensions.DependencyModel.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.OpenApi.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Mono.TextTemplating.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/MySqlConnector.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Pomelo.EntityFrameworkCore.MySql.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Swashbuckle.AspNetCore.Swagger.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Swashbuckle.AspNetCore.SwaggerGen.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Swashbuckle.AspNetCore.SwaggerUI.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/System.CodeDom.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/System.Composition.AttributedModel.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/System.Composition.Convention.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/System.Composition.Hosting.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/System.Composition.Runtime.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/System.Composition.TypedParts.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/cs/Microsoft.CodeAnalysis.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/de/Microsoft.CodeAnalysis.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/es/Microsoft.CodeAnalysis.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/fr/Microsoft.CodeAnalysis.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/it/Microsoft.CodeAnalysis.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ja/Microsoft.CodeAnalysis.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ko/Microsoft.CodeAnalysis.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/pl/Microsoft.CodeAnalysis.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/pt-BR/Microsoft.CodeAnalysis.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ru/Microsoft.CodeAnalysis.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/tr/Microsoft.CodeAnalysis.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/zh-Hans/Microsoft.CodeAnalysis.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/zh-Hant/Microsoft.CodeAnalysis.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/cs/Microsoft.CodeAnalysis.CSharp.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/de/Microsoft.CodeAnalysis.CSharp.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/es/Microsoft.CodeAnalysis.CSharp.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/fr/Microsoft.CodeAnalysis.CSharp.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/it/Microsoft.CodeAnalysis.CSharp.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ja/Microsoft.CodeAnalysis.CSharp.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ko/Microsoft.CodeAnalysis.CSharp.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/pl/Microsoft.CodeAnalysis.CSharp.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/pt-BR/Microsoft.CodeAnalysis.CSharp.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ru/Microsoft.CodeAnalysis.CSharp.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/tr/Microsoft.CodeAnalysis.CSharp.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/zh-Hans/Microsoft.CodeAnalysis.CSharp.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/zh-Hant/Microsoft.CodeAnalysis.CSharp.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/cs/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/de/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/es/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/fr/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/it/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ja/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ko/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/pl/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/pt-BR/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ru/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/tr/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/zh-Hans/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/zh-Hant/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/cs/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/de/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/es/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/fr/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/it/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ja/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ko/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/pl/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/pt-BR/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ru/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/tr/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/zh-Hans/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/zh-Hant/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/scopedcss/bundle/ActivosFijosAPI.styles.css
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/staticwebassets.build.json
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/staticwebassets.build.json.cache
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/staticwebassets.development.json
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/staticwebassets.build.endpoints.json
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosF.8133DC25.Up2Date
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosFijosAPI.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/refint/ActivosFijosAPI.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosFijosAPI.pdb
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosFijosAPI.genruntimeconfig.cache
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ref/ActivosFijosAPI.dll
+/Users/melida.pina/Documents/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/appsettings.Development.json
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/appsettings.Development.json
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/appsettings.json
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ActivosFijosAPI.staticwebassets.endpoints.json
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ActivosFijosAPI.exe
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ActivosFijosAPI.deps.json
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ActivosFijosAPI.runtimeconfig.json
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ActivosFijosAPI.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ActivosFijosAPI.pdb
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Humanizer.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.AspNetCore.OpenApi.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.Bcl.AsyncInterfaces.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.CodeAnalysis.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.CodeAnalysis.CSharp.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.CodeAnalysis.CSharp.Workspaces.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.CodeAnalysis.Workspaces.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.Abstractions.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.Design.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.Relational.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.Extensions.DependencyModel.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.OpenApi.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Mono.TextTemplating.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/MySqlConnector.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Pomelo.EntityFrameworkCore.MySql.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Swashbuckle.AspNetCore.Swagger.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Swashbuckle.AspNetCore.SwaggerGen.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Swashbuckle.AspNetCore.SwaggerUI.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/System.CodeDom.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/System.Composition.AttributedModel.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/System.Composition.Convention.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/System.Composition.Hosting.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/System.Composition.Runtime.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/System.Composition.TypedParts.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/cs/Microsoft.CodeAnalysis.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/de/Microsoft.CodeAnalysis.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/es/Microsoft.CodeAnalysis.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/fr/Microsoft.CodeAnalysis.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/it/Microsoft.CodeAnalysis.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ja/Microsoft.CodeAnalysis.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ko/Microsoft.CodeAnalysis.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/pl/Microsoft.CodeAnalysis.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/pt-BR/Microsoft.CodeAnalysis.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ru/Microsoft.CodeAnalysis.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/tr/Microsoft.CodeAnalysis.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/zh-Hans/Microsoft.CodeAnalysis.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/zh-Hant/Microsoft.CodeAnalysis.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/cs/Microsoft.CodeAnalysis.CSharp.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/de/Microsoft.CodeAnalysis.CSharp.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/es/Microsoft.CodeAnalysis.CSharp.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/fr/Microsoft.CodeAnalysis.CSharp.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/it/Microsoft.CodeAnalysis.CSharp.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ja/Microsoft.CodeAnalysis.CSharp.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ko/Microsoft.CodeAnalysis.CSharp.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/pl/Microsoft.CodeAnalysis.CSharp.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/pt-BR/Microsoft.CodeAnalysis.CSharp.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ru/Microsoft.CodeAnalysis.CSharp.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/tr/Microsoft.CodeAnalysis.CSharp.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/zh-Hans/Microsoft.CodeAnalysis.CSharp.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/zh-Hant/Microsoft.CodeAnalysis.CSharp.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/cs/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/de/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/es/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/fr/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/it/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ja/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ko/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/pl/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/pt-BR/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ru/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/tr/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/zh-Hans/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/zh-Hant/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/cs/Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/de/Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/es/Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/fr/Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/it/Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ja/Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ko/Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/pl/Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/pt-BR/Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ru/Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/tr/Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/zh-Hans/Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/zh-Hant/Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosFijosAPI.csproj.AssemblyReference.cache
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/rpswa.dswa.cache.json
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosFijosAPI.GeneratedMSBuildEditorConfig.editorconfig
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosFijosAPI.AssemblyInfoInputs.cache
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosFijosAPI.AssemblyInfo.cs
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosFijosAPI.csproj.CoreCompileInputs.cache
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosFijosAPI.MvcApplicationPartsAssemblyInfo.cs
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosFijosAPI.MvcApplicationPartsAssemblyInfo.cache
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosFijosAPI.sourcelink.json
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/rjimswa.dswa.cache.json
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/rjsmrazor.dswa.cache.json
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/rjsmcshtml.dswa.cache.json
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/scopedcss/bundle/ActivosFijosAPI.styles.css
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/staticwebassets.build.json
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/staticwebassets.build.json.cache
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/staticwebassets.development.json
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/staticwebassets.build.endpoints.json
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosF.8133DC25.Up2Date
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosFijosAPI.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/refint/ActivosFijosAPI.dll
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosFijosAPI.pdb
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosFijosAPI.genruntimeconfig.cache
+C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ref/ActivosFijosAPI.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/appsettings.Development.json
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/appsettings.json
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ActivosFijosAPI.staticwebassets.endpoints.json
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ActivosFijosAPI
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ActivosFijosAPI.deps.json
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ActivosFijosAPI.runtimeconfig.json
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ActivosFijosAPI.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ActivosFijosAPI.pdb
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Humanizer.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.AspNetCore.OpenApi.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.Bcl.AsyncInterfaces.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.CodeAnalysis.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.CodeAnalysis.CSharp.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.CodeAnalysis.CSharp.Workspaces.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.CodeAnalysis.Workspaces.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.Abstractions.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.Design.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.EntityFrameworkCore.Relational.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.Extensions.DependencyModel.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.OpenApi.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Mono.TextTemplating.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/MySqlConnector.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Pomelo.EntityFrameworkCore.MySql.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Swashbuckle.AspNetCore.Swagger.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Swashbuckle.AspNetCore.SwaggerGen.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Swashbuckle.AspNetCore.SwaggerUI.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/System.CodeDom.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/System.Composition.AttributedModel.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/System.Composition.Convention.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/System.Composition.Hosting.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/System.Composition.Runtime.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/System.Composition.TypedParts.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/cs/Microsoft.CodeAnalysis.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/de/Microsoft.CodeAnalysis.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/es/Microsoft.CodeAnalysis.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/fr/Microsoft.CodeAnalysis.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/it/Microsoft.CodeAnalysis.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ja/Microsoft.CodeAnalysis.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ko/Microsoft.CodeAnalysis.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/pl/Microsoft.CodeAnalysis.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/pt-BR/Microsoft.CodeAnalysis.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ru/Microsoft.CodeAnalysis.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/tr/Microsoft.CodeAnalysis.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/zh-Hans/Microsoft.CodeAnalysis.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/zh-Hant/Microsoft.CodeAnalysis.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/cs/Microsoft.CodeAnalysis.CSharp.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/de/Microsoft.CodeAnalysis.CSharp.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/es/Microsoft.CodeAnalysis.CSharp.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/fr/Microsoft.CodeAnalysis.CSharp.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/it/Microsoft.CodeAnalysis.CSharp.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ja/Microsoft.CodeAnalysis.CSharp.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ko/Microsoft.CodeAnalysis.CSharp.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/pl/Microsoft.CodeAnalysis.CSharp.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/pt-BR/Microsoft.CodeAnalysis.CSharp.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ru/Microsoft.CodeAnalysis.CSharp.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/tr/Microsoft.CodeAnalysis.CSharp.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/zh-Hans/Microsoft.CodeAnalysis.CSharp.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/zh-Hant/Microsoft.CodeAnalysis.CSharp.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/cs/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/de/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/es/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/fr/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/it/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ja/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ko/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/pl/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/pt-BR/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ru/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/tr/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/zh-Hans/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/zh-Hant/Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/cs/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/de/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/es/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/fr/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/it/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ja/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ko/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/pl/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/pt-BR/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/ru/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/tr/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/zh-Hans/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/zh-Hant/Microsoft.CodeAnalysis.Workspaces.resources.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosFijosAPI.csproj.AssemblyReference.cache
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosFijosAPI.GeneratedMSBuildEditorConfig.editorconfig
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosFijosAPI.AssemblyInfoInputs.cache
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosFijosAPI.AssemblyInfo.cs
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosFijosAPI.csproj.CoreCompileInputs.cache
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosFijosAPI.MvcApplicationPartsAssemblyInfo.cs
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosFijosAPI.MvcApplicationPartsAssemblyInfo.cache
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosFijosAPI.sourcelink.json
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/scopedcss/bundle/ActivosFijosAPI.styles.css
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/staticwebassets.build.json
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/staticwebassets.build.json.cache
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/staticwebassets.development.json
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/staticwebassets.build.endpoints.json
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosF.8133DC25.Up2Date
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosFijosAPI.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/refint/ActivosFijosAPI.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosFijosAPI.pdb
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosFijosAPI.genruntimeconfig.cache
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ref/ActivosFijosAPI.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.IdentityModel.Abstractions.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.IdentityModel.JsonWebTokens.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.IdentityModel.Logging.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.IdentityModel.Protocols.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.IdentityModel.Tokens.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/System.IdentityModel.Tokens.Jwt.dll
