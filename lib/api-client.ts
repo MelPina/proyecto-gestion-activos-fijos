@@ -1,109 +1,22 @@
-// Cambiar la URL base para usar HTTP por defecto
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api"
 
-// Agregar logging más detallado
-export interface ApiResponse<T> {
+export interface ApiResponse<T = any> {
   success: boolean
   data?: T
-  message?: string
   error?: string
 }
 
-class ApiClient {
-  private getAuthToken(): string | null {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem("auth_token")
-    }
-    return null
-  }
-
-  private async request<T>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
-    try {
-      const url = `${API_BASE_URL}${endpoint}`
-      console.log(`🌐 API Request: ${options.method || "GET"} ${url}`)
-      console.log(`🔧 Using API_BASE_URL: ${API_BASE_URL}`)
-      console.log(`🔧 Environment variable: ${process.env.NEXT_PUBLIC_API_URL}`)
-
-      const token = this.getAuthToken()
-      const headers: Record<string, string> = {
-        "Content-Type": "application/json",
-        ...(options.headers as Record<string, string>),
-      }
-
-      if (token) {
-        headers.Authorization = `Bearer ${token}`
-      }
-
-      if (options.body) {
-        console.log(`📤 Request Body:`, JSON.parse(options.body as string))
-      }
-
-      const response = await fetch(url, {
-        headers,
-        ...options,
-      })
-
-      console.log(`📡 API Response Status: ${response.status} ${response.statusText}`)
-
-      if (!response.ok) {
-        const errorText = await response.text()
-        console.error(`❌ API Error Response:`, errorText)
-
-        let errorData
-        try {
-          errorData = JSON.parse(errorText)
-        } catch {
-          errorData = { message: errorText || `HTTP error! status: ${response.status}` }
-        }
-
-        return {
-          success: false,
-          error: errorData.message || `HTTP error! status: ${response.status}`,
-        }
-      }
-
-      const data = await response.json()
-      console.log(`✅ API Success Response:`, data)
-
-      return {
-        success: true,
-        data,
-      }
-    } catch (error) {
-      console.error(`🚨 API Request Failed:`, error)
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : "Error desconocido",
-      }
-    }
-  }
-
-  async get<T>(endpoint: string): Promise<ApiResponse<T>> {
-    return this.request<T>(endpoint, { method: "GET" })
-  }
-
-  async post<T>(endpoint: string, data: any): Promise<ApiResponse<T>> {
-    return this.request<T>(endpoint, {
-      method: "POST",
-      body: JSON.stringify(data),
-    })
-  }
-
-  async put<T>(endpoint: string, data: any): Promise<ApiResponse<T>> {
-    return this.request<T>(endpoint, {
-      method: "PUT",
-      body: JSON.stringify(data),
-    })
-  }
-
-  async delete<T>(endpoint: string): Promise<ApiResponse<T>> {
-    return this.request<T>(endpoint, { method: "DELETE" })
+export interface LoginResponseDto {
+  token: string
+  usuario: {
+    id: number
+    nombre: string
+    email: string
+    idSistemaAuxiliar: number
+    fechaCreacion: string
   }
 }
 
-export const apiClient = new ApiClient()
-
-// Interfaces para los DTOs
 export interface EmpleadoDto {
   id: number
   nombre: string
@@ -164,7 +77,6 @@ export interface TipoPersonaStatsDto {
   cantidad: number
 }
 
-// Tipos de Activos
 export interface TipoActivoDto {
   id: number
   descripcion: string
@@ -187,7 +99,6 @@ export interface UpdateTipoActivoDto {
   activo: boolean
 }
 
-// Activos Fijos - Estructura corregida según la DB real
 export interface ActivoFijoDto {
   id: number
   descripcion: string
@@ -227,7 +138,6 @@ export interface ActivoFijoStatsDto {
   valorTotal: number
 }
 
-// Usuarios y Autenticación - Corregido según la tabla real
 export interface UsuarioDto {
   id: number
   nombre: string
@@ -248,12 +158,177 @@ export interface RegisterDto {
   idSistemaAuxiliar: number
 }
 
-export interface LoginResponseDto {
-  token: string
-  usuario: UsuarioDto
-}
-
 export interface ChangePasswordDto {
   currentPassword: string
   newPassword: string
+}
+
+async function handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
+  const contentType = response.headers.get("content-type")
+  const isJson = contentType && contentType.includes("application/json")
+
+  if (!response.ok) {
+    if (isJson) {
+      const errorData = await response.json()
+      console.log("API Error Response:", JSON.stringify(errorData))
+      return {
+        success: false,
+        error: errorData.message || `Error ${response.status}: ${response.statusText}`,
+      }
+    } else {
+      console.log("API Error Response (non-JSON):", response.statusText)
+      return {
+        success: false,
+        error: `Error ${response.status}: ${response.statusText}`,
+      }
+    }
+  }
+
+  if (isJson) {
+    const data = await response.json()
+    console.log("API Success Response:", JSON.stringify(data))
+    return {
+      success: true,
+      data,
+    }
+  }
+
+  return {
+    success: true,
+  }
+}
+
+export const apiClient = {
+  async get<T>(endpoint: string): Promise<ApiResponse<T>> {
+    console.log(`API Request: GET ${API_BASE_URL}${endpoint}`)
+    console.log(`Using API_BASE_URL: ${API_BASE_URL}`)
+    console.log(`Environment variable: ${process.env.NEXT_PUBLIC_API_URL}`)
+
+    try {
+      const token = typeof localStorage !== "undefined" ? localStorage.getItem("auth_token") : null
+
+      const headers: HeadersInit = {
+        "Content-Type": "application/json",
+      }
+
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`
+      }
+
+      const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+        method: "GET",
+        headers,
+      })
+
+      console.log(`API Response Status: ${response.status} ${response.statusText}`)
+      return handleResponse<T>(response)
+    } catch (error) {
+      console.error("API Request Failed:", error)
+      return {
+        success: false,
+        error: "Error de conexión",
+      }
+    }
+  },
+
+  async post<T>(endpoint: string, data?: any): Promise<ApiResponse<T>> {
+    console.log(` API Request: POST ${API_BASE_URL}${endpoint}`)
+    console.log(` Using API_BASE_URL: ${API_BASE_URL}`)
+    console.log(` Environment variable: ${process.env.NEXT_PUBLIC_API_URL}`)
+
+    if (data) {
+      console.log(`Request Body:`, data)
+    }
+
+    try {
+      const token = typeof localStorage !== "undefined" ? localStorage.getItem("auth_token") : null
+
+      const headers: HeadersInit = {
+        "Content-Type": "application/json",
+      }
+
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`
+      }
+
+      const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+        method: "POST",
+        headers,
+        body: data ? JSON.stringify(data) : undefined,
+      })
+
+      console.log(`📡 API Response Status: ${response.status} ${response.statusText}`)
+      return handleResponse<T>(response)
+    } catch (error) {
+      console.error("API Request Failed:", error)
+      return {
+        success: false,
+        error: "Error de conexión",
+      }
+    }
+  },
+
+  async put<T>(endpoint: string, data: any): Promise<ApiResponse<T>> {
+    console.log(`API Request: PUT ${API_BASE_URL}${endpoint}`)
+    console.log(`Using API_BASE_URL: ${API_BASE_URL}`)
+    console.log(`Request Body:`, data)
+
+    try {
+      const token = typeof localStorage !== "undefined" ? localStorage.getItem("auth_token") : null
+
+      const headers: HeadersInit = {
+        "Content-Type": "application/json",
+      }
+
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`
+      }
+
+      const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+        method: "PUT",
+        headers,
+        body: JSON.stringify(data),
+      })
+
+      console.log(`API Response Status: ${response.status} ${response.statusText}`)
+      return handleResponse<T>(response)
+    } catch (error) {
+      console.error("API Request Failed:", error)
+      return {
+        success: false,
+        error: "Error de conexión",
+      }
+    }
+  },
+
+  async delete<T>(endpoint: string): Promise<ApiResponse<T>> {
+    console.log(`API Request: DELETE ${API_BASE_URL}${endpoint}`)
+    console.log(`Using API_BASE_URL: ${API_BASE_URL}`)
+
+    try {
+      const token = typeof localStorage !== "undefined" ? localStorage.getItem("auth_token") : null
+
+      const headers: HeadersInit = {
+        "Content-Type": "application/json",
+      }
+
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`
+      }
+
+      const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+        method: "DELETE",
+        headers,
+      })
+
+      console.log(`📡 API Response Status: ${response.status} ${response.statusText}`)
+      return handleResponse<T>(response)
+    } catch (error) {
+      console.error("API Request Failed:", error)
+      return {
+        success: false,
+        error: "Error de conexión",
+      }
+    }
+  },
 }
