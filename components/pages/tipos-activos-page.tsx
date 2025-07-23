@@ -21,11 +21,10 @@ import {
   AlertCircle,
   RefreshCw,
 } from "lucide-react"
-import { getTiposActivos } from "@/lib/actions/tipos-activos"
+import { getTiposActivos, type TipoActivo } from "@/lib/actions/tipos-activos"
 import { DeleteTipoActivoModal } from "@/components/modals/delete-tipo-activo-modal"
 import { NuevoTipoActivoModal } from "@/components/modals/nuevo-tipo-activo-modal"
 import { EditarTipoActivoModal } from "@/components/modals/editar-tipo-activo-modal"
-import type { TipoActivoDto } from "@/lib/api-client"
 
 const iconMap = {
   Monitor,
@@ -39,16 +38,16 @@ const iconMap = {
 }
 
 export function TiposActivosPage() {
-  const [tiposActivos, setTiposActivos] = useState<TipoActivoDto[]>([])
+  const [tiposActivos, setTiposActivos] = useState<TipoActivo[]>([])
   const [searchTerm, setSearchTerm] = useState("")
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [deleteModal, setDeleteModal] = useState<{ open: boolean; tipoActivo: TipoActivoDto | null }>({
+  const [deleteModal, setDeleteModal] = useState<{ open: boolean; tipoActivo: TipoActivo | null }>({
     open: false,
     tipoActivo: null,
   })
   const [nuevoModal, setNuevoModal] = useState(false)
-  const [editarModal, setEditarModal] = useState<{ open: boolean; tipoActivo: TipoActivoDto | null }>({
+  const [editarModal, setEditarModal] = useState<{ open: boolean; tipoActivo: TipoActivo | null }>({
     open: false,
     tipoActivo: null,
   })
@@ -81,11 +80,11 @@ export function TiposActivosPage() {
       tipo.cuentaContableCompra.toLowerCase().includes(searchTerm.toLowerCase()),
   )
 
-  function handleDeleteClick(tipoActivo: TipoActivoDto) {
+  function handleDeleteClick(tipoActivo: TipoActivo) {
     setDeleteModal({ open: true, tipoActivo })
   }
 
-  function handleEditClick(tipoActivo: TipoActivoDto) {
+  function handleEditClick(tipoActivo: TipoActivo) {
     setEditarModal({ open: true, tipoActivo })
   }
 
@@ -147,7 +146,7 @@ export function TiposActivosPage() {
         <Card className="bg-gray-800 border-gray-700">
           <CardContent className="p-4">
             <div className="text-2xl font-bold text-blue-400">
-              {tiposActivos.reduce((sum, t) => sum + t.cantidadActivos, 0)}
+              {tiposActivos.reduce((sum, t) => sum + (t.cantidadActivos || 0), 0)}
             </div>
             <div className="text-sm text-gray-400">Total Activos</div>
           </CardContent>
@@ -155,7 +154,7 @@ export function TiposActivosPage() {
         <Card className="bg-gray-800 border-gray-700">
           <CardContent className="p-4">
             <div className="text-2xl font-bold text-green-400">
-              ${tiposActivos.reduce((sum, t) => sum + t.cantidadActivos * 1000, 0).toLocaleString()}
+              ${tiposActivos.reduce((sum, t) => sum + (t.cantidadActivos || 0) * 1000, 0).toLocaleString()}
             </div>
             <div className="text-sm text-gray-400">Valor Estimado</div>
           </CardContent>
@@ -164,7 +163,7 @@ export function TiposActivosPage() {
           <CardContent className="p-4">
             <div className="text-2xl font-bold text-yellow-400">
               {tiposActivos.length > 0
-                ? Math.round(tiposActivos.reduce((sum, t) => sum + t.cantidadActivos, 0) / tiposActivos.length)
+                ? Math.round(tiposActivos.reduce((sum, t) => sum + (t.cantidadActivos || 0), 0) / tiposActivos.length)
                 : 0}
             </div>
             <div className="text-sm text-gray-400">Promedio por Tipo</div>
@@ -200,7 +199,7 @@ export function TiposActivosPage() {
                         </div>
                         <div>
                           <CardTitle className="text-white text-lg">{tipo.descripcion}</CardTitle>
-                          <p className="text-sm text-gray-400">Activos: {tipo.cantidadActivos}</p>
+                          <p className="text-sm text-gray-400">Activos: {tipo.cantidadActivos || 0}</p>
                         </div>
                       </div>
                       <Badge variant={tipo.activo ? "default" : "secondary"}>

@@ -313,3 +313,11 @@ C:/Users/May/PycharmProjects/activos-fijos-server/proyecto-gestion-activos-fijos
 /Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosFijosAPI.pdb
 /Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ActivosFijosAPI.genruntimeconfig.cache
 /Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/obj/Debug/net8.0/ref/ActivosFijosAPI.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.IdentityModel.Abstractions.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.IdentityModel.JsonWebTokens.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.IdentityModel.Logging.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.IdentityModel.Protocols.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/Microsoft.IdentityModel.Tokens.dll
+/Users/melida.pina/Desktop/PROYECTOS OGTIC/proyecto-gestion-activos-fijos/ActivosFijosAPI/bin/Debug/net8.0/System.IdentityModel.Tokens.Jwt.dll

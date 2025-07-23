@@ -1,7 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { apiClient } from "@/lib/api-client"
+import { apiClient, type ApiResponse } from "@/lib/api-client"
 
 export interface Departamento {
   id: number
@@ -18,41 +18,59 @@ export interface UpdateDepartamentoDto {
   activo: boolean
 }
 
-export async function getDepartamentos() {
+export async function getDepartamentos(): Promise<ApiResponse<Departamento[]>> {
   try {
     console.log("🔍 Getting departamentos from API...")
     const result = await apiClient.get<Departamento[]>("/departamentos")
     console.log("📊 Departamentos result:", result)
 
     if (result.success && result.data) {
-      return result.data
+      return {
+        success: true,
+        data: result.data,
+      }
     }
 
-    return []
+    return {
+      success: false,
+      error: result.error || "Error al cargar departamentos",
+    }
   } catch (error) {
     console.error("❌ Error fetching departamentos:", error)
-    return []
+    return {
+      success: false,
+      error: "Error de conexión al cargar departamentos",
+    }
   }
 }
 
-export async function getDepartamentoById(id: number) {
+export async function getDepartamentoById(id: number): Promise<ApiResponse<Departamento>> {
   try {
     console.log(`🔍 Getting departamento ${id} from API...`)
     const result = await apiClient.get<Departamento>(`/departamentos/${id}`)
     console.log("📊 Departamento result:", result)
 
     if (result.success && result.data) {
-      return result.data
+      return {
+        success: true,
+        data: result.data,
+      }
     }
 
-    return null
+    return {
+      success: false,
+      error: result.error || "Error al cargar departamento",
+    }
   } catch (error) {
     console.error("❌ Error fetching departamento:", error)
-    return null
+    return {
+      success: false,
+      error: "Error de conexión al cargar departamento",
+    }
   }
 }
 
-export async function createDepartamento(formData: FormData) {
+export async function createDepartamento(formData: FormData): Promise<ApiResponse<Departamento>> {
   try {
     const descripcion = formData.get("descripcion") as string
     console.log(`➕ Creating departamento: "${descripcion}"`)
@@ -70,7 +88,11 @@ export async function createDepartamento(formData: FormData) {
 
     if (result.success) {
       revalidatePath("/departamentos")
-      return { success: true, message: "Departamento creado exitosamente" }
+      return {
+        success: true,
+        data: result.data,
+        error: "Departamento creado exitosamente",
+      }
     }
 
     return result
@@ -80,7 +102,7 @@ export async function createDepartamento(formData: FormData) {
   }
 }
 
-export async function updateDepartamento(id: number, formData: FormData) {
+export async function updateDepartamento(id: number, formData: FormData): Promise<ApiResponse<Departamento>> {
   try {
     const descripcion = formData.get("descripcion") as string
     const activo = formData.get("activo") === "true"
@@ -101,7 +123,11 @@ export async function updateDepartamento(id: number, formData: FormData) {
 
     if (result.success) {
       revalidatePath("/departamentos")
-      return { success: true, message: "Departamento actualizado exitosamente" }
+      return {
+        success: true,
+        data: result.data,
+        error: "Departamento actualizado exitosamente",
+      }
     }
 
     return result
@@ -111,7 +137,7 @@ export async function updateDepartamento(id: number, formData: FormData) {
   }
 }
 
-export async function deleteDepartamento(id: number) {
+export async function deleteDepartamento(id: number): Promise<ApiResponse<void>> {
   try {
     console.log(`🗑️ Deleting departamento ${id}`)
     const result = await apiClient.delete(`/departamentos/${id}`)
@@ -119,7 +145,7 @@ export async function deleteDepartamento(id: number) {
 
     if (result.success) {
       revalidatePath("/departamentos")
-      return { success: true, message: "Departamento eliminado exitosamente" }
+      return { success: true, error: "Departamento eliminado exitosamente" }
     }
 
     return result

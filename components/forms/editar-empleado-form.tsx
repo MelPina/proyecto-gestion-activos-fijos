@@ -194,8 +194,8 @@ export function EditarEmpleadoForm({ empleadoId }: Props) {
                     <SelectValue placeholder="Seleccione el tipo" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="1">Empleado</SelectItem>
-                    <SelectItem value="2">Contratista</SelectItem>
+                    <SelectItem value="1">Física</SelectItem>
+                    <SelectItem value="2">Jurídica</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

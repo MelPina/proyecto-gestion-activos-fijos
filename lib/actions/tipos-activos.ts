@@ -1,7 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { apiClient } from "@/lib/api-client"
+import { apiClient, type ApiResponse } from "@/lib/api-client"
 
 export interface TipoActivo {
   id: number
@@ -9,6 +9,7 @@ export interface TipoActivo {
   cuentaContableCompra: string
   cuentaContableDepreciacion: string
   activo: boolean
+  cantidadActivos?: number
 }
 
 export interface CreateTipoActivoDto {
@@ -24,41 +25,59 @@ export interface UpdateTipoActivoDto {
   activo: boolean
 }
 
-export async function getTiposActivos() {
+export async function getTiposActivos(): Promise<ApiResponse<TipoActivo[]>> {
   try {
     console.log("🔍 Getting tipos activos from API...")
     const result = await apiClient.get<TipoActivo[]>("/tiposactivos")
     console.log("📊 Tipos activos result:", result)
 
     if (result.success && result.data) {
-      return result.data
+      return {
+        success: true,
+        data: result.data,
+      }
     }
 
-    return []
+    return {
+      success: false,
+      error: result.error || "Error al cargar tipos de activos",
+    }
   } catch (error) {
     console.error("❌ Error fetching tipos activos:", error)
-    return []
+    return {
+      success: false,
+      error: "Error de conexión al cargar tipos de activos",
+    }
   }
 }
 
-export async function getTipoActivoById(id: number) {
+export async function getTipoActivoById(id: number): Promise<ApiResponse<TipoActivo>> {
   try {
     console.log(`🔍 Getting tipo activo ${id} from API...`)
     const result = await apiClient.get<TipoActivo>(`/tiposactivos/${id}`)
     console.log("📊 Tipo activo result:", result)
 
     if (result.success && result.data) {
-      return result.data
+      return {
+        success: true,
+        data: result.data,
+      }
     }
 
-    return null
+    return {
+      success: false,
+      error: result.error || "Error al cargar tipo de activo",
+    }
   } catch (error) {
     console.error("❌ Error fetching tipo activo:", error)
-    return null
+    return {
+      success: false,
+      error: "Error de conexión al cargar tipo de activo",
+    }
   }
 }
 
-export async function createTipoActivo(formData: FormData) {
+export async function createTipoActivo(formData: FormData): Promise<ApiResponse<TipoActivo>> {
   try {
     const descripcion = formData.get("descripcion") as string
     const cuentaContableCompra = formData.get("cuentaContableCompra") as string
@@ -89,7 +108,11 @@ export async function createTipoActivo(formData: FormData) {
 
     if (result.success) {
       revalidatePath("/tipos-activos")
-      return { success: true, message: "Tipo de activo creado exitosamente" }
+      return {
+        success: true,
+        data: result.data,
+        error: "Tipo de activo creado exitosamente",
+      }
     }
 
     return result
@@ -99,7 +122,7 @@ export async function createTipoActivo(formData: FormData) {
   }
 }
 
-export async function updateTipoActivo(id: number, formData: FormData) {
+export async function updateTipoActivo(id: number, formData: FormData): Promise<ApiResponse<TipoActivo>> {
   try {
     const descripcion = formData.get("descripcion") as string
     const cuentaContableCompra = formData.get("cuentaContableCompra") as string
@@ -137,7 +160,11 @@ export async function updateTipoActivo(id: number, formData: FormData) {
 
     if (result.success) {
       revalidatePath("/tipos-activos")
-      return { success: true, message: "Tipo de activo actualizado exitosamente" }
+      return {
+        success: true,
+        data: result.data,
+        error: "Tipo de activo actualizado exitosamente",
+      }
     }
 
     return result
@@ -147,7 +174,7 @@ export async function updateTipoActivo(id: number, formData: FormData) {
   }
 }
 
-export async function deleteTipoActivo(id: number) {
+export async function deleteTipoActivo(id: number): Promise<ApiResponse<void>> {
   try {
     console.log(`🗑️ Deleting tipo activo ${id}`)
     const result = await apiClient.delete(`/tiposactivos/${id}`)
@@ -155,7 +182,7 @@ export async function deleteTipoActivo(id: number) {
 
     if (result.success) {
       revalidatePath("/tipos-activos")
-      return { success: true, message: "Tipo de activo eliminado exitosamente" }
+      return { success: true, error: "Tipo de activo eliminado exitosamente" }
     }
 
     return result

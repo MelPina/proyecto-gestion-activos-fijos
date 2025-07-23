@@ -25,6 +25,7 @@ export function ActivosFijosPage() {
   const [filteredActivos, setFilteredActivos] = useState<ActivoFijo[]>([])
   const [departamentos, setDepartamentos] = useState<Departamento[]>([])
   const [tiposActivos, setTiposActivos] = useState<TipoActivo[]>([])
+  
   const [stats, setStats] = useState<ActivoFijoStats>({
     total: 0,
     activos: 0,
@@ -61,9 +62,19 @@ export function ActivosFijosPage() {
         setFilteredActivos([])
       }
 
-      setDepartamentos(departamentosResult)
-      setTiposActivos(tiposResult)
+      if (departamentosResult.success && departamentosResult.data) {
+        setDepartamentos(departamentosResult.data)
+      } else {
+        setDepartamentos([])
+      }
+      const tiposActivosResult = await getTiposActivos()
 
+      if (tiposActivosResult.success && Array.isArray(tiposActivosResult.data)) {
+        setTiposActivos(tiposActivosResult.data)
+      } else {
+        setTiposActivos([]) // o manejar el error si prefieres
+      }
+    
       if (statsResult.success && statsResult.data) {
         setStats(statsResult.data)
       }

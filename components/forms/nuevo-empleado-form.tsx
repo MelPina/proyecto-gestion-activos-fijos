@@ -142,7 +142,7 @@ export function NuevoEmpleadoForm() {
                     <span>{cedulaError}</span>
                   </div>
                 )}
-                <p className="text-xs text-gray-400">Formato: XXX-XXXXXXX-X (11 dígitos)</p>
+                <p className="text-xs text-gray-400">Formato: XXX-XXXXXXX-X</p>
               </div>
 
               <div className="space-y-2">
@@ -172,8 +172,8 @@ export function NuevoEmpleadoForm() {
                     <SelectValue placeholder="Seleccione el tipo" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="1">Empleado</SelectItem>
-                    <SelectItem value="2">Contratista</SelectItem>
+                    <SelectItem value="1">Física</SelectItem>
+                    <SelectItem value="2">Jurídica</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
