@@ -117,6 +117,21 @@ export interface DepartamentoDto {
   cantidadEmpleados: number
 }
 
+export interface CreateDepartamentoDto {
+  descripcion: string
+
+}
+
+export interface UpdateDepartamentoDto {
+  descripcion: string
+
+}
+
+export interface DepartamentoStatsDto {
+  total: number
+  porEmpleado: EmpleadoStatsDto[]
+}
+
 export interface EmpleadoStatsDto {
   total: number
   porDepartamento: DepartamentoStatsDto[]
@@ -133,10 +148,77 @@ export interface TipoPersonaStatsDto {
   cantidad: number
 }
 
-export interface CreateDepreciacionDto {
-  nombre: string
-  cedula: string
-  departamentoId: number
-  tipoPersona: number
-  fechaIngreso: string
+
+export interface DepreciacionDto {
+  id: number
+  anioProceso: number
+  mesProceso: number
+  fechaProceso: Date
+  activoFijoId: number
+  montoDepreciado: number
+  depreciacionAcumulada: number
+  cuentaCompra: string
+  cuentaDepreciacion: string
+  fechaCreacion: Date
+} 
+export interface AsientoActivoFijoDto 
+{
+  id: number;
+  tipoMovimiento: string;
+  fechaProceso: Date;
+  tipoActivoId: number;
+  tipoActivoDescripcion:string;
+  fechaCreacion: Date;
+  cuentaCompra: string;
+  cuentaDepreciacion: string;
+  montoDepreciado: number;
+  depreciacionAcumulada: number;
+}
+
+
+export interface DepreciacionStatsDto {
+  montoDepreciado: number;
+  sumaTotal: number;
+}
+
+export interface DepreciacionAcumuladaStatsDto {
+  depreciadoAcumulada: number;
+  sumaTotal: number;
+}
+
+export interface ActivoFijoStatsDto {
+  cantidad: number;
+  valorTotal: number;
+}
+
+export interface DepreciacioinStatsDto {
+  total: number;
+  porActivoFijo: ActivoFijoStatsDto[];
+  porMontoDepreciacion: DepreciacionStatsDto[];
+  porDepreciacionAcumulada: DepreciacionAcumuladaStatsDto[];
+}
+
+export interface ActivoFijoDto {
+
+  id: number;
+  descripcion: string;
+  departamentoid: number;
+  departamentoDescripcion: string
+  tipoActivoId: number;
+  fechaAdquisicion: Date;
+  valor: number;
+  depreciacionAcumulada:number;
+  estado:boolean;
+}
+
+export interface AsientoContableDto 
+{
+  id: number;
+  tipoMovimiento: string;
+  descripcion: string;
+  fechaAsiento: Date;
+  tipoInventarioId: number;
+  cuentaContable: string;
+  montoAsiento: number;
+  estado: boolean;
 }
