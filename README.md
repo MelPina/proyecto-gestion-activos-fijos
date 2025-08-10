@@ -1,4 +1,4 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Este es un proyecto que integra tecnoloía Open Source y Propietaria. Este es un sistema de Activos Fijos.
 
 ## Getting Started
 

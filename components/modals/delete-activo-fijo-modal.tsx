@@ -11,45 +11,33 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { AlertTriangle } from "lucide-react"
-<<<<<<< HEAD
-import { deleteDepartamento } from "@/lib/actions/departamento"
-=======
-import { deleteDepartamento } from "@/lib/actions/departamentos"
->>>>>>> origin/main
-import type { DepartamentoDto } from "@/lib/api-client"
+import { deleteActivoFijo } from "@/lib/actions/activos-fijos"
+import type { ActivoFijoDto } from "@/lib/api-client"
 
 interface Props {
-  departamento: DepartamentoDto | null
+  activoFijo: ActivoFijoDto | null
   open: boolean
   onOpenChange: (open: boolean) => void
   onSuccess: () => void
 }
 
-export function DeleteDepartamentoModal({ departamento, open, onOpenChange, onSuccess }: Props) {
+export function DeleteActivoFijoModal({ activoFijo, open, onOpenChange, onSuccess }: Props) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
 
   async function handleDelete() {
-    if (!departamento) return
+    if (!activoFijo) return
 
     setLoading(true)
     setError("")
-<<<<<<< HEAD
 
-=======
-    console.log(`Deleting departamento ${departamento.id}:`, departamento.descripcion)
->>>>>>> origin/main
-    const result = await deleteDepartamento(departamento.id)
+    const result = await deleteActivoFijo(activoFijo.id)
 
     if (result.success) {
       onSuccess()
       onOpenChange(false)
     } else {
-<<<<<<< HEAD
-      setError(result.error)
-=======
       setError(result.error ?? "Ocurrió un error desconocido")
->>>>>>> origin/main
     }
 
     setLoading(false)
@@ -63,25 +51,14 @@ export function DeleteDepartamentoModal({ departamento, open, onOpenChange, onSu
             <AlertTriangle className="h-5 w-5 text-red-400" />
             <span>Confirmar Eliminación</span>
           </DialogTitle>
-<<<<<<< HEAD
           <DialogDescription className="text-gray-300">
-            ¿Está seguro que desea eliminar el departamento{" "}
-            <span className="font-semibold text-white">{departamento?.descripcion}</span>? Esta acción no se puede deshacer.
+            ¿Está seguro que desea eliminar el activo fijo{" "}
+            <span className="font-semibold text-white">{activoFijo?.descripcion}</span>?
+            <br />
+            <span className="text-sm text-yellow-400">
+              Valor: ${activoFijo?.valor.toLocaleString()} - Estado: {activoFijo?.estadoDescripcion}
+            </span>
           </DialogDescription>
-=======
-          {departamento && (
-  <DialogDescription className="text-gray-300">
-    ¿Está seguro que desea eliminar el departamento{" "}
-    <span className="font-semibold text-white">{departamento.descripcion}</span>?
-    {(departamento.cantidadEmpleados ?? 0) > 0 && (
-      <span className="text-yellow-400">
-        {" "}
-        Este departamento tiene {departamento.cantidadEmpleados} empleados asignados.
-      </span>
-    )}
-  </DialogDescription>
-)}
->>>>>>> origin/main
         </DialogHeader>
 
         {error && (

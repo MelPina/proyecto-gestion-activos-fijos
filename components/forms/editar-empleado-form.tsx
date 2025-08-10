@@ -7,9 +7,10 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ArrowLeft, Save, User } from "lucide-react"
+import { ArrowLeft, Save, User, AlertCircle } from "lucide-react"
 import { updateEmpleado, getEmpleadoById, getDepartamentos } from "@/lib/actions/empleados"
-import type { Empleado, Departamento } from "@/lib/database"
+import { validationCedula, formatCedula } from "@/lib/validations/cedula"
+import type { EmpleadoDto, DepartamentoDto } from "@/lib/api-client"
 
 interface Props {
   empleadoId: number
@@ -17,43 +18,82 @@ interface Props {
 
 export function EditarEmpleadoForm({ empleadoId }: Props) {
   const router = useRouter()
-  const [empleado, setEmpleado] = useState<Empleado | null>(null)
-  const [departamentos, setDepartamentos] = useState<Departamento[]>([])
+  const [empleado, setEmpleado] = useState<EmpleadoDto | null>(null)
+  const [departamentos, setDepartamentos] = useState<DepartamentoDto[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
+  const [cedulaError, setCedulaError] = useState("")
+  const [cedula, setCedula] = useState("")
 
   useEffect(() => {
     async function loadData() {
-      const [empleadoResult, departamentosResult] = await Promise.all([getEmpleadoById(empleadoId), getDepartamentos()])
+      // No declaramos tipo explícito para evitar conflicto con ApiResponse vs Result
+      const [empleadoResult, departamentosResult] = await Promise.all([
+        getEmpleadoById(empleadoId),
+        getDepartamentos(),
+      ])
 
-      if (empleadoResult.success) {
+      if (empleadoResult.success && empleadoResult.data) {
         setEmpleado(empleadoResult.data)
+        setCedula(empleadoResult.data.cedula)
       } else {
         setError("Empleado no encontrado")
       }
 
-      if (departamentosResult.success) {
+      if (departamentosResult.success && departamentosResult.data) {
         setDepartamentos(departamentosResult.data)
       }
     }
     loadData()
   }, [empleadoId])
 
+  function handleCedulaChange(value: string) {
+    const cleanValue = value.replace(/[^\d-]/g, "")
+    setCedula(cleanValue)
+
+    const numbersOnly = cleanValue.replace(/[-\s]/g, "")
+    if (numbersOnly.length === 11) {
+      if (validationCedula(cleanValue)) {
+        setCedulaError("")
+      } else {
+        setCedulaError("La cédula ingresada no es válida")
+      }
+    } else if (numbersOnly.length > 0) {
+      setCedulaError("La cédula debe tener 11 dígitos")
+    } else {
+      setCedulaError("")
+    }
+  }
+
+  function handleCedulaBlur() {
+    if (cedula) {
+      const formatted = formatCedula(cedula)
+      setCedula(formatted)
+    }
+  }
+
   async function handleSubmit(formData: FormData) {
     setLoading(true)
     setError("")
     setSuccess("")
 
+    const cedulaValue = formData.get("cedula") as string
+    if (!validationCedula(cedulaValue)) {
+      setError("La cédula ingresada no es válida")
+      setLoading(false)
+      return
+    }
+
     const result = await updateEmpleado(empleadoId, formData)
 
     if (result.success) {
-      setSuccess(result.message)
+      setSuccess(result.message ?? "Operación exitosa")
       setTimeout(() => {
         router.push("/empleados")
       }, 1500)
     } else {
-      setError(result.error)
+      setError(result.error ?? "Ocurrió un error desconocido")
     }
 
     setLoading(false)
@@ -112,17 +152,26 @@ export function EditarEmpleadoForm({ empleadoId }: Props) {
                   id="cedula"
                   name="cedula"
                   required
-                  defaultValue={empleado.cedula}
-                  className="bg-gray-700 border-gray-600 text-white"
-                  placeholder="Ingrese la cédula"
+                  value={cedula}
+                  onChange={(e) => handleCedulaChange(e.target.value)}
+                  onBlur={handleCedulaBlur}
+                  className={`bg-gray-700 border-gray-600 text-white ${cedulaError ? "border-red-500" : ""}`}
+                  placeholder="XXX-XXXXXXX-X"
+                  maxLength={13}
                 />
+                {cedulaError && (
+                  <div className="flex items-center space-x-1 text-red-400 text-sm">
+                    <AlertCircle className="h-4 w-4" />
+                    <span>{cedulaError}</span>
+                  </div>
+                )}
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="departamento_id" className="text-gray-300">
                   Departamento *
                 </Label>
-                <Select name="departamento_id" required defaultValue={empleado.departamento_id.toString()}>
+                <Select name="departamento_id" required defaultValue={empleado.departamentoId?.toString() ?? ""}>
                   <SelectTrigger className="bg-gray-700 border-gray-600 text-white">
                     <SelectValue placeholder="Seleccione un departamento" />
                   </SelectTrigger>
@@ -140,7 +189,7 @@ export function EditarEmpleadoForm({ empleadoId }: Props) {
                 <Label htmlFor="tipo_persona" className="text-gray-300">
                   Tipo de Persona *
                 </Label>
-                <Select name="tipo_persona" required defaultValue={empleado.tipo_persona.toString()}>
+                <Select name="tipo_persona" required defaultValue={empleado.tipoPersona?.toString() ?? ""}>
                   <SelectTrigger className="bg-gray-700 border-gray-600 text-white">
                     <SelectValue placeholder="Seleccione el tipo" />
                   </SelectTrigger>
@@ -160,7 +209,7 @@ export function EditarEmpleadoForm({ empleadoId }: Props) {
                   name="fecha_ingreso"
                   type="date"
                   required
-                  defaultValue={empleado.fecha_ingreso}
+                  defaultValue={empleado.fechaIngreso}
                   className="bg-gray-700 border-gray-600 text-white"
                 />
               </div>
@@ -179,7 +228,7 @@ export function EditarEmpleadoForm({ empleadoId }: Props) {
             )}
 
             <div className="flex space-x-4">
-              <Button type="submit" disabled={loading} className="bg-blue-600 hover:bg-blue-700">
+              <Button type="submit" disabled={loading || !!cedulaError} className="bg-blue-600 hover:bg-blue-700">
                 <Save className="h-4 w-4 mr-2" />
                 {loading ? "Guardando..." : "Actualizar Empleado"}
               </Button>

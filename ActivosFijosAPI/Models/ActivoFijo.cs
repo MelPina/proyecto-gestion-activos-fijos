@@ -30,8 +30,10 @@ namespace ActivosFijosAPI.Models
 
         public int Estado { get; set; } = 1;
 
-        // Navigation properties
+        [ForeignKey("DepartamentoId")]
         public virtual Departamento? Departamento { get; set; }
+
+        [ForeignKey("TipoActivoId")]
         public virtual TipoActivo? TipoActivo { get; set; }
     }
 }
