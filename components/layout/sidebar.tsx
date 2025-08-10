@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { LayoutDashboard, Settings, Building2, Users, Package, FileText, ChevronLeft, ChevronRight } from "lucide-react"
+import { LayoutDashboard, Settings, Building2, Users, Package, FileText, ChevronLeft, ChevronRight, BookDown, BookType, } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const menuItems = [
@@ -36,6 +36,16 @@ const menuItems = [
     title: "Activos Fijos",
     href: "/activos-fijos",
     icon: FileText,
+  },
+    {
+    title: "Depreciacion",
+    href: "/depreciacion",
+    icon: BookDown,
+  },
+    {
+    title: "Asiento",
+    href: "/asiento",
+    icon: BookType,
   },
 ]
 

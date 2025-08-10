@@ -34,3 +34,16 @@ export interface Departamento {
   descripcion: string
   activo: boolean
 }
+
+export interface Depreciacion {
+  id: number
+  anio_Proceso: number
+  mes_Proceso: number
+  fecha_Proceso: Date
+  activofijo_id: number
+  monto_depreciado: number
+  depreciacion_acumulada: number
+  cuenta_Compra: string
+  cuenta_depreciacion: string
+  fecha_creacion: Date
+}

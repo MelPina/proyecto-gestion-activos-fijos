@@ -9,7 +9,7 @@ import {
   type TipoActivoDto,
 } from "@/lib/api-client"
 
-
+// Obtener depreciaciones filtradas
 export async function getDepreciaciones(search?: string, anio?: number, mes?: number, tipoActivoId?: number, activoFijoId?: number) {
   if (!anio) {
     return { success: false, error: "El año es obligatorio para filtrar depreciaciones" }
@@ -33,6 +33,7 @@ export async function getDepreciaciones(search?: string, anio?: number, mes?: nu
   }
 }
 
+// Obtener depreciación por ID
 export async function getDepreciacionById(id: number) {
   try {
     const result = await apiClient.get<DepreciacionDto>(`/depreciaciones/${id}`)
@@ -43,6 +44,7 @@ export async function getDepreciacionById(id: number) {
   }
 }
 
+// Obtener tipos de activos
 export async function getTiposActivos() {
   try {
     const result = await apiClient.get<TipoActivoDto[]>("/tiposactivos")
@@ -53,6 +55,7 @@ export async function getTiposActivos() {
   }
 }
 
+// Obtener activos fijos
 export async function getActivosFijos() {
   try {
     const result = await apiClient.get<ActivoFijoDto[]>("/activosfijos")
@@ -63,6 +66,7 @@ export async function getActivosFijos() {
   }
 }
 
+// Obtener estadísticas de depreciaciones
 export async function getDepreciacionesStats() {
   try {
     const result = await apiClient.get<DepreciacioinStatsDto>("/depreciaciones/stats")
@@ -72,9 +76,11 @@ export async function getDepreciacionesStats() {
     return { success: false, error: "Error al obtener estadísticas" }
   }
 }
+
+// Obtener estadísticas de depreciación acumulada
 export async function getDepreciacionAcumuladaStatsDto() {
   try {
-    const result = await apiClient.get<DepreciacionAcumuladaStatsDto>("/depreciacionesacumladas/stats")
+    const result = await apiClient.get<DepreciacionAcumuladaStatsDto>("/depreciacionesacumuladas/stats")
     return result
   } catch (error) {
     console.error("Error fetching stats:", error)
@@ -82,6 +88,30 @@ export async function getDepreciacionAcumuladaStatsDto() {
   }
 }
 
+// 🔹 Obtener asientos de depreciación
+export async function getAsientosDepreciacion(anio: number, mes?: number) {
+  try {
+    const params = new URLSearchParams()
+    params.append("anio", anio.toString())
+    if (mes) params.append("mes", mes.toString())
 
+    const queryString = params.toString()
+    const endpoint = `/asientosdepreciacion${queryString ? `?${queryString}` : ""}`
+    const result = await apiClient.get<any[]>(endpoint)
+    return result
+  } catch (error) {
+    console.error("Error fetching asientos de depreciación:", error)
+    return { success: false, error: "Error al obtener asientos de depreciación" }
+  }
+}
 
-
+// 🔹 Obtener meses de proceso disponibles
+export async function getMesesProceso() {
+  try {
+    const response = await apiClient.get<{ id: number; descripcion: string }[]>("/depreciaciones/meses")
+    return response.data
+  } catch (error) {
+    console.error("Error obteniendo meses:", error)
+    return []
+  }
+}

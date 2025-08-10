@@ -222,3 +222,13 @@ export interface AsientoContableDto
   montoAsiento: number;
   estado: boolean;
 }
+
+export interface TipoActivoDto 
+{
+  id: number;
+  descripcion: string;
+  departamento: string;
+  cuentaCompra: number;
+  cuentaDepreciacion: number;
+  estado: boolean;
+}

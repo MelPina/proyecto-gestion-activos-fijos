@@ -15,6 +15,26 @@ namespace ActivoFijoAPI.Services
             _context = context;
         }
 
+        public async Task<IEnumerable<object>> GetMesesProcesoAsync()
+        {
+            return new List<object>
+            {
+                new { id = 1, nombre = "Ene" },
+                new { id = 2, nombre = "Feb" },
+                new { id = 3, nombre = "Mar" },
+                new { id = 4, nombre = "Abr" },
+                new { id = 5, nombre = "May" },
+                new { id = 6, nombre = "Jun" },
+                new { id = 7, nombre = "Jul" },
+                new { id = 8, nombre = "Ago" },
+                new { id = 9, nombre = "Sep" },
+                new { id = 10, nombre = "Oct" },
+                new { id = 11, nombre = "Nov" },
+                new { id = 12, nombre = "Dic" }
+            };
+        }
+
+
         public int? CategorizarActivo(int tipoActivoId, string? cuentaDepreciacion)
         {
             if (!string.IsNullOrEmpty(cuentaDepreciacion))

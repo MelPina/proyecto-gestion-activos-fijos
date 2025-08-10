@@ -14,5 +14,9 @@ namespace ActivosFijosAPI.Services
 
         Task<IEnumerable<DepreciacionDto>> GetReporteDepreciacionAsync(int? anio, int? mes, int? activoFijoId, int? ActivoId);
         Task<DepreciacionStatsDto> GetStatsAsync();
+        Task<IEnumerable<DepreciacionDto>> GetReporteDepreciacionAsync(int? anio, int? mes, int? tipoActivoId, int? activoId);
+        Task AddAsync(Depreciacion depreciacion);
+        Task SaveChangesAsync();
+        Task GuardarCalculoAsync(DepreciacionDto dto);
     }
 }

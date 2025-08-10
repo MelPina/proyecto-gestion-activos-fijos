@@ -4,7 +4,7 @@ namespace ActivosFijosAPI.Services
 {
     public interface IDepartamentoService
     {
-        Task<IEnumerable<DepartamentoDto>> GetAllAsync();
+        Task<IEnumerable<DepartamentoDto>> GetAllAsync(string? search = null, int? departamentoId = null);
         Task<DepartamentoDto?> GetByIdAsync(int id);
         Task<DepartamentoDto> CreateAsync(CreateDepartamentoDto createDto);
         Task<DepartamentoDto> UpdateAsync(int id, UpdateDepartamentoDto updateDto);
