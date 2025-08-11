@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { LayoutDashboard, Users, Building2, Package, FileText, TrendingDown, LogOut, Menu, X } from "lucide-react"
+import { LayoutDashboard, Users, Building2, Package, FileText, TrendingDown, LogOut, Menu, X, BookOpen } from "lucide-react"
 import { logout } from "@/lib/actions/auth"
 import { useRouter } from "next/navigation"
 
@@ -47,6 +47,11 @@ export function Sidebar() {
       name: "Depreciación",
       path: "/depreciacion",
       icon: <TrendingDown className="h-5 w-5" />,
+    },
+    {
+      name: "Entradas Contables",
+      path: "/entradas-contables",
+      icon: <BookOpen className="h-5 w-5" />,
     },
   ]
 
