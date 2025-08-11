@@ -1,57 +1,51 @@
 import { Users, Building2, Package, DollarSign, UserPlus, FileEdit, Calculator, Clock } from "lucide-react"
+import { getEmpleadosStats } from "@/lib/actions/empleados"
+import { getDepartamentos } from "@/lib/actions/departamentos"
+import { getActivosFijosStats } from "@/lib/actions/activos-fijos"
+import { getTiposActivos } from "@/lib/actions/tipos-activos"
 
-export function Dashboard() {
-  // Datos de ejemplo para el dashboard
-  const stats = [
-    {
-      title: "Total Empleados",
-      value: "156",
-      description: "Empleados activos",
-      icon: <Users className="h-6 w-6 text-blue-500" />,
-    },
-    {
-      title: "Departamentos",
-      value: "12",
-      description: "Departamentos registrados",
-      icon: <Building2 className="h-6 w-6 text-green-500" />,
-    },
-    {
-      title: "Activos Fijos",
-      value: "342",
-      description: "Activos en inventario",
-      icon: <Package className="h-6 w-6 text-purple-500" />,
-    },
-    {
-      title: "Valor Total",
-      value: "$2.4M",
-      description: "Valor total de activos",
-      icon: <DollarSign className="h-6 w-6 text-orange-500" />,
-    },
-  ]
+export async function Dashboard() {
+  const [empleadosStatsResult, departamentosResult, activosStatsResult, tiposActivosResult] = await Promise.all([
+    getEmpleadosStats(),
+    getDepartamentos(),
+    getActivosFijosStats(),
+    getTiposActivos(),
+  ])
+
+  const empleadosStats = empleadosStatsResult.success ? empleadosStatsResult.data : null
+  const departamentos = departamentosResult.success ? departamentosResult.data : []
+  const activosStats = activosStatsResult.success ? activosStatsResult.data : null
+  const tiposActivos = tiposActivosResult.success ? tiposActivosResult.data : []
+
+  // const stats = [
+   
+  //   {
+  //     title: "Departamentos",
+  //     value: (departamentos ?? []).filter((d) => d.activo).length.toString(),
+  //     description: "Departamentos activos",
+  //     icon: <Building2 className="h-6 w-6 text-green-500" />,
+  //   },
+    
+  // ]
 
   const recentActivity = [
+    
     {
-      title: "Nuevo empleado registrado",
-      user: "Juan Pérez",
-      time: "Hace 2 horas",
-      icon: <div className="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>,
-    },
-    {
-      title: "Activo asignado",
-      user: "María García",
-      time: "Hace 4 horas",
+      title: "Departamentos activos",
+      user: `${(departamentos ?? []).filter((d) => d.activo).length} departamentos`,
+      time: "Estado actual",
       icon: <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>,
     },
     {
-      title: "Departamento actualizado",
-      user: "Carlos López",
-      time: "Hace 1 día",
+      title: "Tipos de activos",
+      user: `${(tiposActivos ?? []).filter((t) => t.activo).length} tipos configurados`,
+      time: "Configuración actual",
       icon: <div className="w-2 h-2 bg-purple-500 rounded-full mr-2"></div>,
     },
     {
-      title: "Depreciación calculada",
-      user: "Sistema",
-      time: "Hace 2 días",
+      title: "Valor de inventario",
+      user: activosStats?.valorTotal ? `$${activosStats.valorTotal.toLocaleString()}` : "$0",
+      time: "Valoración actual",
       icon: <div className="w-2 h-2 bg-orange-500 rounded-full mr-2"></div>,
     },
   ]
@@ -79,12 +73,14 @@ export function Dashboard() {
 
   return (
     <div className="space-y-6">
+      <br />
+      <br />
       <div>
         <h1 className="text-3xl font-bold">Dashboard</h1>
-        <p className="text-gray-400">Resumen del sistema de activos fijos</p>
+        {/* <p className="text-gray-400">Resumen del sistema de activos fijos</p> */}
       </div>
 
-      {/* Stats Grid */}
+      {/* Stats Grid
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((stat, index) => (
           <div key={index} className="bg-[#2a2d3a] rounded-lg p-6 shadow">
@@ -98,14 +94,14 @@ export function Dashboard() {
             </div>
           </div>
         ))}
-      </div>
+      </div> */}
 
       {/* Activity and Quick Access */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Activity */}
         <div className="bg-[#2a2d3a] rounded-lg p-6 shadow">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold">Actividad Reciente</h2>
+            <h2 className="text-xl font-bold">Estado del Sistema</h2>
             <Clock className="h-5 w-5 text-gray-400" />
           </div>
           <div className="space-y-4">

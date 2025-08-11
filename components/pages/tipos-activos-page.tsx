@@ -1,62 +1,26 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-import {
-  Plus,
-  Search,
-  Edit,
-  Trash2,
-  Package,
-  Monitor,
-  Car,
-  Wrench,
-  Briefcase,
-  Home,
-  Zap,
-  Cpu,
-  AlertCircle,
-  RefreshCw,
-} from "lucide-react"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Package, Plus, Edit, Trash2, AlertCircle } from "lucide-react"
 import { getTiposActivos, type TipoActivo } from "@/lib/actions/tipos-activos"
-import { DeleteTipoActivoModal } from "@/components/modals/delete-tipo-activo-modal"
 import { NuevoTipoActivoModal } from "@/components/modals/nuevo-tipo-activo-modal"
 import { EditarTipoActivoModal } from "@/components/modals/editar-tipo-activo-modal"
-
-const iconMap = {
-  Monitor,
-  Car,
-  Wrench,
-  Briefcase,
-  Home,
-  Zap,
-  Cpu,
-  Package,
-}
+import { DeleteTipoActivoModal } from "@/components/modals/delete-tipo-activo-modal"
 
 export function TiposActivosPage() {
   const [tiposActivos, setTiposActivos] = useState<TipoActivo[]>([])
-  const [searchTerm, setSearchTerm] = useState("")
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [deleteModal, setDeleteModal] = useState<{ open: boolean; tipoActivo: TipoActivo | null }>({
-    open: false,
-    tipoActivo: null,
-  })
-  const [nuevoModal, setNuevoModal] = useState(false)
-  const [editarModal, setEditarModal] = useState<{ open: boolean; tipoActivo: TipoActivo | null }>({
-    open: false,
-    tipoActivo: null,
-  })
+  const [showNuevoModal, setShowNuevoModal] = useState(false)
+  const [editingTipoActivo, setEditingTipoActivo] = useState<TipoActivo | null>(null)
+  const [deletingTipoActivo, setDeletingTipoActivo] = useState<TipoActivo | null>(null)
 
-  useEffect(() => {
-    loadData()
-  }, [])
-
-  async function loadData() {
+  const loadData = async () => {
     setLoading(true)
     setError(null)
 
@@ -74,195 +38,139 @@ export function TiposActivosPage() {
     }
   }
 
-  const filteredTipos = tiposActivos.filter(
-    (tipo) =>
-      tipo.descripcion.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      tipo.cuentaContableCompra.toLowerCase().includes(searchTerm.toLowerCase()),
-  )
+  useEffect(() => {
+    loadData()
+  }, [])
 
-  function handleDeleteClick(tipoActivo: TipoActivo) {
-    setDeleteModal({ open: true, tipoActivo })
-  }
-
-  function handleEditClick(tipoActivo: TipoActivo) {
-    setEditarModal({ open: true, tipoActivo })
-  }
-
-  function handleSuccess() {
+  const handleNuevoSuccess = () => {
+    setShowNuevoModal(false)
     loadData()
   }
 
-  if (loading) {
-    return (
-      <div className="p-6">
-        <div className="flex items-center space-x-2 text-white">
-          <RefreshCw className="h-5 w-5 animate-spin" />
-          <span>Cargando tipos de activos...</span>
-        </div>
-      </div>
-    )
+  const handleEditSuccess = () => {
+    setEditingTipoActivo(null)
+    loadData()
   }
 
-  if (error) {
-    return (
-      <div className="p-6 space-y-4">
-        <div className="flex items-center space-x-2 text-red-400">
-          <AlertCircle className="h-5 w-5" />
-          <span>Error de conexión</span>
-        </div>
-        <Card className="bg-red-900/20 border-red-700">
-          <CardContent className="p-4">
-            <p className="text-red-400">{error}</p>
-            <Button onClick={loadData} className="mt-4 bg-red-600 hover:bg-red-700">
-              <RefreshCw className="h-4 w-4 mr-2" />
-              Reintentar
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    )
+  const handleDeleteSuccess = () => {
+    setDeletingTipoActivo(null)
+    loadData()
   }
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-white">Tipos de Activos</h1>
-          <p className="text-gray-400 mt-1">Categorías y clasificación de activos fijos</p>
+          {/* <p className="text-gray-400">Gestión de tipos de activos fijos</p> */}
         </div>
-        <Button onClick={() => setNuevoModal(true)} className="bg-blue-600 hover:bg-blue-700">
-          <Plus className="h-4 w-4 mr-2" />
-          Nuevo Tipo
-        </Button>
+        <div className="flex items-center gap-4">
+          <Package className="h-8 w-8 text-green-500" />
+          <Button onClick={() => setShowNuevoModal(true)} className="bg-green-600 hover:bg-green-700">
+            <Plus className="h-4 w-4 mr-2" />
+            Nuevo Tipo
+          </Button>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gray-800 border-gray-700">
-          <CardContent className="p-4">
-            <div className="text-2xl font-bold text-white">{tiposActivos.filter((t) => t.activo).length}</div>
-            <div className="text-sm text-gray-400">Categorías Activas</div>
-          </CardContent>
-        </Card>
-        <Card className="bg-gray-800 border-gray-700">
-          <CardContent className="p-4">
-            <div className="text-2xl font-bold text-blue-400">
-              {tiposActivos.reduce((sum, t) => sum + (t.cantidadActivos || 0), 0)}
-            </div>
-            <div className="text-sm text-gray-400">Total Activos</div>
-          </CardContent>
-        </Card>
-        <Card className="bg-gray-800 border-gray-700">
-          <CardContent className="p-4">
-            <div className="text-2xl font-bold text-green-400">
-              ${tiposActivos.reduce((sum, t) => sum + (t.cantidadActivos || 0) * 1000, 0).toLocaleString()}
-            </div>
-            <div className="text-sm text-gray-400">Valor Estimado</div>
-          </CardContent>
-        </Card>
-        <Card className="bg-gray-800 border-gray-700">
-          <CardContent className="p-4">
-            <div className="text-2xl font-bold text-yellow-400">
-              {tiposActivos.length > 0
-                ? Math.round(tiposActivos.reduce((sum, t) => sum + (t.cantidadActivos || 0), 0) / tiposActivos.length)
-                : 0}
-            </div>
-            <div className="text-sm text-gray-400">Promedio por Tipo</div>
-          </CardContent>
-        </Card>
-      </div>
+      {/* Error Alert */}
+      {error && (
+        <Alert variant="destructive" className="bg-red-900/50 border-red-800">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription className="text-white">{error}</AlertDescription>
+        </Alert>
+      )}
 
-      <Card className="bg-gray-800 border-gray-700">
+      {/* Tipos Activos Table */}
+      <Card className="bg-[#2a2d3a] border-gray-700">
         <CardHeader>
-          <div className="flex items-center space-x-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-              <Input
-                placeholder="Buscar tipos de activos..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 bg-gray-700 border-gray-600 text-white"
-              />
-            </div>
-          </div>
+          <CardTitle className="text-white">Lista de Tipos de Activos</CardTitle>
+          <CardDescription className="text-gray-400">
+            {tiposActivos.length} tipos de activos registrados
+          </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredTipos.map((tipo) => {
-              const IconComponent = Package
-              return (
-                <Card key={tipo.id} className="bg-gray-700 border-gray-600 hover:bg-gray-600/50 transition-colors">
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                          <IconComponent className="h-5 w-5 text-white" />
-                        </div>
-                        <div>
-                          <CardTitle className="text-white text-lg">{tipo.descripcion}</CardTitle>
-                          <p className="text-sm text-gray-400">Activos: {tipo.cantidadActivos || 0}</p>
-                        </div>
-                      </div>
+          {loading ? (
+            <div className="flex items-center justify-center py-8">
+              <div className="text-gray-400">Cargando tipos de activos...</div>
+            </div>
+          ) : tiposActivos.length === 0 ? (
+            <div className="flex items-center justify-center py-8">
+              <div className="text-gray-400">No hay tipos de activos registrados</div>
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow className="border-gray-700">
+                  <TableHead className="text-gray-300">ID</TableHead>
+                  <TableHead className="text-gray-300">Descripción</TableHead>
+                  <TableHead className="text-gray-300">Cuenta Compra</TableHead>
+                  <TableHead className="text-gray-300">Cuenta Depreciación</TableHead>
+                  <TableHead className="text-gray-300">Estado</TableHead>
+                  <TableHead className="text-gray-300">Acciones</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {tiposActivos.map((tipo) => (
+                  <TableRow key={tipo.id} className="border-gray-700">
+                    <TableCell className="text-white font-medium">{tipo.id}</TableCell>
+                    <TableCell className="text-gray-300">{tipo.descripcion}</TableCell>
+                    <TableCell className="text-gray-300">{tipo.cuentaContableCompra}</TableCell>
+                    <TableCell className="text-gray-300">{tipo.cuentaContableDepreciacion}</TableCell>
+                    <TableCell>
                       <Badge variant={tipo.activo ? "default" : "secondary"}>
                         {tipo.activo ? "Activo" : "Inactivo"}
                       </Badge>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="pt-0">
-                    <div className="space-y-2 text-sm">
-                      <div>
-                        <div className="text-gray-400">Cuenta Compra</div>
-                        <div className="text-white font-mono">{tipo.cuentaContableCompra}</div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setEditingTipoActivo(tipo)}
+                          className="text-blue-400 hover:text-blue-300 hover:bg-blue-900/20"
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        {/* <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setDeletingTipoActivo(tipo)}
+                          className="text-red-400 hover:text-red-300 hover:bg-red-900/20"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button> */}
                       </div>
-                      <div>
-                        <div className="text-gray-400">Cuenta Depreciación</div>
-                        <div className="text-white font-mono">{tipo.cuentaContableDepreciacion}</div>
-                      </div>
-                    </div>
-                    <div className="flex space-x-2 mt-4">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="flex-1 bg-transparent"
-                        onClick={() => handleEditClick(tipo)}
-                      >
-                        <Edit className="h-4 w-4 mr-1" />
-                        Editar
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="text-red-400 hover:text-red-300 bg-transparent"
-                        onClick={() => handleDeleteClick(tipo)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              )
-            })}
-          </div>
-          {filteredTipos.length === 0 && (
-            <div className="text-center py-8 text-gray-400">No se encontraron tipos de activos</div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           )}
         </CardContent>
       </Card>
 
-      <DeleteTipoActivoModal
-        tipoActivo={deleteModal.tipoActivo}
-        open={deleteModal.open}
-        onOpenChange={(open) => setDeleteModal({ ...deleteModal, open })}
-        onSuccess={handleSuccess}
-      />
+      {/* Modals */}
+      <NuevoTipoActivoModal open={showNuevoModal} onOpenChange={setShowNuevoModal} onSuccess={handleNuevoSuccess} />
 
-      <NuevoTipoActivoModal open={nuevoModal} onOpenChange={setNuevoModal} onSuccess={handleSuccess} />
+      {editingTipoActivo && (
+        <EditarTipoActivoModal
+          tipoActivo={editingTipoActivo ? { ...editingTipoActivo, cantidadActivos: editingTipoActivo.cantidadActivos ?? 0 } : null}
+          open={!!editingTipoActivo}
+          onOpenChange={(open) => !open && setEditingTipoActivo(null)}
+          onSuccess={handleEditSuccess}
+        />
+      )}
 
-      <EditarTipoActivoModal
-        tipoActivo={editarModal.tipoActivo}
-        open={editarModal.open}
-        onOpenChange={(open) => setEditarModal({ ...editarModal, open })}
-        onSuccess={handleSuccess}
-      />
+      {deletingTipoActivo && (
+        <DeleteTipoActivoModal
+          tipoActivo={deletingTipoActivo ? { ...deletingTipoActivo, cantidadActivos: deletingTipoActivo.cantidadActivos ?? 0 } : null}
+          open={!!deletingTipoActivo}
+          onOpenChange={(open) => !open && setDeletingTipoActivo(null)}
+          onSuccess={handleDeleteSuccess}
+        />
+      )}
     </div>
   )
 }

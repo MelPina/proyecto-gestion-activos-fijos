@@ -20,26 +20,30 @@ namespace ActivosFijosAPI.Services
         {
             try
             {
-                _logger.LogInformation("Getting all departamentos (including inactive)");
-                
                 var departamentos = await _context.Departamentos
-                    .Include(d => d.Empleados.Where(e => e.Activo))
                     .OrderBy(d => d.Descripcion)
                     .ToListAsync();
 
-                _logger.LogInformation($"Found {departamentos.Count} departamentos total");
-
-                return departamentos.Select(d => new DepartamentoDto
+                var result = new List<DepartamentoDto>();
+                foreach (var dept in departamentos)
                 {
-                    Id = d.Id,
-                    Descripcion = d.Descripcion,
-                    Activo = d.Activo,
-                    CantidadEmpleados = d.Empleados.Count(e => e.Activo)
-                });
+                    var cantidadEmpleados = await _context.Empleados
+                        .CountAsync(e => e.DepartamentoId == dept.Id && e.Activo == true);
+
+                    result.Add(new DepartamentoDto
+                    {
+                        Id = dept.Id,
+                        Descripcion = dept.Descripcion,
+                        Activo = dept.Activo,
+                        CantidadEmpleados = cantidadEmpleados
+                    });
+                }
+
+                return result;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting departamentos");
+                _logger.LogError(ex, "Error al obtener departamentos");
                 throw;
             }
         }
@@ -48,29 +52,25 @@ namespace ActivosFijosAPI.Services
         {
             try
             {
-                _logger.LogInformation($"Getting departamento with ID: {id}");
-                
                 var departamento = await _context.Departamentos
-                    .Include(d => d.Empleados.Where(e => e.Activo))
                     .FirstOrDefaultAsync(d => d.Id == id);
 
-                if (departamento == null)
-                {
-                    _logger.LogWarning($"Departamento with ID {id} not found");
-                    return null;
-                }
+                if (departamento == null) return null;
+
+                var cantidadEmpleados = await _context.Empleados
+                    .CountAsync(e => e.DepartamentoId == id && e.Activo == true);
 
                 return new DepartamentoDto
                 {
                     Id = departamento.Id,
                     Descripcion = departamento.Descripcion,
                     Activo = departamento.Activo,
-                    CantidadEmpleados = departamento.Empleados.Count(e => e.Activo)
+                    CantidadEmpleados = cantidadEmpleados
                 };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error getting departamento with ID: {id}");
+                _logger.LogError(ex, "Error al obtener departamento {Id}", id);
                 throw;
             }
         }
@@ -79,32 +79,68 @@ namespace ActivosFijosAPI.Services
         {
             try
             {
-                _logger.LogInformation($"Creating departamento: {createDto.Descripcion}");
-
-                // Verificar si ya existe un departamento activo con la misma descripción
-                var existingDepartamento = await _context.Departamentos
-                    .FirstOrDefaultAsync(d => d.Descripcion.ToLower().Trim() == createDto.Descripcion.ToLower().Trim() && d.Activo);
-
-                if (existingDepartamento != null)
+                var strategy = _context.Database.CreateExecutionStrategy();
+                return await strategy.ExecuteAsync(async () =>
                 {
-                    throw new InvalidOperationException("Ya existe un departamento activo con esta descripción");
-                }
+                    using var transaction = await _context.Database.BeginTransactionAsync();
+                    try
+                    {
+                        var existingDepartamento = await _context.Departamentos
+                            .FirstOrDefaultAsync(d => d.Descripcion.ToLower() == createDto.Descripcion.ToLower());
 
-                var departamento = new Departamento
-                {
-                    Descripcion = createDto.Descripcion.Trim(),
-                    Activo = true
-                };
+                        if (existingDepartamento != null)
+                        {
+                            if (!existingDepartamento.Activo)
+                            {
+                                existingDepartamento.Activo = true;
+                                _context.Entry(existingDepartamento).State = EntityState.Modified;
+                                await _context.SaveChangesAsync();
+                                await transaction.CommitAsync();
 
-                _context.Departamentos.Add(departamento);
-                await _context.SaveChangesAsync();
+                                _logger.LogInformation("Departamento reactivado: {Id}", existingDepartamento.Id);
+                                return new DepartamentoDto
+                                {
+                                    Id = existingDepartamento.Id,
+                                    Descripcion = existingDepartamento.Descripcion,
+                                    Activo = true,
+                                    CantidadEmpleados = 0
+                                };
+                            }
+                            else
+                            {
+                                throw new InvalidOperationException("Ya existe un departamento activo con esta descripción");
+                            }
+                        }
 
-                _logger.LogInformation($"Created departamento with ID: {departamento.Id}");
-                return await GetByIdAsync(departamento.Id) ?? throw new InvalidOperationException("Error al crear departamento");
+                        var departamento = new Departamento
+                        {
+                            Descripcion = createDto.Descripcion,
+                            Activo = true
+                        };
+
+                        _context.Departamentos.Add(departamento);
+                        await _context.SaveChangesAsync();
+                        await transaction.CommitAsync();
+
+                        _logger.LogInformation("Departamento creado: {Id}", departamento.Id);
+                        return new DepartamentoDto
+                        {
+                            Id = departamento.Id,
+                            Descripcion = departamento.Descripcion,
+                            Activo = true,
+                            CantidadEmpleados = 0
+                        };
+                    }
+                    catch
+                    {
+                        await transaction.RollbackAsync();
+                        throw;
+                    }
+                });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error creating departamento: {createDto.Descripcion}");
+                _logger.LogError(ex, "Error al crear departamento");
                 throw;
             }
         }
@@ -113,45 +149,60 @@ namespace ActivosFijosAPI.Services
         {
             try
             {
-                _logger.LogInformation($"Updating departamento with ID: {id}");
-                _logger.LogInformation($"Update data: Descripcion='{updateDto.Descripcion}', Activo={updateDto.Activo}");
-
-                var departamento = await _context.Departamentos.FirstOrDefaultAsync(d => d.Id == id);
-                if (departamento == null)
+                var strategy = _context.Database.CreateExecutionStrategy();
+                return await strategy.ExecuteAsync(async () =>
                 {
-                    _logger.LogWarning($"Departamento with ID {id} not found for update");
-                    throw new InvalidOperationException("Departamento no encontrado");
-                }
+                    using var transaction = await _context.Database.BeginTransactionAsync();
+                    try
+                    {
+                        var departamento = await _context.Departamentos
+                            .FirstOrDefaultAsync(d => d.Id == id);
 
-                // Verificar si ya existe otro departamento activo con la misma descripción
-                var existingDepartamento = await _context.Departamentos
-                    .FirstOrDefaultAsync(d => d.Id != id && 
-                                           d.Descripcion.ToLower().Trim() == updateDto.Descripcion.ToLower().Trim() && 
-                                           d.Activo);
+                        if (departamento == null)
+                        {
+                            throw new InvalidOperationException("Departamento no encontrado");
+                        }
 
-                if (existingDepartamento != null)
-                {
-                    throw new InvalidOperationException("Ya existe otro departamento activo con esta descripción");
-                }
+                        var existingDepartamento = await _context.Departamentos
+                            .FirstOrDefaultAsync(d => d.Id != id && 
+                                               d.Descripcion.ToLower() == updateDto.Descripcion.ToLower() && 
+                                               d.Activo);
 
-                // Actualizar los campos
-                departamento.Descripcion = updateDto.Descripcion.Trim();
-                departamento.Activo = updateDto.Activo;
+                        if (existingDepartamento != null)
+                        {
+                            throw new InvalidOperationException("Ya existe otro departamento activo con esta descripción");
+                        }
 
-                // Usar Update para asegurar que EF detecte los cambios
-                _context.Entry(departamento).State = EntityState.Modified;
-                var changes = await _context.SaveChangesAsync();
-                
-                _logger.LogInformation($"Updated departamento with ID: {id}, Changes saved: {changes}");
+                        departamento.Descripcion = updateDto.Descripcion;
+                        departamento.Activo = updateDto.Activo;
 
-                // Refrescar el contexto para obtener los datos actualizados
-                _context.Entry(departamento).Reload();
+                        _context.Entry(departamento).State = EntityState.Modified;
+                        await _context.SaveChangesAsync();
+                        await transaction.CommitAsync();
 
-                return await GetByIdAsync(id) ?? throw new InvalidOperationException("Error al actualizar departamento");
+                        _logger.LogInformation("Departamento actualizado: {Id}", id);
+
+                        var cantidadEmpleados = await _context.Empleados
+                            .CountAsync(e => e.DepartamentoId == id && e.Activo == true);
+
+                        return new DepartamentoDto
+                        {
+                            Id = departamento.Id,
+                            Descripcion = departamento.Descripcion,
+                            Activo = departamento.Activo,
+                            CantidadEmpleados = cantidadEmpleados
+                        };
+                    }
+                    catch
+                    {
+                        await transaction.RollbackAsync();
+                        throw;
+                    }
+                });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error updating departamento with ID: {id}");
+                _logger.LogError(ex, "Error al actualizar departamento {Id}", id);
                 throw;
             }
         }
@@ -160,33 +211,56 @@ namespace ActivosFijosAPI.Services
         {
             try
             {
-                _logger.LogInformation($"Deleting departamento with ID: {id}");
-                
-                var departamento = await _context.Departamentos.FirstOrDefaultAsync(d => d.Id == id);
-                if (departamento == null)
+                var strategy = _context.Database.CreateExecutionStrategy();
+                return await strategy.ExecuteAsync(async () =>
                 {
-                    _logger.LogWarning($"Departamento with ID {id} not found for deletion");
-                    return false;
-                }
+                    using var transaction = await _context.Database.BeginTransactionAsync();
+                    try
+                    {
+                        var departamento = await _context.Departamentos
+                            .FirstOrDefaultAsync(d => d.Id == id);
 
-                // Verificar si tiene empleados activos
-                var tieneEmpleados = await _context.Empleados.AnyAsync(e => e.DepartamentoId == id && e.Activo);
-                if (tieneEmpleados)
-                {
-                    throw new InvalidOperationException("No se puede eliminar el departamento porque tiene empleados asignados");
-                }
+                        if (departamento == null)
+                        {
+                            _logger.LogWarning("Departamento no encontrado para eliminar: {Id}", id);
+                            return false;
+                        }
 
-                // Soft delete - marcar como inactivo
-                departamento.Activo = false;
-                _context.Entry(departamento).State = EntityState.Modified;
-                var changes = await _context.SaveChangesAsync();
-                
-                _logger.LogInformation($"Deleted (deactivated) departamento with ID: {id}, Changes: {changes}");
-                return true;
+                        var empleadosAsignados = await _context.Empleados
+                            .CountAsync(e => e.DepartamentoId == id && e.Activo == true);
+
+                        if (empleadosAsignados > 0)
+                        {
+                            throw new InvalidOperationException($"No se puede eliminar el departamento porque tiene {empleadosAsignados} empleado(s) asignado(s)");
+                        }
+
+                        var activosAsignados = await _context.ActivosFijos
+                            .CountAsync(af => af.DepartamentoId == id && af.Estado > 0);
+
+                        if (activosAsignados > 0)
+                        {
+                            throw new InvalidOperationException($"No se puede eliminar el departamento porque tiene {activosAsignados} activo(s) fijo(s) asignado(s)");
+                        }
+
+                        departamento.Activo = false;
+                        _context.Entry(departamento).State = EntityState.Modified;
+                        
+                        await _context.SaveChangesAsync();
+                        await transaction.CommitAsync();
+
+                        _logger.LogInformation("Departamento eliminado: {Id}", id);
+                        return true;
+                    }
+                    catch
+                    {
+                        await transaction.RollbackAsync();
+                        throw;
+                    }
+                });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error deleting departamento with ID: {id}");
+                _logger.LogError(ex, "Error al eliminar departamento {Id}", id);
                 throw;
             }
         }

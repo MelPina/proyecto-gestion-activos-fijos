@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ActivosFijosAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ba827a83b4ee960138f77aca6ede26e948dc4385")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+eca6df471841aca5d7501cd2414c25a970d08bd1")]
 [assembly: System.Reflection.AssemblyProductAttribute("ActivosFijosAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ActivosFijosAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

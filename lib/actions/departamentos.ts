@@ -7,6 +7,7 @@ export interface Departamento {
   id: number
   descripcion: string
   activo: boolean
+  cantidadEmpleados?: number
 }
 
 export interface CreateDepartamentoDto {
@@ -91,7 +92,7 @@ export async function createDepartamento(formData: FormData): Promise<ApiRespons
       return {
         success: true,
         data: result.data,
-        error: "Departamento creado exitosamente",
+        // Departamento creado exitosamente
       }
     }
 
@@ -126,7 +127,6 @@ export async function updateDepartamento(id: number, formData: FormData): Promis
       return {
         success: true,
         data: result.data,
-        error: "Departamento actualizado exitosamente",
       }
     }
 
@@ -140,12 +140,12 @@ export async function updateDepartamento(id: number, formData: FormData): Promis
 export async function deleteDepartamento(id: number): Promise<ApiResponse<void>> {
   try {
     console.log(`🗑️ Deleting departamento ${id}`)
-    const result = await apiClient.delete(`/departamentos/${id}`)
+    const result = await apiClient.delete<void>(`/departamentos/${id}`)
     console.log("✅ Delete departamento result:", result)
 
     if (result.success) {
       revalidatePath("/departamentos")
-      return { success: true, error: "Departamento eliminado exitosamente" }
+      return { success: true }
     }
 
     return result

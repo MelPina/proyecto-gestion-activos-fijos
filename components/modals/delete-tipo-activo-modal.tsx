@@ -12,10 +12,10 @@ import {
 } from "@/components/ui/dialog"
 import { AlertTriangle } from "lucide-react"
 import { deleteTipoActivo } from "@/lib/actions/tipos-activos"
-import type { TipoActivoDto } from "@/lib/api-client"
+import type { TipoActivo } from "@/lib/actions/tipos-activos"
 
 interface Props {
-  tipoActivo: TipoActivoDto | null
+  tipoActivo: TipoActivo | null
   open: boolean
   onOpenChange: (open: boolean) => void
   onSuccess: () => void
@@ -37,7 +37,7 @@ export function DeleteTipoActivoModal({ tipoActivo, open, onOpenChange, onSucces
       onSuccess()
       onOpenChange(false)
     } else {
-      setError(result.error ?? "Ocurrió un error desconocido")
+      setError(result.error ?? "")
     }
 
     setLoading(false)
@@ -54,7 +54,7 @@ export function DeleteTipoActivoModal({ tipoActivo, open, onOpenChange, onSucces
           <DialogDescription className="text-gray-300">
             ¿Está seguro que desea eliminar el tipo de activo{" "}
             <span className="font-semibold text-white">{tipoActivo?.descripcion}</span>?
-            {tipoActivo?.cantidadActivos > 0 && (
+            {tipoActivo?.cantidadActivos && tipoActivo.cantidadActivos > 0 && (
               <span className="text-yellow-400"> Este tipo tiene {tipoActivo.cantidadActivos} activos asociados.</span>
             )}
           </DialogDescription>

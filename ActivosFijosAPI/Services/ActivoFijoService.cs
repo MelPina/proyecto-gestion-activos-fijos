@@ -83,173 +83,152 @@ namespace ActivosFijosAPI.Services
 
         public async Task<ActivoFijoDto> CreateAsync(CreateActivoFijoDto createDto)
         {
-            var strategy = _context.Database.CreateExecutionStrategy();
-            return await strategy.ExecuteAsync(async () =>
+            try
             {
-                using var transaction = await _context.Database.BeginTransactionAsync();
-                try
+                // Validar que el tipo de activo existe
+                var tipoActivo = await _context.TiposActivos
+                    .FirstOrDefaultAsync(t => t.Id == createDto.TipoActivoId && t.Activo);
+
+                if (tipoActivo == null)
                 {
-                    // Validar que el tipo de activo existe
-                    var tipoActivo = await _context.TiposActivos
-                        .FirstOrDefaultAsync(t => t.Id == createDto.TipoActivoId && t.Activo);
+                    throw new ArgumentException("El tipo de activo no existe o está inactivo");
+                }
 
-                    if (tipoActivo == null)
+                // Validar departamento si se proporciona
+                if (createDto.DepartamentoId.HasValue)
+                {
+                    var departamento = await _context.Departamentos
+                        .FirstOrDefaultAsync(d => d.Id == createDto.DepartamentoId.Value && d.Activo);
+
+                    if (departamento == null)
                     {
-                        throw new ArgumentException("El tipo de activo no existe o está inactivo");
+                        throw new ArgumentException("El departamento no existe o está inactivo");
                     }
+                }
 
-                    // Validar departamento si se proporciona
-                    if (createDto.DepartamentoId.HasValue)
+                var activo = new ActivoFijo
+                {
+                    Descripcion = createDto.Descripcion.Trim(),
+                    DepartamentoId = createDto.DepartamentoId,
+                    TipoActivoId = createDto.TipoActivoId,
+                    FechaAdquisicion = createDto.FechaAdquisicion,
+                    Valor = createDto.Valor,
+                    DepreciacionAcumulada = 0,
+                    Estado = createDto.Estado
+                };
+
+                _context.ActivosFijos.Add(activo);
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation("Activo fijo creado: {Descripcion} (ID: {Id})", activo.Descripcion, activo.Id);
+
+                return await GetByIdAsync(activo.Id) ?? throw new InvalidOperationException("Error al recuperar el activo creado");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al crear activo fijo");
+                throw;
+            }
+        }
+
+        public async Task<ActivoFijoDto?> UpdateAsync(int id, UpdateActivoFijoDto updateDto)
+        {
+            try
+            {
+                var activo = await _context.ActivosFijos.FindAsync(id);
+                if (activo == null)
+                {
+                    return null;
+                }
+
+                // Actualizar campos si se proporcionan
+                if (!string.IsNullOrWhiteSpace(updateDto.Descripcion))
+                {
+                    activo.Descripcion = updateDto.Descripcion.Trim();
+                }
+
+                if (updateDto.DepartamentoId.HasValue)
+                {
+                    if (updateDto.DepartamentoId.Value > 0)
                     {
                         var departamento = await _context.Departamentos
-                            .FirstOrDefaultAsync(d => d.Id == createDto.DepartamentoId.Value && d.Activo);
+                            .FirstOrDefaultAsync(d => d.Id == updateDto.DepartamentoId.Value && d.Activo);
 
                         if (departamento == null)
                         {
                             throw new ArgumentException("El departamento no existe o está inactivo");
                         }
                     }
-
-                    var activo = new ActivoFijo
-                    {
-                        Descripcion = createDto.Descripcion.Trim(),
-                        DepartamentoId = createDto.DepartamentoId,
-                        TipoActivoId = createDto.TipoActivoId,
-                        FechaAdquisicion = createDto.FechaAdquisicion,
-                        Valor = createDto.Valor,
-                        DepreciacionAcumulada = 0,
-                        Estado = createDto.Estado
-                    };
-
-                    _context.ActivosFijos.Add(activo);
-                    await _context.SaveChangesAsync();
-                    await transaction.CommitAsync();
-
-                    _logger.LogInformation("Activo fijo creado: {Descripcion} (ID: {Id})", activo.Descripcion, activo.Id);
-
-                    return await GetByIdAsync(activo.Id) ?? throw new InvalidOperationException("Error al recuperar el activo creado");
+                    activo.DepartamentoId = updateDto.DepartamentoId.Value > 0 ? updateDto.DepartamentoId.Value : null;
                 }
-                catch (Exception ex)
+
+                if (updateDto.TipoActivoId.HasValue)
                 {
-                    await transaction.RollbackAsync();
-                    _logger.LogError(ex, "Error al crear activo fijo");
-                    throw;
-                }
-            });
-        }
+                    var tipoActivo = await _context.TiposActivos
+                        .FirstOrDefaultAsync(t => t.Id == updateDto.TipoActivoId.Value && t.Activo);
 
-        public async Task<ActivoFijoDto?> UpdateAsync(int id, UpdateActivoFijoDto updateDto)
-        {
-            var strategy = _context.Database.CreateExecutionStrategy();
-            return await strategy.ExecuteAsync(async () =>
+                    if (tipoActivo == null)
+                    {
+                        throw new ArgumentException("El tipo de activo no existe o está inactivo");
+                    }
+                    activo.TipoActivoId = updateDto.TipoActivoId.Value;
+                }
+
+                if (updateDto.FechaAdquisicion.HasValue)
+                {
+                    activo.FechaAdquisicion = updateDto.FechaAdquisicion.Value;
+                }
+
+                if (updateDto.Valor.HasValue)
+                {
+                    activo.Valor = updateDto.Valor.Value;
+                }
+
+                if (updateDto.DepreciacionAcumulada.HasValue)
+                {
+                    activo.DepreciacionAcumulada = updateDto.DepreciacionAcumulada.Value;
+                }
+
+                if (updateDto.Estado.HasValue)
+                {
+                    activo.Estado = updateDto.Estado.Value;
+                }
+
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation("Activo fijo actualizado: {Descripcion} (ID: {Id})", activo.Descripcion, activo.Id);
+
+                return await GetByIdAsync(activo.Id);
+            }
+            catch (Exception ex)
             {
-                using var transaction = await _context.Database.BeginTransactionAsync();
-                try
-                {
-                    var activo = await _context.ActivosFijos.FindAsync(id);
-                    if (activo == null)
-                    {
-                        return null;
-                    }
-
-                    // Actualizar campos si se proporcionan
-                    if (!string.IsNullOrWhiteSpace(updateDto.Descripcion))
-                    {
-                        activo.Descripcion = updateDto.Descripcion.Trim();
-                    }
-
-                    if (updateDto.DepartamentoId.HasValue)
-                    {
-                        if (updateDto.DepartamentoId.Value > 0)
-                        {
-                            var departamento = await _context.Departamentos
-                                .FirstOrDefaultAsync(d => d.Id == updateDto.DepartamentoId.Value && d.Activo);
-
-                            if (departamento == null)
-                            {
-                                throw new ArgumentException("El departamento no existe o está inactivo");
-                            }
-                        }
-                        activo.DepartamentoId = updateDto.DepartamentoId.Value > 0 ? updateDto.DepartamentoId.Value : null;
-                    }
-
-                    if (updateDto.TipoActivoId.HasValue)
-                    {
-                        var tipoActivo = await _context.TiposActivos
-                            .FirstOrDefaultAsync(t => t.Id == updateDto.TipoActivoId.Value && t.Activo);
-
-                        if (tipoActivo == null)
-                        {
-                            throw new ArgumentException("El tipo de activo no existe o está inactivo");
-                        }
-                        activo.TipoActivoId = updateDto.TipoActivoId.Value;
-                    }
-
-                    if (updateDto.FechaAdquisicion.HasValue)
-                    {
-                        activo.FechaAdquisicion = updateDto.FechaAdquisicion.Value;
-                    }
-
-                    if (updateDto.Valor.HasValue)
-                    {
-                        activo.Valor = updateDto.Valor.Value;
-                    }
-
-                    if (updateDto.DepreciacionAcumulada.HasValue)
-                    {
-                        activo.DepreciacionAcumulada = updateDto.DepreciacionAcumulada.Value;
-                    }
-
-                    if (updateDto.Estado.HasValue)
-                    {
-                        activo.Estado = updateDto.Estado.Value;
-                    }
-
-                    await _context.SaveChangesAsync();
-                    await transaction.CommitAsync();
-
-                    _logger.LogInformation("Activo fijo actualizado: {Descripcion} (ID: {Id})", activo.Descripcion, activo.Id);
-
-                    return await GetByIdAsync(activo.Id);
-                }
-                catch (Exception ex)
-                {
-                    await transaction.RollbackAsync();
-                    _logger.LogError(ex, "Error al actualizar activo fijo con ID {Id}", id);
-                    throw;
-                }
-            });
+                _logger.LogError(ex, "Error al actualizar activo fijo con ID {Id}", id);
+                throw;
+            }
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var strategy = _context.Database.CreateExecutionStrategy();
-            return await strategy.ExecuteAsync(async () =>
+            try
             {
-                using var transaction = await _context.Database.BeginTransactionAsync();
-                try
+                var activo = await _context.ActivosFijos.FindAsync(id);
+                if (activo == null)
                 {
-                    var activo = await _context.ActivosFijos.FindAsync(id);
-                    if (activo == null)
-                    {
-                        return false;
-                    }
-
-                    // Soft delete - cambiar estado a inactivo
-                    activo.Estado = 0;
-                    await _context.SaveChangesAsync();
-                    await transaction.CommitAsync();
-
-                    _logger.LogInformation("Activo fijo eliminado (soft delete): {Descripcion} (ID: {Id})", activo.Descripcion, activo.Id);
-                    return true;
+                    return false;
                 }
-                catch (Exception ex)
-                {
-                    await transaction.RollbackAsync();
-                    _logger.LogError(ex, "Error al eliminar activo fijo con ID {Id}", id);
-                    throw;
-                }
-            });
+
+                // Soft delete - cambiar estado a inactivo
+                activo.Estado = 0;
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation("Activo fijo eliminado (soft delete): {Descripcion} (ID: {Id})", activo.Descripcion, activo.Id);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al eliminar activo fijo con ID {Id}", id);
+                throw;
+            }
         }
 
         public async Task<IEnumerable<ActivoFijoDto>> SearchAsync(string searchTerm)

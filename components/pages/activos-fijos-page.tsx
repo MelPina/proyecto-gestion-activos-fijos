@@ -72,7 +72,7 @@ export function ActivosFijosPage() {
       if (tiposActivosResult.success && Array.isArray(tiposActivosResult.data)) {
         setTiposActivos(tiposActivosResult.data)
       } else {
-        setTiposActivos([]) // o manejar el error si prefieres
+        setTiposActivos([]) 
       }
     
       if (statsResult.success && statsResult.data) {
@@ -163,7 +163,7 @@ export function ActivosFijosPage() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-white">Activos Fijos</h1>
-          <p className="text-gray-400 mt-1">Gestión del inventario de activos fijos</p>
+          {/* <p className="text-gray-400 mt-1">Gestión del inventario de activos fijos</p> */}
         </div>
         <div className="flex gap-2">
           <Button onClick={loadData} variant="outline" size="sm">
@@ -191,12 +191,12 @@ export function ActivosFijosPage() {
             <div className="text-sm text-gray-400">Activos</div>
           </CardContent>
         </Card>
-        <Card className="bg-gray-800 border-gray-700">
+        {/* <Card className="bg-gray-800 border-gray-700">
           <CardContent className="p-4">
             <div className="text-2xl font-bold text-red-400">{stats.inactivos}</div>
             <div className="text-sm text-gray-400">Inactivos</div>
           </CardContent>
-        </Card>
+        </Card> */}
         <Card className="bg-gray-800 border-gray-700">
           <CardContent className="p-4">
             <div className="text-2xl font-bold text-blue-400">{formatCurrency(stats.valorNeto)}</div>
@@ -302,14 +302,14 @@ export function ActivosFijosPage() {
                         <Button variant="outline" size="sm" onClick={() => handleEdit(activo)}>
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button
+                        {/* <Button
                           variant="outline"
                           size="sm"
                           onClick={() => handleDelete(activo)}
                           className="text-red-400 hover:text-red-300"
                         >
                           <Trash2 className="h-4 w-4" />
-                        </Button>
+                        </Button> */}
                       </div>
                     </td>
                   </tr>

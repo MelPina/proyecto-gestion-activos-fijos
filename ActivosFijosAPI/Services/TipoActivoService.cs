@@ -22,28 +22,19 @@ namespace ActivosFijosAPI.Services
             {
                 var tiposActivos = await _context.TiposActivos
                     .Where(t => t.Activo)
+                    .Include(t => t.ActivosFijos)
                     .OrderBy(t => t.Descripcion)
                     .ToListAsync();
 
-                var result = new List<TipoActivoDto>();
-                foreach (var tipo in tiposActivos)
+                return tiposActivos.Select(t => new TipoActivoDto
                 {
-                    // Contar activos fijos asociados
-                    var cantidadActivos = await _context.ActivosFijos
-                        .CountAsync(a => a.TipoActivoId == tipo.Id && a.Estado == 1);
-
-                    result.Add(new TipoActivoDto
-                    {
-                        Id = tipo.Id,
-                        Descripcion = tipo.Descripcion,
-                        CuentaContableCompra = tipo.CuentaContableCompra,
-                        CuentaContableDepreciacion = tipo.CuentaContableDepreciacion,
-                        Activo = tipo.Activo,
-                        CantidadActivos = cantidadActivos
-                    });
-                }
-
-                return result;
+                    Id = t.Id,
+                    Descripcion = t.Descripcion,
+                    CuentaContableCompra = t.CuentaContableCompra,
+                    CuentaContableDepreciacion = t.CuentaContableDepreciacion,
+                    Activo = t.Activo,
+                    CantidadActivos = t.ActivosFijos.Count(a => a.Estado > 0)
+                });
             }
             catch (Exception ex)
             {
@@ -57,13 +48,10 @@ namespace ActivosFijosAPI.Services
             try
             {
                 var tipoActivo = await _context.TiposActivos
+                    .Include(t => t.ActivosFijos)
                     .FirstOrDefaultAsync(t => t.Id == id && t.Activo);
 
                 if (tipoActivo == null) return null;
-
-                // Contar activos fijos asociados
-                var cantidadActivos = await _context.ActivosFijos
-                    .CountAsync(a => a.TipoActivoId == id && a.Estado == 1);
 
                 return new TipoActivoDto
                 {
@@ -72,7 +60,7 @@ namespace ActivosFijosAPI.Services
                     CuentaContableCompra = tipoActivo.CuentaContableCompra,
                     CuentaContableDepreciacion = tipoActivo.CuentaContableDepreciacion,
                     Activo = tipoActivo.Activo,
-                    CantidadActivos = cantidadActivos
+                    CantidadActivos = tipoActivo.ActivosFijos.Count(a => a.Estado > 0)
                 };
             }
             catch (Exception ex)
@@ -84,35 +72,25 @@ namespace ActivosFijosAPI.Services
 
         public async Task<TipoActivoDto> CreateAsync(CreateTipoActivoDto createDto)
         {
-            using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
                 // Verificar si ya existe un tipo de activo con la misma descripción
-                var existingTipoActivo = await _context.TiposActivos
+                var existingTipo = await _context.TiposActivos
                     .FirstOrDefaultAsync(t => t.Descripcion.ToLower() == createDto.Descripcion.ToLower());
 
-                if (existingTipoActivo != null)
+                if (existingTipo != null)
                 {
-                    if (!existingTipoActivo.Activo)
+                    if (!existingTipo.Activo)
                     {
                         // Reactivar tipo de activo inactivo
-                        existingTipoActivo.CuentaContableCompra = createDto.CuentaContableCompra;
-                        existingTipoActivo.CuentaContableDepreciacion = createDto.CuentaContableDepreciacion;
-                        existingTipoActivo.Activo = true;
-                        _context.Entry(existingTipoActivo).State = EntityState.Modified;
-                        await _context.SaveChangesAsync();
-                        await transaction.CommitAsync();
+                        existingTipo.CuentaContableCompra = createDto.CuentaContableCompra;
+                        existingTipo.CuentaContableDepreciacion = createDto.CuentaContableDepreciacion;
+                        existingTipo.Activo = true;
 
-                        _logger.LogInformation("Tipo de activo reactivado: {Id}", existingTipoActivo.Id);
-                        return new TipoActivoDto
-                        {
-                            Id = existingTipoActivo.Id,
-                            Descripcion = existingTipoActivo.Descripcion,
-                            CuentaContableCompra = existingTipoActivo.CuentaContableCompra,
-                            CuentaContableDepreciacion = existingTipoActivo.CuentaContableDepreciacion,
-                            Activo = existingTipoActivo.Activo,
-                            CantidadActivos = 0
-                        };
+                        await _context.SaveChangesAsync();
+
+                        _logger.LogInformation("Tipo de activo reactivado: {Id}", existingTipo.Id);
+                        return await GetByIdAsync(existingTipo.Id) ?? throw new InvalidOperationException("Error al reactivar tipo de activo");
                     }
                     else
                     {
@@ -130,23 +108,12 @@ namespace ActivosFijosAPI.Services
 
                 _context.TiposActivos.Add(tipoActivo);
                 await _context.SaveChangesAsync();
-                await transaction.CommitAsync();
 
                 _logger.LogInformation("Tipo de activo creado: {Id}", tipoActivo.Id);
-
-                return new TipoActivoDto
-                {
-                    Id = tipoActivo.Id,
-                    Descripcion = tipoActivo.Descripcion,
-                    CuentaContableCompra = tipoActivo.CuentaContableCompra,
-                    CuentaContableDepreciacion = tipoActivo.CuentaContableDepreciacion,
-                    Activo = tipoActivo.Activo,
-                    CantidadActivos = 0
-                };
+                return await GetByIdAsync(tipoActivo.Id) ?? throw new InvalidOperationException("Error al crear tipo de activo");
             }
             catch (Exception ex)
             {
-                await transaction.RollbackAsync();
                 _logger.LogError(ex, "Error al crear tipo de activo");
                 throw;
             }
@@ -154,7 +121,6 @@ namespace ActivosFijosAPI.Services
 
         public async Task<TipoActivoDto> UpdateAsync(int id, UpdateTipoActivoDto updateDto)
         {
-            using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
                 var tipoActivo = await _context.TiposActivos
@@ -165,32 +131,26 @@ namespace ActivosFijosAPI.Services
                     throw new InvalidOperationException("Tipo de activo no encontrado");
                 }
 
-                // Verificar si ya existe otro tipo de activo con la misma descripción
-                var existingTipoActivo = await _context.TiposActivos
+                var descripcionNormalizada = updateDto.Descripcion.Trim().ToLower();
+                var existingTipo = await _context.TiposActivos
                     .FirstOrDefaultAsync(t => t.Id != id && 
-                                           t.Descripcion.ToLower() == updateDto.Descripcion.ToLower() && 
-                                           t.Activo);
+                                       t.Descripcion.Trim().ToLower() == descripcionNormalizada && 
+                                       t.Activo);
 
-                if (existingTipoActivo != null)
+                if (existingTipo != null)
                 {
                     throw new InvalidOperationException("Ya existe otro tipo de activo activo con esta descripción");
                 }
 
-                tipoActivo.Descripcion = updateDto.Descripcion;
+                tipoActivo.Descripcion = updateDto.Descripcion.Trim();
                 tipoActivo.CuentaContableCompra = updateDto.CuentaContableCompra;
                 tipoActivo.CuentaContableDepreciacion = updateDto.CuentaContableDepreciacion;
                 tipoActivo.Activo = updateDto.Activo;
-                _context.Entry(tipoActivo).State = EntityState.Modified;
-                
+
                 await _context.SaveChangesAsync();
-                await transaction.CommitAsync();
 
                 _logger.LogInformation("Tipo de activo actualizado: {Id}", id);
-
-                // Contar activos fijos asociados
-                var cantidadActivos = await _context.ActivosFijos
-                    .CountAsync(a => a.TipoActivoId == id && a.Estado == 1);
-
+                
                 return new TipoActivoDto
                 {
                     Id = tipoActivo.Id,
@@ -198,12 +158,11 @@ namespace ActivosFijosAPI.Services
                     CuentaContableCompra = tipoActivo.CuentaContableCompra,
                     CuentaContableDepreciacion = tipoActivo.CuentaContableDepreciacion,
                     Activo = tipoActivo.Activo,
-                    CantidadActivos = cantidadActivos
+                    CantidadActivos = await _context.ActivosFijos.CountAsync(a => a.TipoActivoId == tipoActivo.Id && a.Estado > 0)
                 };
             }
             catch (Exception ex)
             {
-                await transaction.RollbackAsync();
                 _logger.LogError(ex, "Error al actualizar tipo de activo {Id}", id);
                 throw;
             }
@@ -211,10 +170,10 @@ namespace ActivosFijosAPI.Services
 
         public async Task<bool> DeleteAsync(int id)
         {
-            using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
                 var tipoActivo = await _context.TiposActivos
+                    .Include(t => t.ActivosFijos)
                     .FirstOrDefaultAsync(t => t.Id == id && t.Activo);
 
                 if (tipoActivo == null)
@@ -223,27 +182,21 @@ namespace ActivosFijosAPI.Services
                     return false;
                 }
 
-                // Verificar si hay activos fijos que usan este tipo
-                var activosConTipo = await _context.ActivosFijos
-                    .CountAsync(a => a.TipoActivoId == id && a.Estado == 1);
-
-                if (activosConTipo > 0)
+                // Verificar si tiene activos fijos asignados
+                var activosAsignados = tipoActivo.ActivosFijos.Count(a => a.Estado > 0);
+                if (activosAsignados > 0)
                 {
-                    throw new InvalidOperationException($"No se puede eliminar el tipo de activo porque hay {activosConTipo} activo(s) fijo(s) que lo usan");
+                    throw new InvalidOperationException($"No se puede eliminar el tipo de activo porque tiene {activosAsignados} activos fijos asignados");
                 }
 
                 tipoActivo.Activo = false; // Soft delete
-                _context.Entry(tipoActivo).State = EntityState.Modified;
-                
                 await _context.SaveChangesAsync();
-                await transaction.CommitAsync();
 
                 _logger.LogInformation("Tipo de activo eliminado: {Id}", id);
                 return true;
             }
             catch (Exception ex)
             {
-                await transaction.RollbackAsync();
                 _logger.LogError(ex, "Error al eliminar tipo de activo {Id}", id);
                 throw;
             }

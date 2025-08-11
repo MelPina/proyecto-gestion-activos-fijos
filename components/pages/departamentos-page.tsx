@@ -58,9 +58,7 @@ export function DepartamentosPage() {
   }, [])
 
   useEffect(() => {
-    const result = departamentos.filter((d) =>
-      d.descripcion.toLowerCase().includes(searchTerm.toLowerCase()),
-    )
+    const result = departamentos.filter((d) => d.descripcion.toLowerCase().includes(searchTerm.toLowerCase()))
     setFiltered(result)
   }, [searchTerm, departamentos])
 
@@ -68,7 +66,9 @@ export function DepartamentosPage() {
 
   const getBadge = (activo: boolean) =>
     activo ? (
-      <Badge variant="default" className="bg-green-600">Activo</Badge>
+      <Badge variant="default" className="bg-green-600">
+        Activo
+      </Badge>
     ) : (
       <Badge variant="secondary">Inactivo</Badge>
     )
@@ -107,7 +107,7 @@ export function DepartamentosPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-white">Departamentos</h1>
-          <p className="text-gray-400">Gestión de departamentos organizacionales</p>
+          {/* <p className="text-gray-400">Gestión de departamentos organizacionales</p> */}
         </div>
         <div className="flex space-x-2">
           <Button
@@ -189,16 +189,30 @@ export function DepartamentosPage() {
                       <Building2 className="h-4 w-4 text-blue-400" />
                       <span>{dept.descripcion}</span>
                     </td>
-                    <td className="py-3 px-4 text-gray-300">{dept.cantidadEmpleados}</td>
+                    <td className="py-3 px-4 text-gray-300">{dept.cantidadEmpleados || 0}</td>
                     <td className="py-3 px-4">{getBadge(dept.activo)}</td>
                     <td className="py-3 px-4">
                       <div className="flex space-x-2">
-                        <Button variant="outline" size="sm" onClick={() => { setSelectedDepartamento(dept); setEditarOpen(true) }}>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            setSelectedDepartamento(dept)
+                            setEditarOpen(true)
+                          }}
+                        >
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button variant="outline" size="sm" onClick={() => { setSelectedDepartamento(dept); setDeleteOpen(true) }}>
+                        {/* <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            setSelectedDepartamento(dept)
+                            setDeleteOpen(true)
+                          }}
+                        >
                           <Trash2 className="h-4 w-4 text-red-400" />
-                        </Button>
+                        </Button> */}
                       </div>
                     </td>
                   </tr>
