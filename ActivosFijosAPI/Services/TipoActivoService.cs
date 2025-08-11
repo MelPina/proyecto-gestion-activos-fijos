@@ -21,7 +21,6 @@ namespace ActivosFijosAPI.Services
             try
             {
                 var tiposActivos = await _context.TiposActivos
-                    .Where(t => t.Activo)
                     .Include(t => t.ActivosFijos)
                     .OrderBy(t => t.Descripcion)
                     .ToListAsync();
@@ -49,7 +48,7 @@ namespace ActivosFijosAPI.Services
             {
                 var tipoActivo = await _context.TiposActivos
                     .Include(t => t.ActivosFijos)
-                    .FirstOrDefaultAsync(t => t.Id == id && t.Activo);
+                    .FirstOrDefaultAsync(t => t.Id == id);
 
                 if (tipoActivo == null) return null;
 
@@ -124,7 +123,7 @@ namespace ActivosFijosAPI.Services
             try
             {
                 var tipoActivo = await _context.TiposActivos
-                    .FirstOrDefaultAsync(t => t.Id == id && t.Activo);
+                    .FirstOrDefaultAsync(t => t.Id == id);
 
                 if (tipoActivo == null)
                 {
@@ -174,7 +173,7 @@ namespace ActivosFijosAPI.Services
             {
                 var tipoActivo = await _context.TiposActivos
                     .Include(t => t.ActivosFijos)
-                    .FirstOrDefaultAsync(t => t.Id == id && t.Activo);
+                    .FirstOrDefaultAsync(t => t.Id == id);
 
                 if (tipoActivo == null)
                 {
