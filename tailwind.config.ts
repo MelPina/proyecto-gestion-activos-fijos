@@ -1,6 +1,6 @@
 import type { Config } from "tailwindcss"
 
-const config: Config = {
+const config = {
   darkMode: ["class"],
   content: [
     "./pages/**/*.{ts,tsx}",
@@ -9,6 +9,7 @@ const config: Config = {
     "./src/**/*.{ts,tsx}",
     "*.{js,ts,jsx,tsx,mdx}",
   ],
+  prefix: "",
   theme: {
     container: {
       center: true,
@@ -52,6 +53,16 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // Colores personalizados para el tema oscuro
+        "dark-bg": "#1e2028",
+        "dark-card": "#2a2d3a",
+        "dark-border": "#3a3f55",
+        "dark-text": "#ffffff",
+        "dark-text-secondary": "#a1a1aa",
+        "blue-accent": "#3b82f6",
+        "green-accent": "#10b981",
+        "purple-accent": "#8b5cf6",
+        "orange-accent": "#f59e0b",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -75,6 +86,6 @@ const config: Config = {
     },
   },
   plugins: [require("tailwindcss-animate")],
-}
+} satisfies Config
 
 export default config

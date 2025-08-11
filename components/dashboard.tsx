@@ -1,117 +1,149 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Building2, Users, Package, FileText } from "lucide-react"
-
-const stats = [
-  {
-    title: "Departamentos",
-    value: "12",
-    description: "Departamentos registrados",
-    icon: Building2,
-    color: "text-blue-400",
-  },
-  {
-    title: "Empleados",
-    value: "145",
-    description: "Empleados registrados",
-    icon: Users,
-    color: "text-green-400",
-  },
-  {
-    title: "Tipos de Activos",
-    value: "8",
-    description: "Categorías de activos",
-    icon: Package,
-    color: "text-yellow-400",
-  },
-  {
-    title: "Activos Fijos",
-    value: "324",
-    description: "Activos registrados",
-    icon: FileText,
-    color: "text-purple-400",
-  },
-]
+import { Users, Building2, Package, DollarSign, UserPlus, FileEdit, Calculator, Clock } from "lucide-react"
 
 export function Dashboard() {
+  // Datos de ejemplo para el dashboard
+  const stats = [
+    {
+      title: "Total Empleados",
+      value: "156",
+      description: "Empleados activos",
+      icon: <Users className="h-6 w-6 text-blue-500" />,
+    },
+    {
+      title: "Departamentos",
+      value: "12",
+      description: "Departamentos registrados",
+      icon: <Building2 className="h-6 w-6 text-green-500" />,
+    },
+    {
+      title: "Activos Fijos",
+      value: "342",
+      description: "Activos en inventario",
+      icon: <Package className="h-6 w-6 text-purple-500" />,
+    },
+    {
+      title: "Valor Total",
+      value: "$2.4M",
+      description: "Valor total de activos",
+      icon: <DollarSign className="h-6 w-6 text-orange-500" />,
+    },
+  ]
+
+  const recentActivity = [
+    {
+      title: "Nuevo empleado registrado",
+      user: "Juan Pérez",
+      time: "Hace 2 horas",
+      icon: <div className="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>,
+    },
+    {
+      title: "Activo asignado",
+      user: "María García",
+      time: "Hace 4 horas",
+      icon: <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>,
+    },
+    {
+      title: "Departamento actualizado",
+      user: "Carlos López",
+      time: "Hace 1 día",
+      icon: <div className="w-2 h-2 bg-purple-500 rounded-full mr-2"></div>,
+    },
+    {
+      title: "Depreciación calculada",
+      user: "Sistema",
+      time: "Hace 2 días",
+      icon: <div className="w-2 h-2 bg-orange-500 rounded-full mr-2"></div>,
+    },
+  ]
+
+  const quickAccess = [
+    {
+      title: "Registrar Nuevo Empleado",
+      description: "Agregar empleado al sistema",
+      icon: <UserPlus className="h-5 w-5" />,
+      path: "/empleados/nuevo",
+    },
+    {
+      title: "Asignar Activo",
+      description: "Asignar activo a empleado",
+      icon: <FileEdit className="h-5 w-5" />,
+      path: "/activos-fijos",
+    },
+    {
+      title: "Calcular Depreciación",
+      description: "Ejecutar cálculo de depreciación",
+      icon: <Calculator className="h-5 w-5" />,
+      path: "/depreciacion",
+    },
+  ]
+
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-white">Dashboard</h1>
-        <p className="text-gray-400 mt-1">Bienvenido al sistema de gestión de activos fijos</p>
+        <h1 className="text-3xl font-bold">Dashboard</h1>
+        <p className="text-gray-400">Resumen del sistema de activos fijos</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((stat) => (
-          <Card key={stat.title} className="bg-gray-800 border-gray-700">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-300">{stat.title}</CardTitle>
-              <stat.icon className={`h-4 w-4 ${stat.color}`} />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-white">{stat.value}</div>
-              <p className="text-xs text-gray-400 mt-1">{stat.description}</p>
-            </CardContent>
-          </Card>
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {stats.map((stat, index) => (
+          <div key={index} className="bg-[#2a2d3a] rounded-lg p-6 shadow">
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="text-sm text-gray-400">{stat.title}</p>
+                <p className="text-3xl font-bold mt-1">{stat.value}</p>
+                <p className="text-xs text-gray-400 mt-1">{stat.description}</p>
+              </div>
+              <div className="bg-[#1e2028] p-2 rounded-lg">{stat.icon}</div>
+            </div>
+          </div>
         ))}
       </div>
 
+      {/* Activity and Quick Access */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="bg-gray-800 border-gray-700">
-          <CardHeader>
-            <CardTitle className="text-white">Actividad Reciente</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="flex items-center space-x-4">
-                <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                <div className="flex-1">
-                  <p className="text-sm text-white">Nuevo activo registrado</p>
-                  <p className="text-xs text-gray-400">Hace 2 horas</p>
+        {/* Recent Activity */}
+        <div className="bg-[#2a2d3a] rounded-lg p-6 shadow">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-bold">Actividad Reciente</h2>
+            <Clock className="h-5 w-5 text-gray-400" />
+          </div>
+          <div className="space-y-4">
+            {recentActivity.map((activity, index) => (
+              <div key={index} className="flex items-start">
+                {activity.icon}
+                <div className="ml-2">
+                  <p className="text-sm font-medium">{activity.title}</p>
+                  <div className="flex items-center text-xs text-gray-400">
+                    <span>{activity.user}</span>
+                    <span className="mx-1">•</span>
+                    <span>{activity.time}</span>
+                  </div>
                 </div>
               </div>
-              <div className="flex items-center space-x-4">
-                <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                <div className="flex-1">
-                  <p className="text-sm text-white">Empleado asignado a departamento</p>
-                  <p className="text-xs text-gray-400">Hace 4 horas</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-4">
-                <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
-                <div className="flex-1">
-                  <p className="text-sm text-white">Actualización de inventario</p>
-                  <p className="text-xs text-gray-400">Hace 1 día</p>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            ))}
+          </div>
+        </div>
 
-        <Card className="bg-gray-800 border-gray-700">
-          <CardHeader>
-            <CardTitle className="text-white">Resumen del Sistema</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-300">Activos en uso</span>
-                <span className="text-sm font-medium text-white">298</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-300">Activos disponibles</span>
-                <span className="text-sm font-medium text-white">26</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-300">En mantenimiento</span>
-                <span className="text-sm font-medium text-white">12</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-300">Valor total</span>
-                <span className="text-sm font-medium text-white">$2,450,000</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        {/* Quick Access */}
+        <div className="bg-[#2a2d3a] rounded-lg p-6 shadow">
+          <h2 className="text-xl font-bold mb-4">Accesos Rápidos</h2>
+          <div className="space-y-3">
+            {quickAccess.map((item, index) => (
+              <a
+                key={index}
+                href={item.path}
+                className="flex items-center p-3 rounded-lg bg-[#1e2028] hover:bg-[#3a3d4a] transition-colors"
+              >
+                <div className="bg-blue-600 p-2 rounded-lg mr-3">{item.icon}</div>
+                <div>
+                  <p className="font-medium">{item.title}</p>
+                  <p className="text-xs text-gray-400">{item.description}</p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   )

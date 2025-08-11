@@ -37,7 +37,7 @@ export function DeleteEmpleadoModal({ empleado, open, onOpenChange, onSuccess }:
       onSuccess()
       onOpenChange(false)
     } else {
-      setError(result.error)
+      setError(result.error ?? "Ocurrió un error desconocido")
     }
 
     setLoading(false)

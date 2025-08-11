@@ -9,16 +9,16 @@ INSERT INTO departamentos (descripcion, activo) VALUES
 
 -- Insertar empleados de ejemplo
 INSERT INTO empleados (nombre, cedula, departamento_id, tipo_persona, fecha_ingreso, activo) VALUES
-('María García López', '12345678', 1, 1, '2023-01-15', 1),
-('Carlos López Martínez', '23456789', 2, 1, '2022-06-10', 1),
-('Ana Martínez Rodríguez', '34567890', 3, 1, '2023-03-20', 1),
-('Pedro Rodríguez Sánchez', '45678901', 4, 1, '2022-11-05', 1),
-('Laura Sánchez Torres', '56789012', 5, 1, '2023-02-14', 1),
-('Miguel Torres Herrera', '67890123', 6, 1, '2022-08-22', 1),
-('Carmen Herrera Díaz', '78901234', 1, 2, '2023-04-10', 1),
-('José Díaz Morales', '89012345', 2, 2, '2022-12-01', 1),
-('Elena Morales Castro', '90123456', 3, 1, '2023-05-18', 1),
-('Roberto Castro Vega', '01234567', 4, 1, '2022-09-30', 1);
+('María García López', '001-1391820-5', 1, 1, '2023-01-15', 1),
+('Carlos López Martínez', '001-0992990-1', 2, 1, '2022-06-10', 1),
+('Ana Martínez Rodríguez', '031-0524452-3', 3, 1, '2023-03-20', 1),
+('Pedro Rodríguez Sánchez', '123-4567890-3', 4, 1, '2022-11-05', 1),
+('Laura Sánchez Torres', '113-6741331-4', 5, 1, '2023-02-14', 1),
+('Miguel Torres Herrera', '822-9056169-3', 6, 1, '2022-08-22', 1),
+('Carmen Herrera Díaz', '630-4336441-1', 1, 2, '2023-04-10', 1),
+('José Díaz Morales', '899-8562850-5', 2, 2, '2022-12-01', 1),
+('Elena Morales Castro', '199-9173265-2', 3, 1, '2023-05-18', 1);
+
 
 -- Insertar tipos de activos de ejemplo
 INSERT INTO tipos_activos (descripcion, cuenta_contable_compra, cuenta_contable_depreciacion, activo) VALUES

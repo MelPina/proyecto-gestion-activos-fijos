@@ -173,8 +173,8 @@ namespace ActivosFijosAPI.Services
         {
             return tipo switch
             {
-                1 => "Empleado",
-                2 => "Contratista",
+                1 => "Física",
+                2 => "Jurídica",
                 _ => "Otro"
             };
         }

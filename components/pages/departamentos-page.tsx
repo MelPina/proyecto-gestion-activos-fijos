@@ -1,55 +1,172 @@
 "use client"
 
-import { useState } from "react"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Plus, Search, Edit, Trash2, Building2 } from "lucide-react"
-
-const departamentos = [
-  { id: 1, nombre: "Recursos Humanos", codigo: "RH001", responsable: "María García", empleados: 8, activos: 15 },
-  { id: 2, nombre: "Tecnología", codigo: "TI001", responsable: "Carlos López", empleados: 12, activos: 45 },
-  { id: 3, nombre: "Contabilidad", codigo: "CT001", responsable: "Ana Martínez", empleados: 6, activos: 12 },
-  { id: 4, nombre: "Ventas", codigo: "VT001", responsable: "Pedro Rodríguez", empleados: 15, activos: 28 },
-  { id: 5, nombre: "Marketing", codigo: "MK001", responsable: "Laura Sánchez", empleados: 9, activos: 22 },
-  { id: 6, nombre: "Operaciones", codigo: "OP001", responsable: "Miguel Torres", empleados: 20, activos: 65 },
-]
+import { Badge } from "@/components/ui/badge"
+import { Plus, Search, Edit, Trash2, Building2, RefreshCw, AlertCircle } from "lucide-react"
+import { toast } from "@/hooks/use-toast"
+import { getDepartamentos, type Departamento } from "@/lib/actions/departamentos"
+import { NuevoDepartamentoModal } from "@/components/modals/nuevo-departamento-modal"
+import { EditarDepartamentoModal } from "@/components/modals/editar-departamento-modal"
+import { DeleteDepartamentoModal } from "@/components/modals/delete-departamento-modal"
 
 export function DepartamentosPage() {
+  const [departamentos, setDepartamentos] = useState<Departamento[]>([])
+  const [filtered, setFiltered] = useState<Departamento[]>([])
   const [searchTerm, setSearchTerm] = useState("")
-  const [showModal, setShowModal] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [isRefreshing, setIsRefreshing] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
-  const filteredDepartamentos = departamentos.filter(
-    (dept) =>
-      dept.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      dept.codigo.toLowerCase().includes(searchTerm.toLowerCase()),
-  )
+  const [nuevoOpen, setNuevoOpen] = useState(false)
+  const [editarOpen, setEditarOpen] = useState(false)
+  const [deleteOpen, setDeleteOpen] = useState(false)
+  const [selectedDepartamento, setSelectedDepartamento] = useState<Departamento | null>(null)
+
+  const fetchDepartamentos = async (showToast = false) => {
+    try {
+      setIsLoading(true)
+      setError(null)
+      const result = await getDepartamentos()
+
+      if (result.success && result.data) {
+        setDepartamentos(result.data)
+        setFiltered(result.data)
+        if (showToast) {
+          toast({
+            title: "Datos actualizados",
+            description: "La lista de departamentos fue actualizada correctamente",
+          })
+        }
+      } else {
+        throw new Error(result.error || "Error desconocido")
+      }
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err)
+      setError(message)
+      toast({ title: "Error", description: message, variant: "destructive" })
+    } finally {
+      setIsLoading(false)
+      setIsRefreshing(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchDepartamentos()
+  }, [])
+
+  useEffect(() => {
+    const result = departamentos.filter((d) =>
+      d.descripcion.toLowerCase().includes(searchTerm.toLowerCase()),
+    )
+    setFiltered(result)
+  }, [searchTerm, departamentos])
+
+  const handleSuccess = () => fetchDepartamentos()
+
+  const getBadge = (activo: boolean) =>
+    activo ? (
+      <Badge variant="default" className="bg-green-600">Activo</Badge>
+    ) : (
+      <Badge variant="secondary">Inactivo</Badge>
+    )
+
+  if (isLoading) {
+    return (
+      <div className="p-6 text-white flex items-center space-x-2">
+        <RefreshCw className="h-5 w-5 animate-spin" />
+        <span>Cargando departamentos...</span>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="p-6 space-y-4">
+        <div className="flex items-center space-x-2 text-red-400">
+          <AlertCircle className="h-5 w-5" />
+          <span>Error de conexión</span>
+        </div>
+        <Card className="bg-red-900/20 border-red-700">
+          <CardContent className="p-4">
+            <p className="text-red-400">{error}</p>
+            <Button onClick={() => fetchDepartamentos()} className="mt-4 bg-red-600 hover:bg-red-700">
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Reintentar
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="space-y-6 p-6">
+      <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-white">Departamentos</h1>
-          <p className="text-gray-400 mt-1">Gestión de departamentos organizacionales</p>
+          <p className="text-gray-400">Gestión de departamentos organizacionales</p>
         </div>
-        <Button onClick={() => setShowModal(true)} className="bg-blue-600 hover:bg-blue-700">
-          <Plus className="h-4 w-4 mr-2" />
-          Nuevo Departamento
-        </Button>
+        <div className="flex space-x-2">
+          <Button
+            onClick={() => {
+              setIsRefreshing(true)
+              fetchDepartamentos(true)
+            }}
+            variant="outline"
+            size="sm"
+          >
+            <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
+            {isRefreshing ? "Actualizando..." : "Actualizar"}
+          </Button>
+          <Button onClick={() => setNuevoOpen(true)} className="bg-blue-600 hover:bg-blue-700">
+            <Plus className="h-4 w-4 mr-2" />
+            Nuevo Departamento
+          </Button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <Card className="bg-gray-800 border-gray-700">
+          <CardContent className="p-4">
+            <div className="text-2xl font-bold text-white">{departamentos.length}</div>
+            <div className="text-sm text-gray-400">Total Departamentos</div>
+          </CardContent>
+        </Card>
+        <Card className="bg-gray-800 border-gray-700">
+          <CardContent className="p-4">
+            <div className="text-2xl font-bold text-green-400">{departamentos.filter((d) => d.activo).length}</div>
+            <div className="text-sm text-gray-400">Activos</div>
+          </CardContent>
+        </Card>
+        <Card className="bg-gray-800 border-gray-700">
+          <CardContent className="p-4">
+            <div className="text-2xl font-bold text-red-400">{departamentos.filter((d) => !d.activo).length}</div>
+            <div className="text-sm text-gray-400">Inactivos</div>
+          </CardContent>
+        </Card>
+        <Card className="bg-gray-800 border-gray-700">
+          <CardContent className="p-4">
+            <div className="text-2xl font-bold text-blue-400">
+              {departamentos.reduce((sum, d) => sum + (d.cantidadEmpleados || 0), 0)}
+            </div>
+            <div className="text-sm text-gray-400">Total Empleados</div>
+          </CardContent>
+        </Card>
       </div>
 
       <Card className="bg-gray-800 border-gray-700">
         <CardHeader>
           <div className="flex items-center space-x-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-              <Input
-                placeholder="Buscar departamentos..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 bg-gray-700 border-gray-600 text-white"
-              />
-            </div>
+            <Search className="h-4 w-4 text-gray-400" />
+            <Input
+              placeholder="Buscar departamentos..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="max-w-sm bg-gray-700 border-gray-600 text-white"
+            />
           </div>
         </CardHeader>
         <CardContent>
@@ -57,44 +174,75 @@ export function DepartamentosPage() {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-gray-700">
-                  <th className="text-left py-3 px-4 text-gray-300">Código</th>
-                  <th className="text-left py-3 px-4 text-gray-300">Nombre</th>
-                  <th className="text-left py-3 px-4 text-gray-300">Responsable</th>
+                  <th className="text-left py-3 px-4 text-gray-300">ID</th>
+                  <th className="text-left py-3 px-4 text-gray-300">Descripción</th>
                   <th className="text-left py-3 px-4 text-gray-300">Empleados</th>
-                  <th className="text-left py-3 px-4 text-gray-300">Activos</th>
+                  <th className="text-left py-3 px-4 text-gray-300">Estado</th>
                   <th className="text-left py-3 px-4 text-gray-300">Acciones</th>
                 </tr>
               </thead>
               <tbody>
-                {filteredDepartamentos.map((dept) => (
+                {filtered.map((dept) => (
                   <tr key={dept.id} className="border-b border-gray-700 hover:bg-gray-700/50">
-                    <td className="py-3 px-4 text-white font-mono">{dept.codigo}</td>
-                    <td className="py-3 px-4">
-                      <div className="flex items-center space-x-2">
-                        <Building2 className="h-4 w-4 text-blue-400" />
-                        <span className="text-white">{dept.nombre}</span>
-                      </div>
+                    <td className="py-3 px-4 text-gray-400 font-mono">#{dept.id}</td>
+                    <td className="py-3 px-4 text-white flex items-center space-x-2">
+                      <Building2 className="h-4 w-4 text-blue-400" />
+                      <span>{dept.descripcion}</span>
                     </td>
-                    <td className="py-3 px-4 text-gray-300">{dept.responsable}</td>
-                    <td className="py-3 px-4 text-gray-300">{dept.empleados}</td>
-                    <td className="py-3 px-4 text-gray-300">{dept.activos}</td>
+                    <td className="py-3 px-4 text-gray-300">{dept.cantidadEmpleados}</td>
+                    <td className="py-3 px-4">{getBadge(dept.activo)}</td>
                     <td className="py-3 px-4">
                       <div className="flex space-x-2">
-                        <Button variant="outline" size="sm">
+                        <Button variant="outline" size="sm" onClick={() => { setSelectedDepartamento(dept); setEditarOpen(true) }}>
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button variant="outline" size="sm" className="text-red-400 hover:text-red-300 bg-transparent">
-                          <Trash2 className="h-4 w-4" />
+                        <Button variant="outline" size="sm" onClick={() => { setSelectedDepartamento(dept); setDeleteOpen(true) }}>
+                          <Trash2 className="h-4 w-4 text-red-400" />
                         </Button>
                       </div>
                     </td>
                   </tr>
                 ))}
+                {filtered.length === 0 && (
+                  <tr>
+                    <td colSpan={5} className="text-center py-8 text-gray-400">
+                      {searchTerm
+                        ? "No se encontraron departamentos que coincidan con la búsqueda"
+                        : "No hay departamentos registrados"}
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
         </CardContent>
       </Card>
+
+      {/* Modales */}
+      <NuevoDepartamentoModal isOpen={nuevoOpen} onClose={() => setNuevoOpen(false)} onSuccess={handleSuccess} />
+
+      {selectedDepartamento && (
+        <>
+          <EditarDepartamentoModal
+            isOpen={editarOpen}
+            onClose={() => {
+              setEditarOpen(false)
+              setSelectedDepartamento(null)
+            }}
+            departamento={selectedDepartamento}
+            onSuccess={handleSuccess}
+          />
+          <DeleteDepartamentoModal
+            isOpen={deleteOpen}
+            onClose={() => {
+              setDeleteOpen(false)
+              setSelectedDepartamento(null)
+            }}
+            departamento={selectedDepartamento}
+            onSuccess={handleSuccess}
+          />
+        </>
+      )}
     </div>
   )
 }
