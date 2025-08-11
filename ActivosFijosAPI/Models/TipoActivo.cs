@@ -25,5 +25,6 @@ namespace ActivosFijosAPI.Models
 
         // Navigation properties
         public virtual ICollection<ActivoFijo> ActivosFijos { get; set; } = new List<ActivoFijo>();
+        
     }
 }

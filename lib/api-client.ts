@@ -127,24 +127,16 @@ export interface DepartamentoDto {
 
 export interface CreateDepartamentoDto {
   descripcion: string
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/main
 }
 
 export interface UpdateDepartamentoDto {
   descripcion: string
-<<<<<<< HEAD
-
 }
 
 export interface DepartamentoStatsDto {
   total: number
   porEmpleado: EmpleadoStatsDto[]
-=======
   activo: boolean
->>>>>>> origin/main
 }
 
 export interface EmpleadoStatsDto {
@@ -163,7 +155,6 @@ export interface TipoPersonaStatsDto {
   cantidad: number
 }
 
-<<<<<<< HEAD
 
 export interface DepreciacionDto {
   id: number
@@ -177,55 +168,29 @@ export interface DepreciacionDto {
   cuentaDepreciacion: string
   fechaCreacion: Date
 } 
-export interface AsientoActivoFijoDto 
-{
-  id: number;
-  tipoMovimiento: string;
-  fechaProceso: Date;
-  tipoActivoId: number;
-  tipoActivoDescripcion:string;
-  fechaCreacion: Date;
-  cuentaCompra: string;
-  cuentaDepreciacion: string;
-  montoDepreciado: number;
-  depreciacionAcumulada: number;
-}
-
 
 export interface DepreciacionStatsDto {
-  montoDepreciado: number;
-  sumaTotal: number;
+  porTipoactivo: TipoActivoStatsDto[]
+  sumaTotal: number
+  acumuladaPorTipoactivo:number
 }
 
-export interface DepreciacionAcumuladaStatsDto {
-  depreciadoAcumulada: number;
-  sumaTotal: number;
+export interface CalcularDepreciacionDto {
+  id: number
+  fechaProceso: Date
+  activoFijoId: number
+  montoDepreciado: number
+  depreciacionAcumulada: number
+  fechaCreacion: Date
+} 
+
+export interface TipoActivoStatsDto {
+  activo: ActivoFijoDto[]
+  tipo: string
+  cantidad: number
 }
 
-export interface ActivoFijoStatsDto {
-  cantidad: number;
-  valorTotal: number;
-}
 
-export interface DepreciacioinStatsDto {
-  total: number;
-  porActivoFijo: ActivoFijoStatsDto[];
-  porMontoDepreciacion: DepreciacionStatsDto[];
-  porDepreciacionAcumulada: DepreciacionAcumuladaStatsDto[];
-}
-
-export interface ActivoFijoDto {
-
-  id: number;
-  descripcion: string;
-  departamentoid: number;
-  departamentoDescripcion: string
-  tipoActivoId: number;
-  fechaAdquisicion: Date;
-  valor: number;
-  depreciacionAcumulada:number;
-  estado:boolean;
-}
 
 export interface AsientoContableDto 
 {
@@ -239,16 +204,39 @@ export interface AsientoContableDto
   estado: boolean;
 }
 
-export interface TipoActivoDto 
+export interface CreateAsientoContableDto 
 {
-  id: number;
+  tipoMovimiento: string;
   descripcion: string;
-  departamento: string;
-  cuentaCompra: number;
-  cuentaDepreciacion: number;
+  fechaAsiento: Date;
+  tipoInventarioId: number;
+  cuentaContable: string;
+  montoAsiento: number;
   estado: boolean;
 }
-=======
+
+export interface UpdateAsientoContableDto
+{
+  id: number;
+  tipoMovimiento: string;
+  descripcion: string;
+  fechaAsiento: Date;
+  tipoInventarioId: number;
+  cuentaContable: string;
+  montoAsiento: number;
+  estado: boolean;
+}
+
+export interface AsientoContableStatsDto
+{
+  
+  fechaAsiento: Date;
+  tipoInventarioId: number;
+  cuentaContable: string;
+  totaldepreciacion: number;
+}
+
+
 // Tipos de Activos
 export interface TipoActivoDto {
   id: number
@@ -311,4 +299,4 @@ export interface ActivoFijoStatsDto {
   enMantenimiento: number
   valorTotal: number
 }
->>>>>>> origin/main
+

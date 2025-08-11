@@ -17,14 +17,18 @@ namespace ActivosFijosAPI.Controllers
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DepreciacionDto>>> GetDepreciacion(
+            [FromQuery] string? search = null,
+            [FromQuery] int? id = null,
             [FromQuery] int? anio = null,
             [FromQuery] int? mes = null,
-            [FromQuery] int? ActivoId = null,
-            [FromQuery] int? tipoActivoId = null)
+            [FromQuery] int? activoFijoId = null,
+            [FromQuery] DateTime? fechaAsiento = null,
+            [FromQuery] string? cuentaCompra = null,
+            [FromQuery] string? cuentaDepreciacion = null)
         {
             try
             {
-                var depreciaciones = await _depreciacionService.GetReporteDepreciacionAsync(anio, mes, tipoActivoId, ActivoId);
+                var depreciaciones = await _depreciacionService.GetAllAsync(search, id, anio, mes, activoFijoId, fechaAsiento, cuentaCompra,cuentaDepreciacion);
                 return Ok(depreciaciones);
             }
             catch (Exception ex)
@@ -33,22 +37,23 @@ namespace ActivosFijosAPI.Controllers
             }
         }
 
-
-        [HttpGet("stats")]
-        public async Task<ActionResult<DepreciacioinStatsDto>> GetStats(
-            [FromQuery] int? anio,
-            [FromQuery] int? mes = null,
-            [FromQuery] int? tipoActivoId = null)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ActivoFijoDto>> GetDepreciacion(int id)
         {
             try
             {
-                var stats = await _depreciacionService.GetStatsAsync();
-                return Ok(stats);
+                var activo = await _depreciacionService.GetByIdAsync(id);
+                if (activo == null)
+                {
+                    return NotFound(new { message = "Depreciacion no encontrado" });
+                }
+                return Ok(activo);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new { message = "Error interno del servidor", error = ex.Message });
             }
         }
+
     }
 }

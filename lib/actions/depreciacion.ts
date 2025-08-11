@@ -3,8 +3,7 @@
 import {
   apiClient,
   type DepreciacionDto,
-  type DepreciacioinStatsDto,
-  type DepreciacionAcumuladaStatsDto,
+  type DepreciacionStatsDto,
   type ActivoFijoDto,
   type TipoActivoDto,
 } from "@/lib/api-client"
@@ -69,18 +68,7 @@ export async function getActivosFijos() {
 // Obtener estadísticas de depreciaciones
 export async function getDepreciacionesStats() {
   try {
-    const result = await apiClient.get<DepreciacioinStatsDto>("/depreciaciones/stats")
-    return result
-  } catch (error) {
-    console.error("Error fetching stats:", error)
-    return { success: false, error: "Error al obtener estadísticas" }
-  }
-}
-
-// Obtener estadísticas de depreciación acumulada
-export async function getDepreciacionAcumuladaStatsDto() {
-  try {
-    const result = await apiClient.get<DepreciacionAcumuladaStatsDto>("/depreciacionesacumuladas/stats")
+    const result = await apiClient.get<DepreciacionStatsDto>("/depreciaciones/stats")
     return result
   } catch (error) {
     console.error("Error fetching stats:", error)

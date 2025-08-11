@@ -35,5 +35,7 @@ namespace ActivosFijosAPI.Models
 
         [ForeignKey("TipoActivoId")]
         public virtual TipoActivo? TipoActivo { get; set; }
+
+        public virtual ICollection<Depreciacion> Depreciaciones { get; set; } = new List<Depreciacion>();
     }
 }

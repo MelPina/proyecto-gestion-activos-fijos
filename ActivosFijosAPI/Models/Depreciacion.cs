@@ -20,12 +20,11 @@ namespace ActivosFijosAPI.Models
 
         [Required]
         public DateTime FechaProceso { get; set; }
-        
+
         [ForeignKey("ActivoFijo")]
-        
+
         [Required]
         public int ActivoFijoId { get; set; }
-        public DateTime FechaCreacion { get; set; } = DateTime.UtcNow;
 
         [Required]
         [Range(0, double.MaxValue)]
@@ -50,6 +49,7 @@ namespace ActivosFijosAPI.Models
         public virtual ActivoFijo? ActivoFijo { get; set; }
         [Required]
         public virtual TipoActivo? TipoActivo { get; set; }
+        public virtual ICollection<AsientoContable> AsientosContables { get; set; } = new List<AsientoContable>();
     }
 
 }
