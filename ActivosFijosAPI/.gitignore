@@ -1,5 +1,4 @@
-# Created by https://www.toptal.com/developers/gitignore/api/aspnetcore
-# Edit at https://www.toptal.com/developers/gitignore?templates=aspnetcore
+
 
 ### ASPNETCore ###
 ## Ignore Visual Studio temporary files, build results, and
@@ -274,8 +273,21 @@ ActivosFijosAPI/obj/
 *.dll
 *.pdb
 
+A continuación se muestra un archivo `.gitignore` que ignorará los archivos que se muestran en la imagen.
+
+```
+# Archivos de compilación y depuración
+/ActivosFijosAPI/bin/
+/ActivosFijosAPI/obj/
+*.pdb
+*.dll
+
+
+# Archivos de cache
+*.cache.json
+*.sourcelink.json
+```
 
 # Cake - Uncomment if you are using it
 # tools/
 
-# End of https://www.toptal.com/developers/gitignore/api/aspnetcore
