@@ -35,7 +35,7 @@ export function EditarTipoActivoModal({ tipoActivo, open, onOpenChange, onSucces
     const result = await updateTipoActivo(tipoActivo.id, formData)
 
     if (result.success) {
-      setSuccess(result.message ?? "Operación exitosa")
+      setSuccess("Operación exitosa")
       setTimeout(() => {
         onSuccess()
         onOpenChange(false)
@@ -106,7 +106,7 @@ export function EditarTipoActivoModal({ tipoActivo, open, onOpenChange, onSucces
           <div className="flex items-center space-x-2">
             <Switch id="activo" checked={activo} onCheckedChange={setActivo} />
             <Label htmlFor="activo" className="text-gray-300">
-              Tipo de activo activo
+              Activo
             </Label>
           </div>
 

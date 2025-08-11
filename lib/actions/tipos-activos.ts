@@ -115,7 +115,10 @@ export async function createTipoActivo(formData: FormData): Promise<ApiResponse<
       }
     }
 
-    return result
+    return {
+      success: result.success,
+      error: result.error || undefined,
+    }
   } catch (error) {
     console.error("❌ Error creating tipo activo:", error)
     return { success: false, error: "Error al crear tipo de activo" }
@@ -177,7 +180,7 @@ export async function updateTipoActivo(id: number, formData: FormData): Promise<
 export async function deleteTipoActivo(id: number): Promise<ApiResponse<void>> {
   try {
     console.log(`🗑️ Deleting tipo activo ${id}`)
-    const result = await apiClient.delete(`/tiposactivos/${id}`)
+    const result = await apiClient.delete<void>(`/tiposactivos/${id}`)
     console.log("✅ Delete tipo activo result:", result)
 
     if (result.success) {

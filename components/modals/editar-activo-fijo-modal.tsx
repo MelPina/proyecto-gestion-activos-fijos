@@ -33,9 +33,24 @@ export function EditarActivoFijoModal({ open, onOpenChange, activo, onSuccess }:
 
   const loadData = async () => {
     try {
-      const [deptData, tiposData] = await Promise.all([getDepartamentos(), getTiposActivos()])
-      setDepartamentos(deptData)
-      setTiposActivos(tiposData)
+      const [deptResponse, tiposResponse] = await Promise.all([
+        getDepartamentos(),
+        getTiposActivos()
+      ])
+
+      // Se extrae la propiedad `data` del objeto de respuesta para `departamentos`
+      if (deptResponse.success) {
+        setDepartamentos(deptResponse.data || [])
+      } else {
+        setError(deptResponse.error || "Error al cargar los departamentos")
+      }
+
+      // Se extrae la propiedad `data` del objeto de respuesta para `tiposActivos`
+      if (tiposResponse.success) {
+        setTiposActivos(tiposResponse.data || [])
+      } else {
+        setError(tiposResponse.error || "Error al cargar los tipos de activos")
+      }
     } catch (error) {
       console.error("Error loading data:", error)
       setError("Error al cargar los datos")

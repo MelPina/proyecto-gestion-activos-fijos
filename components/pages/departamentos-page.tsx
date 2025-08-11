@@ -203,7 +203,7 @@ export function DepartamentosPage() {
                         >
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button
+                        {/* <Button
                           variant="outline"
                           size="sm"
                           onClick={() => {
@@ -212,7 +212,7 @@ export function DepartamentosPage() {
                           }}
                         >
                           <Trash2 className="h-4 w-4 text-red-400" />
-                        </Button>
+                        </Button> */}
                       </div>
                     </td>
                   </tr>
