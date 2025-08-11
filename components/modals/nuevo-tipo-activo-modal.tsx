@@ -27,14 +27,14 @@ export function NuevoTipoActivoModal({ open, onOpenChange, onSuccess }: Props) {
     const result = await createTipoActivo(formData)
 
     if (result.success) {
-      setSuccess(result.message ?? "Operación exitosa")
+      setSuccess("Tipo de activo creado exitosamente")
       setTimeout(() => {
         onSuccess()
         onOpenChange(false)
         setSuccess("")
       }, 1000)
     } else {
-      setError(result.error ?? "Ocurrió un error desconocido")
+      setError(result.error ?? "")
     }
 
     setLoading(false)
@@ -65,12 +65,12 @@ export function NuevoTipoActivoModal({ open, onOpenChange, onSuccess }: Props) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="cuenta_contable_compra" className="text-gray-300">
+            <Label htmlFor="cuentaContableCompra" className="text-gray-300">
               Cuenta Contable Compra *
             </Label>
             <Input
-              id="cuenta_contable_compra"
-              name="cuenta_contable_compra"
+              id="cuentaContableCompra"
+              name="cuentaContableCompra"
               required
               className="bg-gray-700 border-gray-600 text-white font-mono"
               placeholder="Ej: 1205001"
@@ -78,12 +78,12 @@ export function NuevoTipoActivoModal({ open, onOpenChange, onSuccess }: Props) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="cuenta_contable_depreciacion" className="text-gray-300">
+            <Label htmlFor="cuentaContableDepreciacion" className="text-gray-300">
               Cuenta Contable Depreciación *
             </Label>
             <Input
-              id="cuenta_contable_depreciacion"
-              name="cuenta_contable_depreciacion"
+              id="cuentaContableDepreciacion"
+              name="cuentaContableDepreciacion"
               required
               className="bg-gray-700 border-gray-600 text-white font-mono"
               placeholder="Ej: 1209001"

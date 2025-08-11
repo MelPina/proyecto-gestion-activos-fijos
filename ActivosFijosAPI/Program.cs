@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using ActivosFijosAPI.Data;
 using ActivosFijosAPI.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 // Add logging
 builder.Services.AddLogging(logging =>
 {
@@ -21,6 +23,7 @@ builder.Services.AddLogging(logging =>
     logging.AddConsole();
     logging.AddDebug();
 });
+
 // Add Entity Framework with better error handling
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -45,22 +48,77 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         options.EnableSensitiveDataLogging();
         options.EnableDetailedErrors();
         options.LogTo(Console.WriteLine, LogLevel.Information);
-
     }
 });
+
 // Add JWT Authentication
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+var jwtKey = builder.Configuration["Jwt:Key"] ?? "your-super-secret-jwt-key-that-is-at-least-32-characters-long";
+var key = Encoding.ASCII.GetBytes(jwtKey);
+
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(x =>
+{
+    x.RequireHttpsMetadata = false;
+    x.SaveToken = true;
+    x.TokenValidationParameters = new TokenValidationParameters
     {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"] ?? "")),
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            ClockSkew = TimeSpan.Zero
-        };
-    });
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ClockSkew = TimeSpan.Zero
+    };
+});
+
+// HttpClient para API externa con configuración mejorada
+builder.Services.AddHttpClient<IEntradaContableService, EntradaContableService>((sp, client) =>
+{
+    var config = sp.GetRequiredService<IConfiguration>();
+    var baseUrl = config["ExternalApi:BaseUrl"];
+    var apiKey = config["ExternalApi:ApiKey"];
+
+    if (string.IsNullOrEmpty(baseUrl))
+    {
+        throw new InvalidOperationException("ExternalApi:BaseUrl no está configurada");
+    }
+
+    if (string.IsNullOrEmpty(apiKey))
+    {
+        throw new InvalidOperationException("ExternalApi:ApiKey no está configurada");
+    }
+
+    if (string.IsNullOrEmpty(baseUrl))
+    {
+        throw new InvalidOperationException("ExternalApi:BaseUrl no está configurada");
+    }
+
+    if (string.IsNullOrEmpty(apiKey))
+    {
+        throw new InvalidOperationException("ExternalApi:ApiKey no está configurada");
+    }
+
+    client.BaseAddress = new Uri(baseUrl);
+    client.DefaultRequestHeaders.Add("x-api-key", apiKey);
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+    client.DefaultRequestHeaders.Add("User-Agent", "ActivosFijosAPI/1.0");
+    
+    // Timeout configurado
+    client.Timeout = TimeSpan.FromSeconds(30);
+    client.DefaultRequestHeaders.Add("User-Agent", "ActivosFijosAPI/1.0");
+    
+    // Timeout configurado
+    client.Timeout = TimeSpan.FromSeconds(30);
+})
+.ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+{
+    // Configuraciones adicionales si son necesarias
+    ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+   
+});
 
 // Add services
 builder.Services.AddScoped<IEmpleadoService, EmpleadoService>();
@@ -68,9 +126,9 @@ builder.Services.AddScoped<IDepartamentoService, DepartamentoService>();
 builder.Services.AddScoped<ITipoActivoService, TipoActivoService>();
 builder.Services.AddScoped<IActivoFijoService, ActivoFijoService>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+builder.Services.AddScoped<IEntradaContableService, EntradaContableService>();
 
-
-// Add CORS - IMPORTANTE: Configuración más permisiva para desarrollo
+// Add CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -81,6 +139,9 @@ builder.Services.AddCors(options =>
     });
 });
 
+// HTTP Context Accessor
+builder.Services.AddHttpContextAccessor();
+
 var app = builder.Build();
 
 // Test database connection on startup
@@ -90,17 +151,41 @@ using (var scope = app.Services.CreateScope())
     try
     {
         Console.WriteLine("Testing database connection...");
-        Task.Run(async () => await context.Database.CanConnectAsync()).Wait();
+        await context.Database.CanConnectAsync();
         Console.WriteLine("Database connection successful!");
         
         // Optionally create database if it doesn't exist
-        Task.Run(async () => await context.Database.EnsureCreatedAsync()).Wait();
+        await context.Database.EnsureCreatedAsync();
         Console.WriteLine("Database schema verified!");
     }
     catch (Exception ex)
     {
         Console.WriteLine($"Database connection failed: {ex.Message}");
         Console.WriteLine($"Connection String: {context.Database.GetConnectionString()}");
+    }
+}
+
+// Test external API connection on startup
+using (var scope = app.Services.CreateScope())
+{
+    try
+    {
+        var entradaService = scope.ServiceProvider.GetRequiredService<IEntradaContableService>();
+        Console.WriteLine("Testing external API connection...");
+        
+        var testResult = await entradaService.GetAllAsync(null);
+        if (testResult != null)
+        {
+            Console.WriteLine($"External API connection successful! Found {testResult.Count} records.");
+        }
+        else
+        {
+            Console.WriteLine("External API connection failed - check configuration and network connectivity.");
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"External API connection test failed: {ex.Message}");
     }
 }
 
@@ -115,21 +200,50 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-// IMPORTANTE: Usar CORS antes de otros middlewares
 app.UseCors("AllowAll");
-
 // app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-// Add a test endpoint
+// Add test endpoints
 app.MapGet("/", () => "Activos Fijos API is running! Go to /swagger to see the API documentation.");
+
+app.MapGet("/health", () => new { 
+    status = "healthy", 
+    timestamp = DateTime.UtcNow,
+    version = "1.0.0"
+});
+
+// External API health check
+app.MapGet("/health/external-api", async (IEntradaContableService service) =>
+{
+    try
+    {
+        var result = await service.GetAllAsync(null);
+        return Results.Ok(new
+        {
+            status = result != null ? "healthy" : "unhealthy",
+            timestamp = DateTime.UtcNow,
+            recordsFound = result?.Count ?? 0
+        });
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem(
+            detail: ex.Message,
+            title: "External API Connection Failed",
+            statusCode: 503
+        );
+    }
+});
 
 Console.WriteLine("API started successfully!");
 Console.WriteLine("Swagger UI: http://localhost:5001/swagger");
 Console.WriteLine("API Base: http://localhost:5001/api");
 Console.WriteLine("HTTPS Swagger: https://localhost:7001/swagger");
 Console.WriteLine("HTTPS API: https://localhost:7001/api");
+Console.WriteLine("Health Check: http://localhost:5001/health");
+Console.WriteLine("External API Health: http://localhost:5001/health/external-api");
 
 app.Run();

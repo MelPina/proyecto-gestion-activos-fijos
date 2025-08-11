@@ -8,10 +8,10 @@ import { Switch } from "@/components/ui/switch"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Package, Save } from "lucide-react"
 import { updateTipoActivo } from "@/lib/actions/tipos-activos"
-import type { TipoActivoDto } from "@/lib/api-client"
+import type { TipoActivo } from "@/lib/actions/tipos-activos"
 
 interface Props {
-  tipoActivo: TipoActivoDto | null
+  tipoActivo: TipoActivo | null
   open: boolean
   onOpenChange: (open: boolean) => void
   onSuccess: () => void
@@ -35,14 +35,14 @@ export function EditarTipoActivoModal({ tipoActivo, open, onOpenChange, onSucces
     const result = await updateTipoActivo(tipoActivo.id, formData)
 
     if (result.success) {
-      setSuccess("Operación exitosa")
+      setSuccess("Tipo de activo actualizado exitosamente")
       setTimeout(() => {
         onSuccess()
         onOpenChange(false)
         setSuccess("")
       }, 1000)
     } else {
-      setError(result.error ?? "Ocurrió un error desconocido")
+      setError(result.error ?? "")
     }
 
     setLoading(false)
@@ -76,12 +76,12 @@ export function EditarTipoActivoModal({ tipoActivo, open, onOpenChange, onSucces
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="cuenta_contable_compra" className="text-gray-300">
+            <Label htmlFor="cuentaContableCompra" className="text-gray-300">
               Cuenta Contable Compra *
             </Label>
             <Input
-              id="cuenta_contable_compra"
-              name="cuenta_contable_compra"
+              id="cuentaContableCompra"
+              name="cuentaContableCompra"
               required
               defaultValue={tipoActivo.cuentaContableCompra}
               className="bg-gray-700 border-gray-600 text-white font-mono"
@@ -90,12 +90,12 @@ export function EditarTipoActivoModal({ tipoActivo, open, onOpenChange, onSucces
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="cuenta_contable_depreciacion" className="text-gray-300">
+            <Label htmlFor="cuentaContableDepreciacion" className="text-gray-300">
               Cuenta Contable Depreciación *
             </Label>
             <Input
-              id="cuenta_contable_depreciacion"
-              name="cuenta_contable_depreciacion"
+              id="cuentaContableDepreciacion"
+              name="cuentaContableDepreciacion"
               required
               defaultValue={tipoActivo.cuentaContableDepreciacion}
               className="bg-gray-700 border-gray-600 text-white font-mono"

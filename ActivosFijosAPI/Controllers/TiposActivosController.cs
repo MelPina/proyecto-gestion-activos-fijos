@@ -52,6 +52,11 @@ namespace ActivosFijosAPI.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
                 var tipoActivo = await _tipoActivoService.CreateAsync(createDto);
                 return CreatedAtAction(nameof(GetTipoActivo), new { id = tipoActivo.Id }, tipoActivo);
             }
@@ -70,6 +75,11 @@ namespace ActivosFijosAPI.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
                 var tipoActivo = await _tipoActivoService.UpdateAsync(id, updateDto);
                 return Ok(tipoActivo);
             }
