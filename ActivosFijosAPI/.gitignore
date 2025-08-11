@@ -273,9 +273,7 @@ ActivosFijosAPI/obj/
 *.dll
 *.pdb
 
-A continuación se muestra un archivo `.gitignore` que ignorará los archivos que se muestran en la imagen.
 
-```
 # Archivos de compilación y depuración
 /ActivosFijosAPI/bin/
 /ActivosFijosAPI/obj/
@@ -286,7 +284,7 @@ A continuación se muestra un archivo `.gitignore` que ignorará los archivos qu
 # Archivos de cache
 *.cache.json
 *.sourcelink.json
-```
+
 
 # Cake - Uncomment if you are using it
 # tools/
