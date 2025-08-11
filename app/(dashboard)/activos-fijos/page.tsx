@@ -1,5 +1,5 @@
 import { ActivosFijosPage } from "@/components/pages/activos-fijos-page"
 
-export default function ActivosFijos() {
+export default function ActivosFijosPageRoute() {
   return <ActivosFijosPage />
 }

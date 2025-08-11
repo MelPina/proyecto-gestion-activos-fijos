@@ -1,31 +1,53 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import {
-  apiClient,
-  type ActivoFijoDto,
-  type CreateActivoFijoDto,
-  type UpdateActivoFijoDto,
-  type ActivoFijoStatsDto,
-} from "@/lib/api-client"
+import { apiClient, type ApiResponse } from "@/lib/api-client"
 
-export async function getActivosFijos(
-  search?: string,
-  tipoActivoId?: number,
-  departamentoId?: number,
-  estado?: number,
-) {
+export interface ActivoFijo {
+  id: number
+  descripcion: string
+  departamentoId: number | null
+  departamentoNombre: string
+  tipoActivoId: number
+  tipoActivoNombre: string
+  fechaAdquisicion: string
+  valor: number
+  depreciacionAcumulada: number
+  estado: number
+  valorNeto: number
+}
+
+export interface CreateActivoFijo {
+  descripcion: string
+  departamentoId: number | null
+  tipoActivoId: number
+  fechaAdquisicion: string
+  valor: number
+  estado: number
+}
+
+export interface UpdateActivoFijo {
+  descripcion?: string
+  departamentoId?: number | null
+  tipoActivoId?: number
+  fechaAdquisicion?: string
+  valor?: number
+  depreciacionAcumulada?: number
+  estado?: number
+}
+
+export interface ActivoFijoStats {
+  total: number
+  activos: number
+  inactivos: number
+  valorTotal: number
+  depreciacionTotal: number
+  valorNeto: number
+}
+
+export async function getActivosFijos(): Promise<ApiResponse<ActivoFijo[]>> {
   try {
-    const params = new URLSearchParams()
-    if (search) params.append("search", search)
-    if (tipoActivoId) params.append("tipoActivoId", tipoActivoId.toString())
-    if (departamentoId) params.append("departamentoId", departamentoId.toString())
-    if (estado) params.append("estado", estado.toString())
-
-    const queryString = params.toString()
-    const endpoint = `/activosfijos${queryString ? `?${queryString}` : ""}`
-
-    const result = await apiClient.get<ActivoFijoDto[]>(endpoint)
+    const result = await apiClient.get<ActivoFijo[]>("/activosfijos")
     return result
   } catch (error) {
     console.error("Error fetching activos fijos:", error)
@@ -33,9 +55,9 @@ export async function getActivosFijos(
   }
 }
 
-export async function getActivoFijoById(id: number) {
+export async function getActivoFijoById(id: number): Promise<ApiResponse<ActivoFijo>> {
   try {
-    const result = await apiClient.get<ActivoFijoDto>(`/activosfijos/${id}`)
+    const result = await apiClient.get<ActivoFijo>(`/activosfijos/${id}`)
     return result
   } catch (error) {
     console.error("Error fetching activo fijo:", error)
@@ -43,27 +65,28 @@ export async function getActivoFijoById(id: number) {
   }
 }
 
-export async function createActivoFijo(formData: FormData) {
+export async function createActivoFijo(formData: FormData): Promise<ApiResponse<ActivoFijo>> {
   try {
-    const createDto: CreateActivoFijoDto = {
+    const departamentoIdStr = formData.get("departamentoId") as string
+    const departamentoId = departamentoIdStr && departamentoIdStr !== "0" ? Number.parseInt(departamentoIdStr) : null
+
+    const createData: CreateActivoFijo = {
       descripcion: formData.get("descripcion") as string,
-      departamentoId: formData.get("departamento_id")
-        ? Number.parseInt(formData.get("departamento_id") as string)
-        : undefined,
-      tipoActivoId: Number.parseInt(formData.get("tipo_activo_id") as string),
-      fechaAdquisicion: formData.get("fecha_adquisicion") as string,
+      departamentoId: departamentoId,
+      tipoActivoId: Number.parseInt(formData.get("tipoActivoId") as string),
+      fechaAdquisicion: formData.get("fechaAdquisicion") as string,
       valor: Number.parseFloat(formData.get("valor") as string),
+      estado: Number.parseInt(formData.get("estado") as string) || 1,
     }
 
-    if (!createDto.descripcion || !createDto.tipoActivoId || !createDto.fechaAdquisicion || !createDto.valor) {
-      return { success: false, error: "Los campos descripción, tipo de activo, fecha y valor son obligatorios" }
+    if (!createData.descripcion || !createData.tipoActivoId || !createData.fechaAdquisicion || !createData.valor) {
+      return { success: false, error: "Todos los campos obligatorios deben ser completados" }
     }
 
-    const result = await apiClient.post<ActivoFijoDto>("/activosfijos", createDto)
+    const result = await apiClient.post<ActivoFijo>("/activosfijos", createData)
 
     if (result.success) {
       revalidatePath("/activos-fijos")
-      return { success: true, message: "Activo fijo creado exitosamente" }
     }
 
     return result
@@ -73,34 +96,25 @@ export async function createActivoFijo(formData: FormData) {
   }
 }
 
-export async function updateActivoFijo(id: number, formData: FormData) {
+export async function updateActivoFijo(id: number, formData: FormData): Promise<ApiResponse<ActivoFijo>> {
   try {
-    const updateDto: UpdateActivoFijoDto = {
+    const departamentoIdStr = formData.get("departamentoId") as string
+    const departamentoId = departamentoIdStr && departamentoIdStr !== "0" ? Number.parseInt(departamentoIdStr) : null
+
+    const updateData: UpdateActivoFijo = {
       descripcion: formData.get("descripcion") as string,
-      departamentoId: formData.get("departamento_id")
-        ? Number.parseInt(formData.get("departamento_id") as string)
-        : undefined,
-      tipoActivoId: Number.parseInt(formData.get("tipo_activo_id") as string),
-      fechaAdquisicion: formData.get("fecha_adquisicion") as string,
+      departamentoId: departamentoId,
+      tipoActivoId: Number.parseInt(formData.get("tipoActivoId") as string),
+      fechaAdquisicion: formData.get("fechaAdquisicion") as string,
       valor: Number.parseFloat(formData.get("valor") as string),
-      estado: Number.parseInt(formData.get("estado") as string),
+      depreciacionAcumulada: Number.parseFloat(formData.get("depreciacionAcumulada") as string) || 0,
+      estado: Number.parseInt(formData.get("estado") as string) || 1,
     }
 
-    if (
-      !updateDto.descripcion ||
-      !updateDto.tipoActivoId ||
-      !updateDto.fechaAdquisicion ||
-      !updateDto.valor ||
-      !updateDto.estado
-    ) {
-      return { success: false, error: "Todos los campos son obligatorios" }
-    }
-
-    const result = await apiClient.put<ActivoFijoDto>(`/activosfijos/${id}`, updateDto)
+    const result = await apiClient.put<ActivoFijo>(`/activosfijos/${id}`, updateData)
 
     if (result.success) {
       revalidatePath("/activos-fijos")
-      return { success: true, message: "Activo fijo actualizado exitosamente" }
     }
 
     return result
@@ -110,13 +124,12 @@ export async function updateActivoFijo(id: number, formData: FormData) {
   }
 }
 
-export async function deleteActivoFijo(id: number) {
+export async function deleteActivoFijo(id: number): Promise<ApiResponse<any>> {
   try {
     const result = await apiClient.delete(`/activosfijos/${id}`)
 
     if (result.success) {
       revalidatePath("/activos-fijos")
-      return { success: true, message: "Activo fijo eliminado exitosamente" }
     }
 
     return result
@@ -126,9 +139,19 @@ export async function deleteActivoFijo(id: number) {
   }
 }
 
-export async function getActivosFijosStats() {
+export async function searchActivosFijos(searchTerm: string): Promise<ApiResponse<ActivoFijo[]>> {
   try {
-    const result = await apiClient.get<ActivoFijoStatsDto>("/activosfijos/stats")
+    const result = await apiClient.get<ActivoFijo[]>(`/activosfijos/search?term=${encodeURIComponent(searchTerm)}`)
+    return result
+  } catch (error) {
+    console.error("Error searching activos fijos:", error)
+    return { success: false, error: "Error al buscar activos fijos" }
+  }
+}
+
+export async function getActivosFijosStats(): Promise<ApiResponse<ActivoFijoStats>> {
+  try {
+    const result = await apiClient.get<ActivoFijoStats>("/activosfijos/stats")
     return result
   } catch (error) {
     console.error("Error fetching activos fijos stats:", error)

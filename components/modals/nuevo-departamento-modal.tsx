@@ -9,39 +9,46 @@ import { Building2, Save } from "lucide-react"
 import { createDepartamento } from "@/lib/actions/departamentos"
 
 interface Props {
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  isOpen: boolean
+  onClose: () => void
   onSuccess: () => void
 }
 
-export function NuevoDepartamentoModal({ open, onOpenChange, onSuccess }: Props) {
+export function NuevoDepartamentoModal({ isOpen, onClose, onSuccess }: Props) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
 
   async function handleSubmit(formData: FormData) {
+    const descripcion = formData.get("descripcion") as string
+    console.log("📝 Creating new departamento:", descripcion)
+
     setLoading(true)
     setError("")
     setSuccess("")
 
     const result = await createDepartamento(formData)
+    console.log("✅ Create result:", result)
 
     if (result.success) {
-      setSuccess(result.message ?? "Operación exitosa")
+      setSuccess("Departamento creado exitosamente")
       setTimeout(() => {
         onSuccess()
-        onOpenChange(false)
+        onClose()
         setSuccess("")
+        // Reset form
+        const form = document.querySelector("form") as HTMLFormElement
+        form?.reset()
       }, 1000)
     } else {
-      setError(result.error ?? "Ocurrió un error desconocido")
+      setError(result.error || "Error al crear departamento")
     }
 
     setLoading(false)
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-gray-800 border-gray-700 text-white">
         <DialogHeader>
           <DialogTitle className="flex items-center space-x-2">
@@ -81,7 +88,7 @@ export function NuevoDepartamentoModal({ open, onOpenChange, onSuccess }: Props)
               <Save className="h-4 w-4 mr-2" />
               {loading ? "Guardando..." : "Guardar"}
             </Button>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)} className="bg-transparent">
+            <Button type="button" variant="outline" onClick={() => onClose()} className="bg-transparent">
               Cancelar
             </Button>
           </div>

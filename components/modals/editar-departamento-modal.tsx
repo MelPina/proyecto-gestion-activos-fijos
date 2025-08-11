@@ -9,79 +9,68 @@ import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Building2, Save } from "lucide-react"
-import { updateDepartamento } from "@/lib/actions/departamentos"
-import type { DepartamentoDto } from "@/lib/api-client"
+import { updateDepartamento, type Departamento } from "@/lib/actions/departamentos"
+import { toast } from "@/hooks/use-toast"
 
 interface Props {
-  departamento: DepartamentoDto | null
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  isOpen: boolean
+  onClose: () => void
+  departamento: Departamento
   onSuccess: () => void
 }
 
-export function EditarDepartamentoModal({ departamento, open, onOpenChange, onSuccess }: Props) {
+export function EditarDepartamentoModal({ isOpen, onClose, departamento, onSuccess }: Props) {
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
-  const [success, setSuccess] = useState("")
-  const [activo, setActivo] = useState(true)
   const [descripcion, setDescripcion] = useState("")
+  const [activo, setActivo] = useState(true)
 
-  // Reset form when departamento changes or modal opens/closes
   useEffect(() => {
-    if (departamento && open) {
-      console.log("🔄 Setting form data for departamento:", departamento)
+    if (isOpen && departamento) {
       setDescripcion(departamento.descripcion)
       setActivo(departamento.activo)
-      setError("")
-      setSuccess("")
-    } else if (!open) {
-      // Reset when modal closes
-      setError("")
-      setSuccess("")
-      setLoading(false)
     }
-  }, [departamento, open])
+  }, [isOpen, departamento])
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
 
-    if (!departamento) return
-
-    console.log("📝 Submitting departamento update:", {
-      id: departamento.id,
-      descripcion,
-      activo,
-    })
+    if (!descripcion.trim()) {
+      toast({
+        title: "Error",
+        description: "La descripción es requerida",
+        variant: "destructive",
+      })
+      return
+    }
 
     setLoading(true)
-    setError("")
-    setSuccess("")
 
-    // Create FormData manually to ensure we have the right values
     const formData = new FormData()
-    formData.set("descripcion", descripcion.trim())
-    formData.set("activo", activo.toString())
+    formData.append("descripcion", descripcion.trim())
+    formData.append("activo", activo.toString())
 
     const result = await updateDepartamento(departamento.id, formData)
-    console.log("✅ Update result:", result)
 
     if (result.success) {
-      setSuccess(result.message ?? "Operación exitosa")
-      setTimeout(() => {
-        onSuccess()
-        onOpenChange(false)
-      }, 1500)
+      toast({
+        title: "Éxito",
+        description: "Departamento actualizado correctamente",
+      })
+      onSuccess()
+      onClose()
     } else {
-      setError(result.error ?? "Ocurrió un error desconocido")
+      toast({
+        title: "Error",
+        description: result.error || "Error al actualizar departamento",
+        variant: "destructive",
+      })
     }
 
     setLoading(false)
   }
 
-  if (!departamento) return null
-
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-gray-800 border-gray-700 text-white">
         <DialogHeader>
           <DialogTitle className="flex items-center space-x-2">
@@ -97,10 +86,9 @@ export function EditarDepartamentoModal({ departamento, open, onOpenChange, onSu
             </Label>
             <Input
               id="descripcion"
-              name="descripcion"
-              required
               value={descripcion}
               onChange={(e) => setDescripcion(e.target.value)}
+              required
               className="bg-gray-700 border-gray-600 text-white"
               placeholder="Ingrese el nombre del departamento"
             />
@@ -113,24 +101,12 @@ export function EditarDepartamentoModal({ departamento, open, onOpenChange, onSu
             </Label>
           </div>
 
-          {error && (
-            <div className="p-3 rounded-md bg-red-900/20 border border-red-700">
-              <p className="text-red-400 text-sm">{error}</p>
-            </div>
-          )}
-
-          {success && (
-            <div className="p-3 rounded-md bg-green-900/20 border border-green-700">
-              <p className="text-green-400 text-sm">{success}</p>
-            </div>
-          )}
-
           <div className="flex space-x-4 pt-4">
             <Button type="submit" disabled={loading} className="bg-blue-600 hover:bg-blue-700">
               <Save className="h-4 w-4 mr-2" />
-              {loading ? "Guardando..." : "Actualizar"}
+              {loading ? "Guardando..." : "Guardar Cambios"}
             </Button>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)} className="bg-transparent">
+            <Button type="button" variant="outline" onClick={() => onClose()} className="bg-transparent">
               Cancelar
             </Button>
           </div>

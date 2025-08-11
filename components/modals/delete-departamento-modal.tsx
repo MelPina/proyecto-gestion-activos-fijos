@@ -2,102 +2,80 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { AlertTriangle } from "lucide-react"
-<<<<<<< HEAD
-import { deleteDepartamento } from "@/lib/actions/departamento"
-=======
-import { deleteDepartamento } from "@/lib/actions/departamentos"
->>>>>>> origin/main
-import type { DepartamentoDto } from "@/lib/api-client"
+import { deleteDepartamento, type Departamento } from "@/lib/actions/departamentos"
+import { toast } from "@/hooks/use-toast"
 
 interface Props {
-  departamento: DepartamentoDto | null
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  isOpen: boolean
+  onClose: () => void
+  departamento: Departamento
   onSuccess: () => void
 }
 
-export function DeleteDepartamentoModal({ departamento, open, onOpenChange, onSuccess }: Props) {
+export function DeleteDepartamentoModal({ isOpen, onClose, departamento, onSuccess }: Props) {
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
 
   async function handleDelete() {
-    if (!departamento) return
-
     setLoading(true)
-    setError("")
-<<<<<<< HEAD
 
-=======
-    console.log(`Deleting departamento ${departamento.id}:`, departamento.descripcion)
->>>>>>> origin/main
     const result = await deleteDepartamento(departamento.id)
 
     if (result.success) {
+      toast({
+        title: "Éxito",
+        description: "Departamento eliminado correctamente",
+      })
       onSuccess()
-      onOpenChange(false)
+      onClose()
     } else {
-<<<<<<< HEAD
-      setError(result.error)
-=======
-      setError(result.error ?? "Ocurrió un error desconocido")
->>>>>>> origin/main
+      toast({
+        title: "Error",
+        description: result.error || "Error al eliminar departamento",
+        variant: "destructive",
+      })
     }
 
     setLoading(false)
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-gray-800 border-gray-700 text-white">
         <DialogHeader>
-          <DialogTitle className="flex items-center space-x-2">
-            <AlertTriangle className="h-5 w-5 text-red-400" />
-            <span>Confirmar Eliminación</span>
+          <DialogTitle className="flex items-center space-x-2 text-red-400">
+            <AlertTriangle className="h-5 w-5" />
+            <span>Eliminar Departamento</span>
           </DialogTitle>
-<<<<<<< HEAD
           <DialogDescription className="text-gray-300">
-            ¿Está seguro que desea eliminar el departamento{" "}
-            <span className="font-semibold text-white">{departamento?.descripcion}</span>? Esta acción no se puede deshacer.
+            ¿Estás seguro de que deseas eliminar el departamento "{departamento.descripcion}"?
+            <br />
+            <br />
+            <strong className="text-red-400">
+              Esta acción no se puede deshacer. El departamento será marcado como inactivo.
+            </strong>
+            <br />
+            <br />
+            <em className="text-sm text-gray-400">
+              Nota: No se puede eliminar un departamento que tenga empleados o activos fijos asignados.
+            </em>
           </DialogDescription>
-=======
-          {departamento && (
-  <DialogDescription className="text-gray-300">
-    ¿Está seguro que desea eliminar el departamento{" "}
-    <span className="font-semibold text-white">{departamento.descripcion}</span>?
-    {(departamento.cantidadEmpleados ?? 0) > 0 && (
-      <span className="text-yellow-400">
-        {" "}
-        Este departamento tiene {departamento.cantidadEmpleados} empleados asignados.
-      </span>
-    )}
-  </DialogDescription>
-)}
->>>>>>> origin/main
         </DialogHeader>
 
-        {error && (
-          <div className="p-3 rounded-md bg-red-900/20 border border-red-700">
-            <p className="text-red-400 text-sm">{error}</p>
-          </div>
-        )}
-
-        <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={loading} className="bg-transparent">
-            Cancelar
-          </Button>
-          <Button onClick={handleDelete} disabled={loading} className="bg-red-600 hover:bg-red-700">
+        <div className="flex space-x-4 pt-4">
+          <Button
+            onClick={handleDelete}
+            disabled={loading}
+            variant="destructive"
+            className="bg-red-600 hover:bg-red-700"
+          >
             {loading ? "Eliminando..." : "Eliminar"}
           </Button>
-        </DialogFooter>
+          <Button type="button" variant="outline" onClick={() => onClose()} className="bg-transparent">
+            Cancelar
+          </Button>
+        </div>
       </DialogContent>
     </Dialog>
   )

@@ -142,7 +142,7 @@ export function NuevoEmpleadoForm() {
                     <span>{cedulaError}</span>
                   </div>
                 )}
-                <p className="text-xs text-gray-400">Formato: XXX-XXXXXXX-X (11 dígitos)</p>
+                <p className="text-xs text-gray-400">Formato: XXX-XXXXXXX-X</p>
               </div>
 
               <div className="space-y-2">
