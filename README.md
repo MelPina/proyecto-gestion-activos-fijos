@@ -48,59 +48,57 @@ Un sistema completo de gestión de activos fijos desarrollado con Next.js y ASP.
 ## Instalación
 
 ### 1. Clonar el Repositorio
-\`\`\`bash
+bash
 git clone <repository-url>
 cd proyecto-gestion-activos-fijos
-\`\`\`
+
 
 ### 2. Configurar Backend
 
 #### Instalar dependencias
-\`\`\`bash
+bash
 cd ActivosFijosAPI
 dotnet restore
-\`\`\`
+
 
 #### Configurar Base de Datos
 1. Crear base de datos MySQL llamada `bd_activo_fijo`
 2. Actualizar cadena de conexión en `appsettings.json`:
-\`\`\`json
+json
 {
   "ConnectionStrings": {
     "DefaultConnection": "Server=localhost;Port=3306;Database=bd_activo_fijo;Uid=root;Pwd=TU_PASSWORD;SslMode=none;AllowPublicKeyRetrieval=true;"
   }
 }
-\`\`\`
+
 
 #### Ejecutar migraciones
-\`\`\`bash
+bash
 dotnet ef database update
-\`\`\`
+
 
 #### Ejecutar API
-\`\`\`bash
+bash
 dotnet run
-\`\`\`
 La API estará disponible en: `https://localhost:7001` y `http://localhost:5001`
 
 ### 3. Configurar Frontend
 
 #### Instalar dependencias
-\`\`\`bash
+bash
 npm install
-\`\`\`
+
 
 #### Configurar variables de entorno
 Crear archivo `.env.local`:
-\`\`\`env
+env
 API_BASE_URL=http://localhost:5001/api
 NEXT_PUBLIC_DEV_MODE=true
-\`\`\`
+
 
 #### Ejecutar aplicación
-\`\`\`bash
+bash
 npm run dev
-\`\`\`
 La aplicación estará disponible en: `http://localhost:3000`
 
 ## Configuración
@@ -108,7 +106,7 @@ La aplicación estará disponible en: `http://localhost:3000`
 ### Variables de Entorno
 
 #### Backend (appsettings.json)
-\`\`\`json
+json
 {
   "ConnectionStrings": {
     "DefaultConnection": "Server=localhost;Port=3306;Database=bd_activo_fijo;Uid=root;Pwd=PASSWORD;"
@@ -124,17 +122,16 @@ La aplicación estará disponible en: `http://localhost:3000`
     }
   }
 }
-\`\`\`
+
 
 #### Frontend (.env.local)
-\`\`\`env
+env
 API_BASE_URL=http://localhost:5001/api
 NEXT_PUBLIC_DEV_MODE=true
-\`\`\`
+
 
 ## Estructura del Proyecto
 
-\`\`\`
 proyecto-gestion-activos-fijos/
 ├── ActivosFijosAPI/              # Backend ASP.NET Core
 │   ├── Controllers/              # Controladores de API
@@ -153,7 +150,7 @@ proyecto-gestion-activos-fijos/
 │   ├── actions/                  # Server Actions
 │   └── utils/                    # Funciones auxiliares
 └── scripts/                      # Scripts de base de datos
-\`\`\`
+
 
 ## API Externa
 
