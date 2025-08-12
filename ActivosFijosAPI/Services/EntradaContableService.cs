@@ -208,45 +208,91 @@ namespace ActivosFijosAPI.Services
             }
         }
 
+        // public async Task<bool> CreateAsync(CreateEntradaContableDto entrada)
+        // {
+        //     try
+        //     {
+        //         _logger.LogInformation("📝 Creating entrada contable...");
+
+        //         var entradaModel = new ExternalEntradaContable
+        //         {
+        //             descripcion = entrada.descripcion,
+        //             auxiliar_Id = IdSistemaAuxiliar,
+        //             fechaAsiento = entrada.fechaAsiento.ToString("yyyy-MM-dd"),
+        //             cuenta_Id = entrada.detalles.First().cuentaId,
+        //             tipoMovimiento = entrada.detalles.First().tipoMovimiento,
+        //             montoAsiento = entrada.detalles.First().montoAsiento
+        //         };
+
+        //         var json = JsonSerializer.Serialize(entradaModel, new JsonSerializerOptions
+        //         {
+        //             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        //         });
+
+        //         var content = new StringContent(json, Encoding.UTF8, "application/json");
+        //         var response = await _httpClient.PostAsync("api/public/entradas-contables", content);
+
+        //         if (response.IsSuccessStatusCode)
+        //         {
+        //             _logger.LogInformation("✅ Entrada contable created successfully");
+        //             return true;
+        //         }
+        //         else
+        //         {
+        //             var errorContent = await response.Content.ReadAsStringAsync();
+        //             _logger.LogError($"❌ Create failed: {response.StatusCode} - {errorContent}");
+        //             return false;
+        //         }
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         _logger.LogError(ex, "❌ Error creating entrada contable");
+        //         return false;
+        //     }
+        // }
+
         public async Task<bool> CreateAsync(CreateEntradaContableDto entrada)
         {
             try
             {
-                _logger.LogInformation("📝 Creating entrada contable...");
+                _logger.LogInformation("Creating entrada contable...");
 
-                var entradaModel = new ExternalEntradaContable
+                var payload = new
                 {
                     descripcion = entrada.descripcion,
+                    cuenta_Id = entrada.detalle.cuentaId,
                     auxiliar_Id = IdSistemaAuxiliar,
+                    tipoMovimiento = entrada.detalle.tipoMovimiento,
                     fechaAsiento = entrada.fechaAsiento.ToString("yyyy-MM-dd"),
-                    cuenta_Id = entrada.detalles.First().cuentaId,
-                    tipoMovimiento = entrada.detalles.First().tipoMovimiento,
-                    montoAsiento = entrada.detalles.First().montoAsiento
+                    montoAsiento = entrada.detalle.montoAsiento
                 };
 
-                var json = JsonSerializer.Serialize(entradaModel, new JsonSerializerOptions
+                var json = JsonSerializer.Serialize(payload, new JsonSerializerOptions
                 {
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                 });
 
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await _httpClient.PostAsync("api/public/entradas-contables", content);
+                var request = new HttpRequestMessage(HttpMethod.Post, "api/public/entradas-contables");
+                request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+                request.Headers.Add("x-api-key", "ak_live_961bea0d3b66b4e10ba6ed563cfe430921fe2bf11ee29191");
+
+                var response = await _httpClient.SendAsync(request);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    _logger.LogInformation("✅ Entrada contable created successfully");
+                    _logger.LogInformation("Entrada contable created successfully");
                     return true;
                 }
                 else
                 {
                     var errorContent = await response.Content.ReadAsStringAsync();
-                    _logger.LogError($"❌ Create failed: {response.StatusCode} - {errorContent}");
+                    _logger.LogError($"Create failed: {response.StatusCode} - {errorContent}");
                     return false;
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "❌ Error creating entrada contable");
+                _logger.LogError(ex, "Error creating entrada contable");
                 return false;
             }
         }
@@ -255,45 +301,48 @@ namespace ActivosFijosAPI.Services
         {
             try
             {
-                _logger.LogInformation($"📝 Updating entrada contable {id}...");
+                _logger.LogInformation("Updating entrada contable...");
 
-                var entradaModel = new ExternalEntradaContable
+                var payload = new
                 {
-                    id = id,
                     descripcion = entrada.descripcion,
+                    cuenta_Id = entrada.detalle.cuentaId,
                     auxiliar_Id = IdSistemaAuxiliar,
+                    tipoMovimiento = entrada.detalle.tipoMovimiento,
                     fechaAsiento = entrada.fechaAsiento.ToString("yyyy-MM-dd"),
-                    cuenta_Id = entrada.detalles.First().cuentaId,
-                    tipoMovimiento = entrada.detalles.First().tipoMovimiento,
-                    montoAsiento = entrada.detalles.First().montoAsiento
+                    montoAsiento = entrada.detalle.montoAsiento
                 };
 
-                var json = JsonSerializer.Serialize(entradaModel, new JsonSerializerOptions
+                var json = JsonSerializer.Serialize(payload, new JsonSerializerOptions
                 {
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                 });
 
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await _httpClient.PutAsync($"api/public/entradas-contables/{id}", content);
+                var request = new HttpRequestMessage(HttpMethod.Put, $"api/public/entradas-contables/{id}");
+                request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+                request.Headers.Add("x-api-key", "ak_live_961bea0d3b66b4e10ba6ed563cfe430921fe2bf11ee29191");
+
+                var response = await _httpClient.SendAsync(request);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    _logger.LogInformation($"✅ Entrada contable {id} updated successfully");
+                    _logger.LogInformation("Entrada contable updated successfully");
                     return true;
                 }
                 else
                 {
                     var errorContent = await response.Content.ReadAsStringAsync();
-                    _logger.LogError($"❌ Update failed: {response.StatusCode} - {errorContent}");
+                    _logger.LogError($"Update failed: {response.StatusCode} - {errorContent}");
                     return false;
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"❌ Error updating entrada contable {id}");
+                _logger.LogError(ex, "Error updating entrada contable");
                 return false;
             }
         }
+
 
         public async Task<bool> DeleteAsync(int id)
         {
@@ -372,7 +421,7 @@ namespace ActivosFijosAPI.Services
             }
         }
 
-        
+
 
         private static EntradaContableDto MapToDto(ExternalEntradaContable entrada)
         {
@@ -382,17 +431,15 @@ namespace ActivosFijosAPI.Services
                 descripcion = entrada.descripcion,
                 sistemaAuxiliarId = entrada.auxiliar_Id,
                 fechaAsiento = DateTime.Parse(entrada.fechaAsiento),
-                detalles = new List<DetalleAsientoDto>
+                detalle = new DetalleAsientoDto
                 {
-                    new DetalleAsientoDto
-                    {
-                        cuentaId = entrada.cuenta_Id,
-                        tipoMovimiento = entrada.tipoMovimiento,
-                        montoAsiento = entrada.montoAsiento
-                    }
+                    cuentaId = entrada.cuenta_Id,
+                    tipoMovimiento = entrada.tipoMovimiento,
+                    montoAsiento = entrada.montoAsiento
                 }
             };
         }
+
     }
 
     public class ExternalApiResponse
@@ -406,7 +453,7 @@ namespace ActivosFijosAPI.Services
     {
         public int id { get; set; }
         public string descripcion { get; set; } = string.Empty;
-        public int auxiliar_Id { get; set; }
+        public int? auxiliar_Id { get; set; }
         public int cuenta_Id { get; set; }
         public string tipoMovimiento { get; set; } = string.Empty;
         public string fechaAsiento { get; set; } = string.Empty;

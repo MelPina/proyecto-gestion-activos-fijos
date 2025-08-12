@@ -6,11 +6,11 @@ namespace ActivosFijosAPI.DTOs
     {
         [Required]
         public int cuentaId { get; set; }
-        
+
         [Required]
         [StringLength(2)]
         public string tipoMovimiento { get; set; } = string.Empty;
-        
+
         [Required]
         [Range(0.01, double.MaxValue, ErrorMessage = "El monto debe ser mayor a 0")]
         public decimal montoAsiento { get; set; }
@@ -19,19 +19,18 @@ namespace ActivosFijosAPI.DTOs
     public class EntradaContableDto
     {
         public int? id { get; set; }
-        
+
         [Required]
         [StringLength(500)]
         public string descripcion { get; set; } = string.Empty;
-        
-        public int sistemaAuxiliarId { get; set; }
-        
+
+        public int? sistemaAuxiliarId { get; set; }
+
         [Required]
         public DateTime fechaAsiento { get; set; }
-        
+
         [Required]
-        [MinLength(1, ErrorMessage = "Debe incluir al menos un detalle")]
-        public List<DetalleAsientoDto> detalles { get; set; } = new();
+        public DetalleAsientoDto detalle { get; set; } = new DetalleAsientoDto();
     }
 
     public class CreateEntradaContableDto
@@ -39,13 +38,12 @@ namespace ActivosFijosAPI.DTOs
         [Required]
         [StringLength(500)]
         public string descripcion { get; set; } = string.Empty;
-        
+
         [Required]
         public DateTime fechaAsiento { get; set; }
-        
+
         [Required]
-        [MinLength(1, ErrorMessage = "Debe incluir al menos un detalle")]
-        public List<DetalleAsientoDto> detalles { get; set; } = new();
+        public DetalleAsientoDto detalle { get; set; } = new DetalleAsientoDto();
     }
 
     public class UpdateEntradaContableDto
@@ -53,13 +51,12 @@ namespace ActivosFijosAPI.DTOs
         [Required]
         [StringLength(500)]
         public string descripcion { get; set; } = string.Empty;
-        
+
         [Required]
         public DateTime fechaAsiento { get; set; }
-        
+
         [Required]
-        [MinLength(1, ErrorMessage = "Debe incluir al menos un detalle")]
-        public List<DetalleAsientoDto> detalles { get; set; } = new();
+        public DetalleAsientoDto detalle { get; set; } = new DetalleAsientoDto();
     }
 
     public class EntradaContableFiltersDto

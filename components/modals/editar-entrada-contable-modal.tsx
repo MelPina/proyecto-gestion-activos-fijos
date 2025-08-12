@@ -9,8 +9,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Plus, Trash2, AlertCircle } from "lucide-react"
-import type { UpdateEntradaContableDto, EntradaContable, DetalleAsiento } from "@/lib/actions/entradas-contables"
+import { AlertCircle } from "lucide-react"
+import type { UpdateEntradaContableDto, EntradaContable } from "@/lib/actions/entradas-contables"
 
 export interface EditarEntradaContableModalProps {
   open: boolean
@@ -30,42 +30,53 @@ export function EditarEntradaContableModal({
   const [error, setError] = useState<string | null>(null)
   const [formData, setFormData] = useState<UpdateEntradaContableDto>({
     descripcion: "",
+    cuenta_Id: 3,
+    auxiliar_Id: 8,
+    tipoMovimiento: "DB",
     fechaAsiento: "",
-    detalles: [],
+    montoAsiento: 0,
   })
+
+  // useEffect(() => {
+  //   if (entrada) {
+  //     setFormData({
+  //       descripcion: entrada.descripcion,
+  //       cuenta_Id: entrada.detalles[0]?.cuentaId || 3,
+  //       auxiliar_Id: entrada.detalles[0]?.montoAsiento  || 8,
+  //       tipoMovimiento: (entrada.detalles[0]?.tipoMovimiento  as "DB" | "CR") || "DB",
+  //       fechaAsiento: entrada.fechaAsiento.split("T")[0],
+  //       montoAsiento: entrada.detalles[0]?.montoAsiento || 0,
+  //     })
+  //   }
+  // }, [entrada])
 
   useEffect(() => {
     if (entrada) {
+      const primerDetalle = entrada.detalles?.length ? entrada.detalles[0] : null
+  
       setFormData({
         descripcion: entrada.descripcion,
+        cuenta_Id: primerDetalle?.cuentaId ?? 3,
+        auxiliar_Id: primerDetalle?.montoAsiento ?? 8,
+        tipoMovimiento: (primerDetalle?.tipoMovimiento as "DB" | "CR") ?? "DB",
         fechaAsiento: entrada.fechaAsiento.split("T")[0],
-        detalles: entrada.detalles.map((d) => ({
-          cuentaId: d.cuentaId,
-          tipoMovimiento: d.tipoMovimiento,
-          montoAsiento: d.montoAsiento,
-        })),
+        montoAsiento: primerDetalle?.montoAsiento ?? 0,
       })
     }
   }, [entrada])
-
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
 
     try {
-      // Validaciones básicas
       if (!formData.descripcion.trim()) {
         setError("La descripción es requerida")
         return
       }
 
-      if (formData.detalles.length === 0) {
-        setError("Debe agregar al menos un detalle")
-        return
-      }
-
-      if (formData.detalles.some((d) => d.montoAsiento <= 0)) {
-        setError("Todos los montos deben ser mayores a 0")
+      if (formData.montoAsiento <= 0) {
+        setError("El monto debe ser mayor a 0")
         return
       }
 
@@ -75,171 +86,107 @@ export function EditarEntradaContableModal({
     }
   }
 
-  const addDetalle = () => {
-    setFormData((prev) => ({
-      ...prev,
-      detalles: [
-        ...prev.detalles,
-        {
-          cuentaId: 66,
-          tipoMovimiento: "CR",
-          montoAsiento: 0,
-        },
-      ],
-    }))
-  }
-
-  const removeDetalle = (index: number) => {
-    if (formData.detalles.length > 1) {
-      setFormData((prev) => ({
-        ...prev,
-        detalles: prev.detalles.filter((_, i) => i !== index),
-      }))
-    }
-  }
-
-  const updateDetalle = (index: number, field: keyof DetalleAsiento, value: any) => {
-    setFormData((prev) => ({
-      ...prev,
-      detalles: prev.detalles.map((detalle, i) => (i === index ? { ...detalle, [field]: value } : detalle)),
-    }))
-  }
-
   if (!entrada) return null
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-[#2a2d3a] border-gray-700 text-white max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="bg-[#2a2d3a] border-gray-700 text-white max-w-lg">
         <DialogHeader>
           <DialogTitle className="text-white">Editar Entrada Contable</DialogTitle>
           <DialogDescription className="text-gray-400">Modificar la entrada contable #{entrada.id}</DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Información General */}
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="descripcion" className="text-gray-300">
-                Descripción *
-              </Label>
-              <Input
-                id="descripcion"
-                value={formData.descripcion}
-                onChange={(e) => setFormData((prev) => ({ ...prev, descripcion: e.target.value }))}
-                placeholder="Descripción de la entrada contable"
-                className="bg-[#1e2028] border-gray-700 text-white"
-                required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="fechaAsiento" className="text-gray-300">
-                Fecha del Asiento *
-              </Label>
-              <Input
-                id="fechaAsiento"
-                type="date"
-                value={formData.fechaAsiento}
-                onChange={(e) => setFormData((prev) => ({ ...prev, fechaAsiento: e.target.value }))}
-                className="bg-[#1e2028] border-gray-700 text-white"
-                required
-              />
-            </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="descripcion" className="text-gray-300">
+              Descripción *
+            </Label>
+            <Input
+              id="descripcion"
+              value={formData.descripcion}
+              onChange={(e) => setFormData((prev) => ({ ...prev, descripcion: e.target.value }))}
+              placeholder="Descripción de la entrada contable"
+              className="bg-[#1e2028] border-gray-700 text-white"
+              required
+            />
           </div>
 
-          {/* Detalles del Asiento */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <Label className="text-gray-300 text-lg font-semibold">Detalles del Asiento</Label>
-              <Button
-                type="button"
-                onClick={addDetalle}
-                variant="outline"
-                size="sm"
-                className="border-gray-700 text-gray-300 hover:bg-gray-700 bg-transparent"
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Agregar Detalle
-              </Button>
-            </div>
+          <div className="space-y-2">
+            <Label htmlFor="cuenta_Id" className="text-gray-300">
+              Cuenta ID *
+            </Label>
+            <Select
+              value={formData.cuenta_Id.toString()}
+              onValueChange={(value) => setFormData((prev) => ({ ...prev, cuenta_Id: Number.parseInt(value) }))}
+            >
+              <SelectTrigger className="bg-[#1e2028] border-gray-700 text-white">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-[#2a2d3a] border-gray-700">
+                
+                <SelectItem value="65" className="text-white">
+                  65 - Gasto Depreciación Activos Fijos
+                </SelectItem>
+                <SelectItem value="66" className="text-white">
+                  66 - Depreciación Acumulada Activos Fijos
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
-            {formData.detalles.map((detalle, index) => (
-              <div key={index} className="p-4 border border-gray-700 rounded-lg space-y-4">
-                <div className="flex items-center justify-between">
-                  <h4 className="text-gray-300 font-medium">Detalle {index + 1}</h4>
-                  {formData.detalles.length > 1 && (
-                    <Button
-                      type="button"
-                      onClick={() => removeDetalle(index)}
-                      variant="ghost"
-                      size="sm"
-                      className="text-red-400 hover:text-red-300 hover:bg-red-900/20"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  )}
-                </div>
+          <div className="space-y-2">
+            <Label htmlFor="tipoMovimiento" className="text-gray-300">
+              Tipo Movimiento *
+            </Label>
+            <Select
+              value={formData.tipoMovimiento}
+              onValueChange={(value: "DB" | "CR") => setFormData((prev) => ({ ...prev, tipoMovimiento: value }))}
+            >
+              <SelectTrigger className="bg-[#1e2028] border-gray-700 text-white">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="bg-[#2a2d3a] border-gray-700">
+                <SelectItem value="DB" className="text-white">
+                  DB - Débito
+                </SelectItem>
+                <SelectItem value="CR" className="text-white">
+                  CR - Crédito
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="space-y-2">
-                    <Label className="text-gray-300">Cuenta ID *</Label>
-                    <Select
-                      value={detalle.cuentaId.toString()}
-                      onValueChange={(value) => updateDetalle(index, "cuentaId", Number.parseInt(value))}
-                    >
-                      <SelectTrigger className="bg-[#1e2028] border-gray-700 text-white">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent className="bg-[#2a2d3a] border-gray-700">
-                        <SelectItem value="65" className="text-white">
-                          65 - Gasto Depreciación Activos Fijos
-                        </SelectItem>
-                        <SelectItem value="66" className="text-white">
-                          66 - Depreciación Acumulada Activos Fijos
-                        </SelectItem>
-                        <SelectItem value="3" className="text-white">
-                          3 - Cuenta General
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+          <div className="space-y-2">
+            <Label htmlFor="fechaAsiento" className="text-gray-300">
+              Fecha del Asiento *
+            </Label>
+            <Input
+              id="fechaAsiento"
+              type="date"
+              value={formData.fechaAsiento}
+              onChange={(e) => setFormData((prev) => ({ ...prev, fechaAsiento: e.target.value }))}
+              className="bg-[#1e2028] border-gray-700 text-white"
+              required
+            />
+          </div>
 
-                  <div className="space-y-2">
-                    <Label className="text-gray-300">Tipo Movimiento *</Label>
-                    <Select
-                      value={detalle.tipoMovimiento}
-                      onValueChange={(value) => updateDetalle(index, "tipoMovimiento", value)}
-                    >
-                      <SelectTrigger className="bg-[#1e2028] border-gray-700 text-white">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent className="bg-[#2a2d3a] border-gray-700">
-                        <SelectItem value="DB" className="text-white">
-                          DB - Débito
-                        </SelectItem>
-                        <SelectItem value="CR" className="text-white">
-                          CR - Crédito
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label className="text-gray-300">Monto *</Label>
-                    <Input
-                      type="number"
-                      step="0.01"
-                      min="0.01"
-                      value={detalle.montoAsiento}
-                      onChange={(e) => updateDetalle(index, "montoAsiento", Number.parseFloat(e.target.value) || 0)}
-                      placeholder="0.00"
-                      className="bg-[#1e2028] border-gray-700 text-white"
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
-            ))}
+          <div className="space-y-2">
+            <Label htmlFor="montoAsiento" className="text-gray-300">
+              Monto *
+            </Label>
+            <Input
+              id="montoAsiento"
+              type="number"
+              step="0.01"
+              min="0.01"
+              value={formData.montoAsiento}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, montoAsiento: Number.parseFloat(e.target.value) || 0 }))
+              }
+              placeholder="0.00"
+              className="bg-[#1e2028] border-gray-700 text-white"
+              required
+            />
           </div>
 
           {/* Error Alert */}

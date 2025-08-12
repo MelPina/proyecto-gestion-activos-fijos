@@ -4,7 +4,7 @@ const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:5001/api"
 
 export interface DetalleAsiento {
   cuentaId: number
-  tipoMovimiento: string
+  tipoMovimiento: "DB" | "CR"
   montoAsiento: number
 }
 
@@ -23,15 +23,22 @@ export interface EntradaContableFilters {
 }
 
 export interface CreateEntradaContableDto {
-  descripcion: string
-  fechaAsiento: string
-  detalles: DetalleAsiento[]
-}
+    descripcion: string;
+    cuenta_Id: number;
+    auxiliar_Id: number; // fijo 8
+    tipoMovimiento: "DB" | "CR";
+    fechaAsiento: string; // "YYYY-MM-DD"
+    montoAsiento: number;
+  }
+  
 
 export interface UpdateEntradaContableDto {
-  descripcion: string
-  fechaAsiento: string
-  detalles: DetalleAsiento[]
+  descripcion: string;
+    cuenta_Id: number;
+    auxiliar_Id: number; 
+    tipoMovimiento: string;
+    fechaAsiento: string; 
+    montoAsiento: number;
 }
 
 export interface EntradaContableStats {

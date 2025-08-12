@@ -202,9 +202,6 @@ namespace ActivosFijosAPI.Controllers
             }
         }
 
-        /// <summary>
-        /// Obtener estadísticas de entradas contables
-        /// </summary>
         [HttpGet("stats")]
         public async Task<IActionResult> GetStats([FromQuery] EntradaContableFiltersDto? filters = null)
         {
@@ -222,11 +219,11 @@ namespace ActivosFijosAPI.Controllers
                 var stats = new
                 {
                     total = entradas.Count,
-                    montoTotal = entradas.SelectMany(e => e.detalles).Sum(d => d.montoAsiento),
+                    montoTotal = entradas.Sum(e => e.detalle.montoAsiento),  
                     porFecha = entradas.GroupBy(e => e.fechaAsiento.Date)
-                                     .Select(g => new { fecha = g.Key, cantidad = g.Count() })
-                                     .OrderBy(x => x.fecha)
-                                     .ToList()
+                                       .Select(g => new { fecha = g.Key, cantidad = g.Count() })
+                                       .OrderBy(x => x.fecha)
+                                       .ToList()
                 };
 
                 _logger.LogInformation($"Retrieved stats for {entradas.Count} entradas contables");
@@ -239,6 +236,7 @@ namespace ActivosFijosAPI.Controllers
                 return StatusCode(500, new { message = "Error interno del servidor" });
             }
         }
+
 
         /// <summary>
         /// Verificar el estado de la conexión con la API externa
@@ -282,10 +280,11 @@ namespace ActivosFijosAPI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Health check error");
-                return StatusCode(500, new { 
-                    status = "error", 
+                return StatusCode(500, new
+                {
+                    status = "error",
                     message = "Error checking external API health",
-                    timestamp = DateTime.UtcNow 
+                    timestamp = DateTime.UtcNow
                 });
             }
         }

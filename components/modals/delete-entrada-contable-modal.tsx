@@ -41,7 +41,7 @@ export function DeleteEntradaContableModal({
   }
 
   const getTotalMonto = () => {
-    return entrada?.detalles.reduce((sum, detalle) => sum + detalle.montoAsiento, 0) || 0
+    return entrada?.detalles?.reduce((sum, detalle) => sum + detalle.montoAsiento, 0) || 0
   }
 
   if (!entrada) return null
@@ -75,7 +75,7 @@ export function DeleteEntradaContableModal({
               </div>
               <div>
                 <p className="text-gray-400 text-sm">Sistema</p>
-                <p className="text-white font-medium">Sistema {entrada.sistemaAuxiliarId}</p>
+                <p className="text-white font-medium">Sistema {entrada.sistemaAuxiliarId || "N/A"}</p>
               </div>
             </div>
 
@@ -95,19 +95,21 @@ export function DeleteEntradaContableModal({
               </div>
             </div>
 
-            <div>
-              <p className="text-gray-400 text-sm mb-2">Detalles ({entrada.detalles.length})</p>
-              <div className="space-y-2">
-                {entrada.detalles.map((detalle, index) => (
-                  <div key={index} className="flex justify-between items-center text-sm">
-                    <span className="text-gray-300">
-                      Cuenta {detalle.cuentaId} - {detalle.tipoMovimiento}
-                    </span>
-                    <span className="text-white font-medium">{formatCurrency(detalle.montoAsiento)}</span>
-                  </div>
-                ))}
+            {entrada.detalles && entrada.detalles.length > 0 && (
+              <div>
+                <p className="text-gray-400 text-sm mb-2">Detalles ({entrada.detalles.length})</p>
+                <div className="space-y-2">
+                  {entrada.detalles.map((detalle, index) => (
+                    <div key={index} className="flex justify-between items-center text-sm">
+                      <span className="text-gray-300">
+                        Cuenta {detalle.cuentaId} - {detalle.tipoMovimiento}
+                      </span>
+                      <span className="text-white font-medium">{formatCurrency(detalle.montoAsiento)}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
 
