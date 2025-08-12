@@ -30,77 +30,7 @@ namespace ActivosFijosAPI.Services
             // _httpClient.Timeout = TimeSpan.FromSeconds(30);
         }
 
-        // public async Task<List<EntradaContableDto>?> GetAllAsync(EntradaContableFiltersDto? filters = null)
-        // {
-        //     try
-        //     {
-        //         _logger.LogInformation("Fetching entradas contables from external API...");
-        //         _logger.LogInformation("Request Headers:");
-        //         foreach (var header in _httpClient.DefaultRequestHeaders)
-        //         {
-        //             _logger.LogInformation($"{header.Key}: {string.Join(", ", header.Value)}");
-        //         }
 
-
-        //         var queryParams = new List<string>();
-
-        //         if (filters != null)
-        //         {
-        //             if (filters.fechaInicio.HasValue)
-        //                 queryParams.Add($"fechaInicio={filters.fechaInicio.Value:yyyy-MM-dd}");
-
-        //             if (filters.fechaFin.HasValue)
-        //                 queryParams.Add($"fechaFin={filters.fechaFin.Value:yyyy-MM-dd}");
-
-        //             if (filters.cuentaId.HasValue)
-        //                 queryParams.Add($"cuenta_Id={filters.cuentaId.Value}");
-        //         }
-
-        //         var url = "api/public/entradas-contables";
-        //         if (queryParams.Any())
-        //         {
-        //             url += "?" + string.Join("&", queryParams);
-        //         }
-
-        //         _logger.LogInformation($"🌐 Calling: {_httpClient.BaseAddress}{url}");
-
-        //         var response = await _httpClient.GetAsync(url);
-
-        //         if (response.IsSuccessStatusCode)
-        //         {
-        //             var json = await response.Content.ReadAsStringAsync();
-        //             _logger.LogInformation($"📡 Raw API Response: {json}");
-
-        //             var apiResponse = JsonSerializer.Deserialize<ExternalApiResponse>(json, new JsonSerializerOptions
-        //             {
-        //                 PropertyNameCaseInsensitive = true
-        //             });
-
-        //             if (apiResponse?.success == true && apiResponse.data != null)
-        //             {
-        //                 var result = apiResponse.data.Select(MapToDto).ToList();
-        //                 _logger.LogInformation($"✅ Retrieved {result.Count} entradas contables");
-        //                 return result;
-        //             }
-        //             else
-        //             {
-        //                 _logger.LogWarning($"⚠️ API returned success=false or no data");
-        //                 return new List<EntradaContableDto>();
-        //             }
-        //         }
-        //         else
-        //         {
-        //             var errorContent = await response.Content.ReadAsStringAsync();
-        //             _logger.LogError($"❌ API Error: {response.StatusCode} - {errorContent}");
-        //             return new List<EntradaContableDto>();
-        //         }
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         _logger.LogError(ex, "❌ Error fetching entradas contables");
-        //         return new List<EntradaContableDto>();
-        //     }
-        // }
         public async Task<List<EntradaContableDto>?> GetAllAsync(EntradaContableFiltersDto? filters = null)
         {
             try

@@ -411,8 +411,8 @@ export function EntradasContablesPage() {
                   <TableHead className="text-gray-300">Id. Transacción</TableHead>
                   <TableHead className="text-gray-300">Descripción</TableHead>
                   <TableHead className="text-gray-300">Fecha Asiento</TableHead>
-                  <TableHead className="text-gray-300">Monto</TableHead>
-                  <TableHead className="text-gray-300">Acciones</TableHead>
+                  {/* <TableHead className="text-gray-300">Monto</TableHead> */}
+                  {/* <TableHead className="text-gray-300">Acciones</TableHead> */}
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -429,12 +429,13 @@ export function EntradasContablesPage() {
                     <TableCell className="text-gray-300">
                       {entrada.fechaAsiento ? formatDate(entrada.fechaAsiento) : "Fecha no disponible"}
                     </TableCell>
-                    <TableCell className="text-gray-300">
-                      {entrada.detalles?.[0]
-                        ? formatCurrency(entrada.detalles[0].montoAsiento)
+                    {/* <TableCell className="text-gray-300">
+                      {entrada.montoAsiento !== undefined
+                        ? formatCurrency(entrada.montoAsiento)
                         : "Monto no definido"}
-                    </TableCell>
-                    <TableCell>
+                    </TableCell> */}
+
+                    {/* <TableCell>
                       <div className="flex items-center gap-2">
                         <Button
                           size="sm"
@@ -457,12 +458,13 @@ export function EntradasContablesPage() {
                           className="border-red-600 text-red-400 hover:bg-red-900/50"
                         >
                           <Trash2 className="h-3 w-3" />
-                        </Button> */}
+                        </Button> 
                       </div>
-                    </TableCell>
+                    </TableCell>  */}
                   </TableRow>
                 ))}
               </TableBody>
+
             </Table>
           )}
         </CardContent>

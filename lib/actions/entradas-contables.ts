@@ -8,13 +8,30 @@ export interface DetalleAsiento {
   montoAsiento: number
 }
 
+// export interface EntradaContable {
+//   id?: number
+//   descripcion: string
+//   sistemaAuxiliarId: number
+//   fechaAsiento: string
+//   detalles: DetalleAsiento[]
+// }
 export interface EntradaContable {
   id?: number
   descripcion: string
-  sistemaAuxiliarId: number
+  auxiliar_Id: number
+  cuenta_Id: number
+  tipoMovimiento: "DB" | "CR"
   fechaAsiento: string
-  detalles: DetalleAsiento[]
+  montoAsiento: number
+  estado_Id: number
+  CatalogoCuentasContable?: {
+    descripcion: string
+  }
+  Auxiliare?: {
+    nombre: string
+  }
 }
+
 
 export interface EntradaContableFilters {
   fechaInicio?: string
@@ -124,17 +141,43 @@ export async function getEntradasContables(filters?: EntradaContableFilters): Pr
   return result
 }
 
+// export async function createEntradaContable(entrada: CreateEntradaContableDto): Promise<ApiResponse<void>> {
+//   console.log("📝 Creating entrada contable in local API...")
+
+//   const entradaConSistema = {
+//     ...entrada,
+//     sistemaAuxiliarId: 1, // ID por defecto para el sistema
+//   }
+
+//   const result = await callLocalAPI<void>("/EntradasContables", {
+//     method: "POST",
+//     body: JSON.stringify(entradaConSistema),
+//   })
+
+//   if (result.success) {
+//     console.log("✅ Entrada contable created in local API")
+//   }
+
+//   return result
+// }
+
 export async function createEntradaContable(entrada: CreateEntradaContableDto): Promise<ApiResponse<void>> {
   console.log("📝 Creating entrada contable in local API...")
 
-  const entradaConSistema = {
-    ...entrada,
-    sistemaAuxiliarId: 1, // ID por defecto para el sistema
+  const payload = {
+    descripcion: entrada.descripcion,
+    fechaAsiento: entrada.fechaAsiento,
+    sistemaAuxiliarId: 1, // si es obligatorio
+    detalle: {
+      cuentaId: entrada.cuenta_Id,
+      tipoMovimiento: entrada.tipoMovimiento,
+      montoAsiento: entrada.montoAsiento
+    }
   }
 
   const result = await callLocalAPI<void>("/EntradasContables", {
     method: "POST",
-    body: JSON.stringify(entradaConSistema),
+    body: JSON.stringify(payload),
   })
 
   if (result.success) {
@@ -143,6 +186,7 @@ export async function createEntradaContable(entrada: CreateEntradaContableDto): 
 
   return result
 }
+
 
 export async function updateEntradaContable(id: number, entrada: UpdateEntradaContableDto): Promise<ApiResponse<void>> {
   console.log(`📝 Updating entrada contable ${id} in local API...`)

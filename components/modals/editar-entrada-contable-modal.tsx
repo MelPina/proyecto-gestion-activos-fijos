@@ -1,9 +1,14 @@
 "use client"
 
 import type React from "react"
-
 import { useState, useEffect } from "react"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle
+} from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -18,6 +23,16 @@ export interface EditarEntradaContableModalProps {
   entrada: EntradaContable | null
   onSubmit: (data: UpdateEntradaContableDto) => Promise<void>
   loading: boolean
+}
+
+// Función mock para traer monto según cuenta ID (reemplázala con llamada real si aplica)
+function getMontoPorCuenta(cuentaId: number): number {
+  const montosPorCuenta: Record<number, number> = {
+    65: 1500.75,
+    66: 800.25,
+    3: 500,
+  }
+  return montosPorCuenta[cuentaId] ?? 0
 }
 
 export function EditarEntradaContableModal({
@@ -37,34 +52,31 @@ export function EditarEntradaContableModal({
     montoAsiento: 0,
   })
 
-  // useEffect(() => {
-  //   if (entrada) {
-  //     setFormData({
-  //       descripcion: entrada.descripcion,
-  //       cuenta_Id: entrada.detalles[0]?.cuentaId || 3,
-  //       auxiliar_Id: entrada.detalles[0]?.montoAsiento  || 8,
-  //       tipoMovimiento: (entrada.detalles[0]?.tipoMovimiento  as "DB" | "CR") || "DB",
-  //       fechaAsiento: entrada.fechaAsiento.split("T")[0],
-  //       montoAsiento: entrada.detalles[0]?.montoAsiento || 0,
-  //     })
-  //   }
-  // }, [entrada])
-
+  // Cargar datos al abrir
   useEffect(() => {
     if (entrada) {
       const primerDetalle = entrada.detalles?.length ? entrada.detalles[0] : null
-  
+
       setFormData({
         descripcion: entrada.descripcion,
         cuenta_Id: primerDetalle?.cuentaId ?? 3,
-        auxiliar_Id: primerDetalle?.montoAsiento ?? 8,
+        auxiliar_Id: 8,
         tipoMovimiento: (primerDetalle?.tipoMovimiento as "DB" | "CR") ?? "DB",
         fechaAsiento: entrada.fechaAsiento.split("T")[0],
         montoAsiento: primerDetalle?.montoAsiento ?? 0,
       })
     }
   }, [entrada])
-  
+
+  // Actualizar monto automáticamente al cambiar cuentaId
+  useEffect(() => {
+    const nuevoMonto = getMontoPorCuenta(formData.cuenta_Id)
+    setFormData((prev) => ({
+      ...prev,
+      montoAsiento: nuevoMonto
+    }))
+  }, [formData.cuenta_Id])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
@@ -93,7 +105,9 @@ export function EditarEntradaContableModal({
       <DialogContent className="bg-[#2a2d3a] border-gray-700 text-white max-w-lg">
         <DialogHeader>
           <DialogTitle className="text-white">Editar Entrada Contable</DialogTitle>
-          <DialogDescription className="text-gray-400">Modificar la entrada contable #{entrada.id}</DialogDescription>
+          <DialogDescription className="text-gray-400">
+            Modificar la entrada contable #{entrada.id}
+          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -115,23 +129,17 @@ export function EditarEntradaContableModal({
             <Label htmlFor="cuenta_Id" className="text-gray-300">
               Cuenta ID *
             </Label>
-            <Select
-              value={formData.cuenta_Id.toString()}
-              onValueChange={(value) => setFormData((prev) => ({ ...prev, cuenta_Id: Number.parseInt(value) }))}
-            >
-              <SelectTrigger className="bg-[#1e2028] border-gray-700 text-white">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="bg-[#2a2d3a] border-gray-700">
-                
-                <SelectItem value="65" className="text-white">
-                  65 - Gasto Depreciación Activos Fijos
-                </SelectItem>
-                <SelectItem value="66" className="text-white">
-                  66 - Depreciación Acumulada Activos Fijos
-                </SelectItem>
-              </SelectContent>
-            </Select>
+            <Input
+              id="cuenta_Id"
+              type="number"
+              min="1"
+              value={formData.cuenta_Id}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, cuenta_Id: Number.parseInt(e.target.value) || 0 }))
+              }
+              className="bg-[#1e2028] border-gray-700 text-white"
+              required
+            />
           </div>
 
           <div className="space-y-2">
@@ -189,7 +197,6 @@ export function EditarEntradaContableModal({
             />
           </div>
 
-          {/* Error Alert */}
           {error && (
             <Alert variant="destructive" className="bg-red-900/50 border-red-800">
               <AlertCircle className="h-4 w-4" />
@@ -197,7 +204,6 @@ export function EditarEntradaContableModal({
             </Alert>
           )}
 
-          {/* Actions */}
           <div className="flex justify-end gap-3">
             <Button
               type="button"

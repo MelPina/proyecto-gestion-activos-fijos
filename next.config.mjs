@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
     // Permitir conexiones a localhost con certificados auto-firmados
     experimental: {
       serverComponentsExternalPackages: [],

@@ -90,23 +90,17 @@ export function NuevaEntradaContableModal({ open, onOpenChange, onSubmit, loadin
             <Label htmlFor="cuenta_Id" className="text-gray-300">
               Cuenta ID *
             </Label>
-            <Select
-              value={formData.cuenta_Id.toString()}
-              onValueChange={(value) => setFormData((prev) => ({ ...prev, cuenta_Id: Number.parseInt(value) }))}
-            >
-              <SelectTrigger className="bg-[#1e2028] border-gray-700 text-white">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="bg-[#2a2d3a] border-gray-700">
-                
-                <SelectItem value="65" className="text-white">
-                  65 - Gasto Depreciación Activos Fijos
-                </SelectItem>
-                <SelectItem value="66" className="text-white">
-                  66 - Depreciación Acumulada Activos Fijos
-                </SelectItem>
-              </SelectContent>
-            </Select>
+            <Input
+              id="cuenta_Id"
+              type="number"
+              min="1"
+              value={formData.cuenta_Id}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, cuenta_Id: Number.parseInt(e.target.value) || 0 }))
+              }
+              className="bg-[#1e2028] border-gray-700 text-white"
+              required
+            />
           </div>
 
           <div className="space-y-2">
