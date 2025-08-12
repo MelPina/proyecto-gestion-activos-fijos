@@ -42,16 +42,12 @@ namespace ActivosFijosAPI.Models
         public virtual Departamento? Departamento { get; set; }
 
         [ForeignKey("TipoActivoId")]
-<<<<<<< HEAD
         public virtual TipoActivo? TipoActivo { get; set; }
 
         public virtual ICollection<Depreciacion> Depreciaciones { get; set; } = new List<Depreciacion>();
-=======
-        public virtual TipoActivo TipoActivo { get; set; } = null!;
 
         // Calculated property
         [NotMapped]
         public decimal ValorNeto => Valor - DepreciacionAcumulada;
->>>>>>> origin/dev-mel
     }
 }
