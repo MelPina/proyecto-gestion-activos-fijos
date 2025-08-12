@@ -34,3 +34,16 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+
+
+# Archivos de compilación y depuración
+/ActivosFijosAPI/bin/
+/ActivosFijosAPI/obj/
+*.pdb
+*.dll
+
+
+# Archivos de cache
+*.cache.json
+*.sourcelink.json

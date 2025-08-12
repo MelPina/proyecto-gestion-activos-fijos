@@ -44,13 +44,25 @@ export function DepreciacionPage() {
       const [activosResult, tiposResult] = await Promise.all([getActivosFijos(), getTiposActivos()])
 
       if (activosResult.success && activosResult.data) {
-        setActivosFijos(activosResult.data)
+        const activosConPropiedades = activosResult.data.map((activo) => ({
+          ...activo,
+          departamentoId: activo.departamentoId ?? undefined, 
+          departamentoDescripcion: activo.departamentoNombre || "",
+          tipoActivoDescripcion: activo.tipoActivoNombre || "",
+          estadoDescripcion: "", 
+        }))
+        setActivosFijos(activosConPropiedades)
       } else {
         setError(`Error cargando activos: ${activosResult.error}`)
       }
 
       if (tiposResult.success && tiposResult.data) {
-        setTiposActivos(tiposResult.data)
+        setTiposActivos(
+          tiposResult.data.map((tipo) => ({
+            ...tipo,
+            cantidadActivos: tipo.cantidadActivos ?? 0, 
+          }))
+        )
       }
     } catch (err) {
       setError(`Error inesperado: ${err instanceof Error ? err.message : String(err)}`)
@@ -134,14 +146,14 @@ export function DepreciacionPage() {
           <p className="text-gray-400 mt-1">Cálculo automático de depreciación por método de línea recta</p>
         </div>
         <div className="flex space-x-2">
-          <Button onClick={calcularDepreciaciones} className="bg-green-600 hover:bg-green-700">
+          {/* <Button onClick={calcularDepreciaciones} className="bg-green-600 hover:bg-green-700">
             <Calculator className="h-4 w-4 mr-2" />
             Recalcular
-          </Button>
-          <Button variant="outline">
+          </Button> */}
+          {/* <Button variant="outline">
             <FileText className="h-4 w-4 mr-2" />
             Exportar Reporte
-          </Button>
+          </Button> */}
         </div>
       </div>
 
