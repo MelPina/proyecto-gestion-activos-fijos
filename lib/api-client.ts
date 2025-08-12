@@ -86,6 +86,20 @@ export interface TipoActivoDto {
   cantidadActivos: number
 }
 
+export interface ActivoFijo {
+  id: number
+  descripcion: string
+  departamentoId?: number
+  tipoActivoId: number
+  fechaAdquisicion: string
+  valor: number
+  depreciacionAcumulada: number
+  estado: number
+  departamentoDescripcion: string
+  tipoActivoDescripcion: string
+  estadoDescripcion: string
+}
+
 export interface CreateTipoActivoDto {
   descripcion: string
   cuentaContableCompra: string

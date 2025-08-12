@@ -2,12 +2,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using ActivosFijosAPI.Services;
 using ActivosFijosAPI.DTOs;
+using System;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace ActivosFijosAPI.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
-    [Route("api/entradas-contables")]
     [ApiController]
     public class EntradasContablesController : ControllerBase
     {
@@ -36,28 +37,17 @@ namespace ActivosFijosAPI.Controllers
 
                 if (entradas == null)
                 {
-                    return StatusCode(500, new { 
-                        message = "Error al obtener las entradas contables del sistema externo",
-                        details = "Verifique la conectividad con la API externa"
-                    });
+                    return StatusCode(500, new { message = "Error al obtener las entradas contables del sistema externo" });
                 }
 
                 _logger.LogInformation($"Retrieved {entradas.Count} entradas contables");
 
-                return Ok(new 
-                { 
-                    success = true,
-                    count = entradas.Count,
-                    data = entradas 
-                });
+                return Ok(entradas);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error getting entradas contables");
-                return StatusCode(500, new { 
-                    message = "Error interno del servidor",
-                    error = ex.Message 
-                });
+                return StatusCode(500, new { message = "Error interno del servidor" });
             }
         }
 
@@ -75,27 +65,17 @@ namespace ActivosFijosAPI.Controllers
 
                 if (entrada == null)
                 {
-                    return NotFound(new { 
-                        message = $"Entrada contable con ID {id} no encontrada",
-                        success = false
-                    });
+                    return NotFound(new { message = $"Entrada contable con ID {id} no encontrada" });
                 }
 
                 _logger.LogInformation($"Retrieved entrada contable {id}");
 
-                return Ok(new 
-                { 
-                    success = true,
-                    data = entrada 
-                });
+                return Ok(entrada);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error getting entrada contable {id}");
-                return StatusCode(500, new { 
-                    message = "Error interno del servidor",
-                    error = ex.Message 
-                });
+                return StatusCode(500, new { message = "Error interno del servidor" });
             }
         }
 
@@ -111,28 +91,7 @@ namespace ActivosFijosAPI.Controllers
 
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest(new 
-                    { 
-                        message = "Datos de entrada inválidos",
-                        errors = ModelState,
-                        success = false
-                    });
-                }
-
-                // Validación adicional: Los débitos deben igualar los créditos
-                var totalDebitos = entrada.detalles.Where(d => d.tipoMovimiento == "DB").Sum(d => d.montoAsiento);
-                var totalCreditos = entrada.detalles.Where(d => d.tipoMovimiento == "CR").Sum(d => d.montoAsiento);
-
-                if (totalDebitos != totalCreditos)
-                {
-                    return BadRequest(new
-                    {
-                        message = "El total de débitos debe igualar el total de créditos",
-                        totalDebitos,
-                        totalCreditos,
-                        diferencia = totalDebitos - totalCreditos,
-                        success = false
-                    });
+                    return BadRequest(ModelState);
                 }
 
                 var success = await _entradaContableService.CreateAsync(entrada);
@@ -140,25 +99,15 @@ namespace ActivosFijosAPI.Controllers
                 if (success)
                 {
                     _logger.LogInformation("Entrada contable created successfully");
-                    return CreatedAtAction(nameof(GetById), new { id = 0 }, new { 
-                        message = "Entrada contable creada correctamente",
-                        success = true
-                    });
+                    return Ok(new { message = "Entrada contable creada correctamente" });
                 }
 
-                return BadRequest(new { 
-                    message = "Error al crear la entrada contable en el sistema externo",
-                    success = false
-                });
+                return BadRequest(new { message = "Error al crear la entrada contable en el sistema externo" });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error creating entrada contable");
-                return StatusCode(500, new { 
-                    message = "Error interno del servidor",
-                    error = ex.Message,
-                    success = false
-                });
+                return StatusCode(500, new { message = "Error interno del servidor" });
             }
         }
 
@@ -170,32 +119,11 @@ namespace ActivosFijosAPI.Controllers
         {
             try
             {
-                _logger.LogInformation($"📝 Updating entrada contable {id}...");
+                _logger.LogInformation($"Updating entrada contable {id}...");
 
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest(new 
-                    { 
-                        message = "Datos de entrada inválidos",
-                        errors = ModelState,
-                        success = false
-                    });
-                }
-
-                // Validación adicional: Los débitos deben igualar los créditos
-                var totalDebitos = entrada.detalles.Where(d => d.tipoMovimiento == "DB").Sum(d => d.montoAsiento);
-                var totalCreditos = entrada.detalles.Where(d => d.tipoMovimiento == "CR").Sum(d => d.montoAsiento);
-
-                if (totalDebitos != totalCreditos)
-                {
-                    return BadRequest(new
-                    {
-                        message = "El total de débitos debe igualar el total de créditos",
-                        totalDebitos,
-                        totalCreditos,
-                        diferencia = totalDebitos - totalCreditos,
-                        success = false
-                    });
+                    return BadRequest(ModelState);
                 }
 
                 var success = await _entradaContableService.UpdateAsync(id, entrada);
@@ -203,25 +131,15 @@ namespace ActivosFijosAPI.Controllers
                 if (success)
                 {
                     _logger.LogInformation($"Entrada contable {id} updated successfully");
-                    return Ok(new { 
-                        message = "Entrada contable actualizada correctamente",
-                        success = true
-                    });
+                    return Ok(new { message = "Entrada contable actualizada correctamente" });
                 }
 
-                return BadRequest(new { 
-                    message = "Error al actualizar la entrada contable en el sistema externo",
-                    success = false
-                });
+                return BadRequest(new { message = "Error al actualizar la entrada contable en el sistema externo" });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error updating entrada contable {id}");
-                return StatusCode(500, new { 
-                    message = "Error interno del servidor",
-                    error = ex.Message,
-                    success = false
-                });
+                return StatusCode(500, new { message = "Error interno del servidor" });
             }
         }
 
@@ -240,25 +158,15 @@ namespace ActivosFijosAPI.Controllers
                 if (success)
                 {
                     _logger.LogInformation($"Entrada contable {id} deleted successfully");
-                    return Ok(new { 
-                        message = "Entrada contable eliminada correctamente",
-                        success = true
-                    });
+                    return Ok(new { message = "Entrada contable eliminada correctamente" });
                 }
 
-                return BadRequest(new { 
-                    message = "Error al eliminar la entrada contable del sistema externo",
-                    success = false
-                });
+                return BadRequest(new { message = "Error al eliminar la entrada contable del sistema externo" });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error deleting entrada contable {id}");
-                return StatusCode(500, new { 
-                    message = "Error interno del servidor",
-                    error = ex.Message,
-                    success = false
-                });
+                return StatusCode(500, new { message = "Error interno del servidor" });
             }
         }
 
@@ -270,14 +178,11 @@ namespace ActivosFijosAPI.Controllers
         {
             try
             {
-                _logger.LogInformation($"Contabilizando {entradaIds?.Count ?? 0} entradas...");
+                _logger.LogInformation($"Contabilizando {entradaIds.Count} entradas...");
 
                 if (entradaIds == null || !entradaIds.Any())
                 {
-                    return BadRequest(new { 
-                        message = "Debe proporcionar al menos una entrada para contabilizar",
-                        success = false
-                    });
+                    return BadRequest(new { message = "Debe proporcionar al menos una entrada para contabilizar" });
                 }
 
                 var success = await _entradaContableService.ContabilizarAsync(entradaIds);
@@ -285,26 +190,15 @@ namespace ActivosFijosAPI.Controllers
                 if (success)
                 {
                     _logger.LogInformation($"{entradaIds.Count} entradas contabilizadas successfully");
-                    return Ok(new { 
-                        message = $"{entradaIds.Count} entradas contabilizadas exitosamente",
-                        count = entradaIds.Count,
-                        success = true
-                    });
+                    return Ok(new { message = $"{entradaIds.Count} entradas contabilizadas exitosamente" });
                 }
 
-                return BadRequest(new { 
-                    message = "Error al contabilizar las entradas",
-                    success = false
-                });
+                return BadRequest(new { message = "Error al contabilizar las entradas" });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error contabilizando entradas");
-                return StatusCode(500, new { 
-                    message = "Error interno del servidor",
-                    error = ex.Message,
-                    success = false
-                });
+                return StatusCode(500, new { message = "Error interno del servidor" });
             }
         }
 
@@ -322,10 +216,7 @@ namespace ActivosFijosAPI.Controllers
 
                 if (entradas == null)
                 {
-                    return StatusCode(500, new { 
-                        message = "Error al obtener las estadísticas",
-                        success = false
-                    });
+                    return StatusCode(500, new { message = "Error al obtener las estadísticas" });
                 }
 
                 var stats = new
@@ -335,12 +226,7 @@ namespace ActivosFijosAPI.Controllers
                     porFecha = entradas.GroupBy(e => e.fechaAsiento.Date)
                                      .Select(g => new { fecha = g.Key, cantidad = g.Count() })
                                      .OrderBy(x => x.fecha)
-                                     .ToList(),
-                    porTipoMovimiento = entradas.SelectMany(e => e.detalles)
-                                              .GroupBy(d => d.tipoMovimiento)
-                                              .Select(g => new { tipo = g.Key, total = g.Sum(x => x.montoAsiento) })
-                                              .ToList(),
-                    success = true
+                                     .ToList()
                 };
 
                 _logger.LogInformation($"Retrieved stats for {entradas.Count} entradas contables");
@@ -350,43 +236,56 @@ namespace ActivosFijosAPI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error getting entradas contables stats");
-                return StatusCode(500, new { 
-                    message = "Error interno del servidor",
-                    error = ex.Message,
-                    success = false
-                });
+                return StatusCode(500, new { message = "Error interno del servidor" });
             }
         }
 
         /// <summary>
-        /// Endpoint de prueba para verificar conectividad con API externa
+        /// Verificar el estado de la conexión con la API externa
         /// </summary>
-        [HttpGet("test-connection")]
-        public async Task<IActionResult> TestConnection()
+        [HttpGet("health")]
+        public async Task<IActionResult> HealthCheck()
         {
             try
             {
-                _logger.LogInformation("Testing connection to external API...");
+                _logger.LogInformation("Checking external API health...");
 
-                var entradas = await _entradaContableService.GetAllAsync(null);
+                var isConnected = await ((EntradaContableService)_entradaContableService).TestConnectionAsync();
 
-                return Ok(new
+                var healthStatus = new
                 {
-                    message = "Conexión con API externa exitosa",
-                    timestamp = DateTime.UtcNow,
-                    recordsFound = entradas?.Count ?? 0,
-                    success = entradas != null
-                });
+                    status = isConnected ? "healthy" : "unhealthy",
+                    externalApi = new
+                    {
+                        url = "http://3.80.223.142:3001/api/public/entradas-contables",
+                        connected = isConnected,
+                        timestamp = DateTime.UtcNow
+                    },
+                    localApi = new
+                    {
+                        status = "running",
+                        timestamp = DateTime.UtcNow
+                    }
+                };
+
+                if (isConnected)
+                {
+                    _logger.LogInformation("External API health check passed");
+                    return Ok(healthStatus);
+                }
+                else
+                {
+                    _logger.LogWarning("External API health check failed");
+                    return StatusCode(503, healthStatus);
+                }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error testing connection");
-                return StatusCode(500, new
-                {
-                    message = "Error de conectividad con API externa",
-                    error = ex.Message,
-                    timestamp = DateTime.UtcNow,
-                    success = false
+                _logger.LogError(ex, "Health check error");
+                return StatusCode(500, new { 
+                    status = "error", 
+                    message = "Error checking external API health",
+                    timestamp = DateTime.UtcNow 
                 });
             }
         }

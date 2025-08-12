@@ -10,27 +10,23 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Plus, Trash2, AlertCircle } from "lucide-react"
-import {
-  updateEntradaContable,
-  type UpdateEntradaContableDto,
-  type EntradaContable,
-  type DetalleAsiento,
-} from "@/lib/actions/entradas-contables"
+import type { UpdateEntradaContableDto, EntradaContable, DetalleAsiento } from "@/lib/actions/entradas-contables"
 
-interface EditarEntradaContableModalProps {
+export interface EditarEntradaContableModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  entrada: EntradaContable
-  onSuccess: () => void
+  entrada: EntradaContable | null
+  onSubmit: (data: UpdateEntradaContableDto) => Promise<void>
+  loading: boolean
 }
 
 export function EditarEntradaContableModal({
   open,
   onOpenChange,
   entrada,
-  onSuccess,
+  onSubmit,
+  loading,
 }: EditarEntradaContableModalProps) {
-  const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [formData, setFormData] = useState<UpdateEntradaContableDto>({
     descripcion: "",
@@ -54,7 +50,6 @@ export function EditarEntradaContableModal({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setLoading(true)
     setError(null)
 
     try {
@@ -74,18 +69,9 @@ export function EditarEntradaContableModal({
         return
       }
 
-      const result = await updateEntradaContable(entrada.id!, formData)
-
-      if (result.success) {
-        onSuccess()
-        onOpenChange(false)
-      } else {
-        setError(result.error || "Error al actualizar la entrada contable")
-      }
+      await onSubmit(formData)
     } catch (err) {
       setError(`Error inesperado: ${err instanceof Error ? err.message : String(err)}`)
-    } finally {
-      setLoading(false)
     }
   }
 
@@ -118,6 +104,8 @@ export function EditarEntradaContableModal({
       detalles: prev.detalles.map((detalle, i) => (i === index ? { ...detalle, [field]: value } : detalle)),
     }))
   }
+
+  if (!entrada) return null
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

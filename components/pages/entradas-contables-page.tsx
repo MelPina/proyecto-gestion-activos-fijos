@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Dispatch, SetStateAction } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -9,12 +9,47 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Badge } from "@/components/ui/badge"
-import { BookOpen, Search, Calculator, AlertCircle, Plus, Edit, Trash2, BarChart3 } from "lucide-react"
-
+import { BookOpen, Search, Calculator, AlertCircle, BarChart3, RefreshCw, Plus, Edit, Trash2 } from "lucide-react"
+import {
+  getEntradasContables,
+  contabilizarEntradas,
+  deleteEntradaContable,
+  getEntradasContablesStats,
+  createEntradaContable,
+  updateEntradaContable,
+  type EntradaContable,
+  type EntradaContableFilters,
+  type EntradaContableStats,
+  type CreateEntradaContableDto,
+  type UpdateEntradaContableDto,
+} from "@/lib/actions/entradas-contables"
 import { NuevaEntradaContableModal } from "@/components/modals/nueva-entrada-contable-modal"
 import { EditarEntradaContableModal } from "@/components/modals/editar-entrada-contable-modal"
 import { DeleteEntradaContableModal } from "@/components/modals/delete-entrada-contable-modal"
-import { contabilizarEntradas, deleteEntradaContable, EntradaContable, EntradaContableFilters, EntradaContableStats, getEntradasContables, getEntradasContablesStats } from "@/lib/actions/entradas-contables"
+
+
+interface NuevaEntradaContableModalProps {
+  open: boolean;
+  onOpenChange: Dispatch<SetStateAction<boolean>>;
+  onSubmit: (data: CreateEntradaContableDto) => Promise<void>;
+  loading: boolean;
+}
+
+interface EditarEntradaContableModalProps {
+  open: boolean;
+  onOpenChange: Dispatch<SetStateAction<boolean>>;
+  entrada: EntradaContable | null; // Aceptar null aquí es crucial
+  onSubmit: (data: UpdateEntradaContableDto) => Promise<void>;
+  loading: boolean;
+}
+
+interface DeleteEntradaContableModalProps {
+  open: boolean;
+  onOpenChange: Dispatch<SetStateAction<boolean>>;
+  entrada: EntradaContable | null;
+  onConfirm: () => void;
+  loading: boolean;
+}
 
 export function EntradasContablesPage() {
   const [entradas, setEntradas] = useState<EntradaContable[]>([])
@@ -26,11 +61,13 @@ export function EntradasContablesPage() {
   const [showNewModal, setShowNewModal] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
+  // El tipo `EntradaContable | null` es correcto aquí, pero los componentes que lo usan
+  // deben estar preparados para manejar el `null`.
   const [selectedEntrada, setSelectedEntrada] = useState<EntradaContable | null>(null)
   const [filters, setFilters] = useState<EntradaContableFilters>({
-    fechaInicio: "2024-01-01",
-    fechaFin: "2024-12-31",
-    cuentaId: 3,
+    fechaInicio: "",
+    fechaFin: "",
+    cuentaId:undefined,
   })
 
   const loadData = async () => {
@@ -39,6 +76,8 @@ export function EntradasContablesPage() {
     setSuccess(null)
 
     try {
+      console.log("🔄 Loading entradas contables data...")
+
       const [entradasResult, statsResult] = await Promise.all([
         getEntradasContables(filters),
         getEntradasContablesStats(filters),
@@ -47,15 +86,23 @@ export function EntradasContablesPage() {
       if (entradasResult.success && entradasResult.data) {
         setEntradas(entradasResult.data)
         setSelectedEntradas([])
+        console.log(`✅ Loaded ${entradasResult.data.length} entradas contables`)
       } else {
-        setError(entradasResult.error || "Error al cargar las entradas contables")
+        const errorMsg = entradasResult.error || "Error al cargar las entradas contables"
+        setError(errorMsg)
+        console.error("❌ Error loading entradas:", errorMsg)
       }
 
       if (statsResult.success && statsResult.data) {
         setStats(statsResult.data)
+        console.log("✅ Loaded stats successfully")
+      } else {
+        console.warn("⚠️ Could not load stats:", statsResult.error)
       }
     } catch (err) {
-      setError(`Error inesperado: ${err instanceof Error ? err.message : String(err)}`)
+      const errorMsg = `Error inesperado: ${err instanceof Error ? err.message : String(err)}`
+      setError(errorMsg)
+      console.error("🔥 Unexpected error:", err)
     } finally {
       setLoading(false)
     }
@@ -125,6 +172,65 @@ export function EntradasContablesPage() {
     }
   }
 
+  const handleCreate = async (data: CreateEntradaContableDto) => {
+    setLoading(true)
+    setError(null)
+
+    try {
+      const result = await createEntradaContable(data)
+
+      if (result.success) {
+        setSuccess("Entrada contable creada exitosamente")
+        await loadData()
+        setShowNewModal(false)
+      } else {
+        setError(result.error || "Error al crear la entrada contable")
+      }
+    } catch (err) {
+      setError(`Error inesperado: ${err instanceof Error ? err.message : String(err)}`)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleUpdate = async (data: UpdateEntradaContableDto) => {
+    // Se añade un chequeo para asegurar que selectedEntrada existe y tiene un id
+    if (!selectedEntrada?.id) {
+      setError("No hay entrada seleccionada para actualizar.")
+      return
+    }
+
+    setLoading(true)
+    setError(null)
+
+    try {
+      const result = await updateEntradaContable(selectedEntrada.id, data)
+
+      if (result.success) {
+        setSuccess("Entrada contable actualizada exitosamente")
+        await loadData()
+        setShowEditModal(false)
+        setSelectedEntrada(null)
+      } else {
+        setError(result.error || "Error al actualizar la entrada contable")
+      }
+    } catch (err) {
+      setError(`Error inesperado: ${err instanceof Error ? err.message : String(err)}`)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    if (error || success) {
+      const timer = setTimeout(() => {
+        setError(null)
+        setSuccess(null)
+      }, 5000)
+      return () => clearTimeout(timer)
+    }
+  }, [error, success])
+
   const formatDate = (dateString: string) => {
     try {
       return new Date(dateString).toLocaleDateString("es-ES", {
@@ -149,6 +255,7 @@ export function EntradasContablesPage() {
   }
 
   useEffect(() => {
+    console.log("🚀 EntradasContablesPage mounted, loading initial data...")
     loadData()
   }, [])
 
@@ -158,12 +265,21 @@ export function EntradasContablesPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-white">Entradas Contables</h1>
-          {/* <p className="text-gray-400">Gestión de entradas contables del sistema externo</p> */}
+          <p className="text-gray-400">Gestión de entradas contables del sistema externo</p>
         </div>
         <div className="flex items-center gap-2">
-          <Button onClick={() => setShowNewModal(true)} className="bg-blue-600 hover:bg-blue-700">
+          <Button onClick={() => setShowNewModal(true)} className="bg-green-600 hover:bg-green-700">
             <Plus className="h-4 w-4 mr-2" />
             Nueva Entrada
+          </Button>
+          <Button
+            onClick={loadData}
+            disabled={loading}
+            variant="outline"
+            className="border-gray-600 text-gray-300 hover:bg-gray-700 bg-transparent"
+          >
+            <RefreshCw className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`} />
+            Actualizar
           </Button>
           <BookOpen className="h-8 w-8 text-blue-500" />
         </div>
@@ -258,6 +374,7 @@ export function EntradasContablesPage() {
                 }
                 className="bg-[#1e2028] border-gray-700 text-white"
               />
+              
             </div>
           </div>
           <Button onClick={loadData} disabled={loading} className="bg-blue-600 hover:bg-blue-700">
@@ -304,7 +421,10 @@ export function EntradasContablesPage() {
         <CardContent>
           {loading ? (
             <div className="flex items-center justify-center py-8">
-              <div className="text-gray-400">Cargando entradas contables...</div>
+              <div className="text-gray-400 flex items-center gap-2">
+                <RefreshCw className="h-4 w-4 animate-spin" />
+                Cargando entradas contables...
+              </div>
             </div>
           ) : entradas.length === 0 ? (
             <div className="flex items-center justify-center py-8">
@@ -325,6 +445,7 @@ export function EntradasContablesPage() {
                   <TableHead className="text-gray-300">Fecha Asiento</TableHead>
                   <TableHead className="text-gray-300">Monto Total</TableHead>
                   <TableHead className="text-gray-300">Sistema</TableHead>
+                  <TableHead className="text-gray-300">Detalles</TableHead>
                   <TableHead className="text-gray-300">Acciones</TableHead>
                 </TableRow>
               </TableHeader>
@@ -347,28 +468,33 @@ export function EntradasContablesPage() {
                       </Badge>
                     </TableCell>
                     <TableCell>
+                      <Badge variant="outline" className="border-gray-600 text-gray-300">
+                        {entrada.detalles.length} detalle{entrada.detalles.length !== 1 ? "s" : ""}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
                       <div className="flex items-center gap-2">
                         <Button
-                          variant="ghost"
                           size="sm"
+                          variant="outline"
                           onClick={() => {
                             setSelectedEntrada(entrada)
                             setShowEditModal(true)
                           }}
-                          className="text-blue-400 hover:text-blue-300 hover:bg-blue-900/20"
+                          className="border-gray-600 text-gray-300 hover:bg-gray-700"
                         >
-                          <Edit className="h-4 w-4" />
+                          <Edit className="h-3 w-3" />
                         </Button>
                         <Button
-                          variant="ghost"
                           size="sm"
+                          variant="outline"
                           onClick={() => {
                             setSelectedEntrada(entrada)
                             setShowDeleteModal(true)
                           }}
-                          className="text-red-400 hover:text-red-300 hover:bg-red-900/20"
+                          className="border-red-600 text-red-400 hover:bg-red-900/50"
                         >
-                          <Trash2 className="h-4 w-4" />
+                          <Trash2 className="h-3 w-3" />
                         </Button>
                       </div>
                     </TableCell>
@@ -384,34 +510,25 @@ export function EntradasContablesPage() {
       <NuevaEntradaContableModal
         open={showNewModal}
         onOpenChange={setShowNewModal}
-        onSuccess={() => {
-          loadData()
-          setSuccess("Entrada contable creada exitosamente")
-        }}
+        onSubmit={handleCreate}
+        loading={loading}
       />
 
-      {selectedEntrada && (
-        <EditarEntradaContableModal
-          open={showEditModal}
-          onOpenChange={setShowEditModal}
-          entrada={selectedEntrada}
-          onSuccess={() => {
-            loadData()
-            setSuccess("Entrada contable actualizada exitosamente")
-            setSelectedEntrada(null)
-          }}
-        />
-      )}
+      <EditarEntradaContableModal
+        open={showEditModal}
+        onOpenChange={setShowEditModal}
+        entrada={selectedEntrada}
+        onSubmit={handleUpdate}
+        loading={loading}
+      />
 
-      {selectedEntrada && (
-        <DeleteEntradaContableModal
-          open={showDeleteModal}
-          onOpenChange={setShowDeleteModal}
-          entrada={selectedEntrada}
-          onConfirm={() => handleDelete(selectedEntrada.id!)}
-          loading={loading}
-        />
-      )}
+      {/* <DeleteEntradaContableModal
+        open={showDeleteModal}
+        onOpenChange={setShowDeleteModal}
+        entrada={selectedEntrada}
+        onConfirm={() => selectedEntrada?.id && handleDelete(selectedEntrada.id)}
+        loading={loading}
+      /> */}
     </div>
   )
 }

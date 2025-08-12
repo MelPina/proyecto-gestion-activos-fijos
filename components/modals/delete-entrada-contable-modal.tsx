@@ -6,10 +6,10 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AlertTriangle } from "lucide-react"
 import type { EntradaContable } from "@/lib/actions/entradas-contables"
 
-interface DeleteEntradaContableModalProps {
+export interface DeleteEntradaContableModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  entrada: EntradaContable
+  entrada: EntradaContable | null
   onConfirm: () => void
   loading: boolean
 }
@@ -41,8 +41,10 @@ export function DeleteEntradaContableModal({
   }
 
   const getTotalMonto = () => {
-    return entrada.detalles.reduce((sum, detalle) => sum + detalle.montoAsiento, 0)
+    return entrada?.detalles.reduce((sum, detalle) => sum + detalle.montoAsiento, 0) || 0
   }
+
+  if (!entrada) return null
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

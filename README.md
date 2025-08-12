@@ -14,14 +14,6 @@ Un sistema completo de gestión de activos fijos desarrollado con Next.js y ASP.
 - **Depreciación**: Cálculo automático de depreciación de activos
 - **Entradas Contables**: Integración con API externa para gestión contable
 
-### Funcionalidades Técnicas
-- **Autenticación**: Sistema de login con bypass para desarrollo
-- **Tema Oscuro**: Interfaz adaptable con modo oscuro/claro
-- **API REST**: Backend completo con Entity Framework Core
-- **Base de Datos**: MySQL con migraciones automáticas
-- **Integración Externa**: Conexión con API de entradas contables
-- **Responsive**: Diseño adaptable para móviles y escritorio
-
 ## Tecnologías
 
 ### Frontend
@@ -116,11 +108,8 @@ La aplicación estará disponible en: `http://localhost:3000`
   "ExternalApi": {
     "EntradasContables": {
       "BaseUrl": "http://3.80.223.142:3001/api/public/entradas-contables",
-      "Timeout": 30,
-      "DefaultFilters": {
-        "CuentaId": 3,
-        "SistemaAuxiliarId": 4
-      }
+      "Timeout": 30
+     
     }
   }
 }
