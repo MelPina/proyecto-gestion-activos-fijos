@@ -1,6 +1,6 @@
 "use server"
 
-import { apiClient, type ApiResponse } from "@/lib/api-client"
+const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:5001/api"
 
 export interface DetalleAsiento {
   cuentaId: number
@@ -43,223 +43,154 @@ export interface EntradaContableStats {
   }>
 }
 
-export async function getEntradasContables(filters?: EntradaContableFilters): Promise<ApiResponse<EntradaContable[]>> {
+export interface ApiResponse<T = any> {
+  success: boolean
+  data?: T
+  message?: string
+  error?: string
+}
+
+async function callLocalAPI<T>(endpoint: string, options?: RequestInit): Promise<ApiResponse<T>> {
   try {
-    console.log("🔍 Getting entradas contables...")
+    const url = `${API_BASE_URL}${endpoint}`
+    console.log(`🌐 Local API Call: ${url}`)
 
-    let endpoint = "/entradas-contables"
-    const params = new URLSearchParams()
+    const response = await fetch(url, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options?.headers,
+      },
+    })
 
-    if (filters?.fechaInicio) {
-      params.append("fechaInicio", filters.fechaInicio)
-    }
-    if (filters?.fechaFin) {
-      params.append("fechaFin", filters.fechaFin)
-    }
-    if (filters?.cuentaId) {
-      params.append("cuentaId", filters.cuentaId.toString())
-    }
+    console.log(`📡 Local API Response: ${response.status} ${response.statusText}`)
 
-    if (params.toString()) {
-      endpoint += `?${params.toString()}`
-    }
-
-    const result = await apiClient.get<EntradaContable[]>(endpoint)
-
-    if (result.success && result.data) {
-      console.log(`✅ Retrieved ${result.data.length} entradas contables`)
+    if (!response.ok) {
+      const errorText = await response.text()
+      console.error(`❌ Local API Error: ${errorText}`)
       return {
-        success: true,
-        data: result.data,
+        success: false,
+        error: `Error ${response.status}: ${response.statusText}`,
       }
     }
 
+    const data = await response.json()
+    console.log(`✅ Local API Success:`, data)
     return {
-      success: false,
-      error: result.error || "Error al obtener las entradas contables",
+      success: true,
+      data,
     }
   } catch (error) {
-    console.error("❌ Error getting entradas contables:", error)
+    console.error("🔥 Local API Request Failed:", error)
     return {
       success: false,
-      error: "Error de conexión",
+      error: "Error de conexión con la API local",
     }
   }
 }
 
-export async function getEntradaContableById(id: number): Promise<ApiResponse<EntradaContable>> {
-  try {
-    console.log(`🔍 Getting entrada contable ${id}...`)
+export async function checkApiHealth(): Promise<ApiResponse<any>> {
+  console.log("🔍 Checking API health...")
+  return await callLocalAPI("/EntradasContables/health")
+}
 
-    const result = await apiClient.get<EntradaContable>(`/entradas-contables/${id}`)
+export async function getEntradasContables(filters?: EntradaContableFilters): Promise<ApiResponse<EntradaContable[]>> {
+  console.log("🔍 Getting entradas contables from local API...")
 
-    if (result.success && result.data) {
-      console.log(`✅ Retrieved entrada contable ${id}`)
-      return {
-        success: true,
-        data: result.data,
-      }
-    }
+  let endpoint = "/EntradasContables"
+  const params = new URLSearchParams()
 
-    return {
-      success: false,
-      error: result.error || "Entrada contable no encontrada",
-    }
-  } catch (error) {
-    console.error(`❌ Error getting entrada contable ${id}:`, error)
-    return {
-      success: false,
-      error: "Error de conexión",
-    }
+  if (filters?.fechaInicio) params.append("fechaInicio", filters.fechaInicio)
+  if (filters?.fechaFin) params.append("fechaFin", filters.fechaFin)
+  if (filters?.cuentaId) params.append("cuentaId", filters.cuentaId.toString())
+
+  if (params.toString()) {
+    endpoint = `${endpoint}?${params.toString()}`
   }
+
+  const result = await callLocalAPI<EntradaContable[]>(endpoint)
+
+  if (result.success && result.data) {
+    console.log(`✅ Retrieved ${result.data.length} entradas contables from local API`)
+  }
+
+  return result
 }
 
 export async function createEntradaContable(entrada: CreateEntradaContableDto): Promise<ApiResponse<void>> {
-  try {
-    console.log("📝 Creating entrada contable...")
+  console.log("📝 Creating entrada contable in local API...")
 
-    const result = await apiClient.post<void>("/entradas-contables", entrada)
-
-    if (result.success) {
-      console.log("✅ Entrada contable created successfully")
-      return {
-        success: true,
-      }
-    }
-
-    return {
-      success: false,
-      error: result.error || "Error al crear la entrada contable",
-    }
-  } catch (error) {
-    console.error("❌ Error creating entrada contable:", error)
-    return {
-      success: false,
-      error: "Error de conexión",
-    }
+  const entradaConSistema = {
+    ...entrada,
+    sistemaAuxiliarId: 1, // ID por defecto para el sistema
   }
+
+  const result = await callLocalAPI<void>("/EntradasContables", {
+    method: "POST",
+    body: JSON.stringify(entradaConSistema),
+  })
+
+  if (result.success) {
+    console.log("✅ Entrada contable created in local API")
+  }
+
+  return result
 }
 
 export async function updateEntradaContable(id: number, entrada: UpdateEntradaContableDto): Promise<ApiResponse<void>> {
-  try {
-    console.log(`📝 Updating entrada contable ${id}...`)
+  console.log(`📝 Updating entrada contable ${id} in local API...`)
 
-    const result = await apiClient.put<void>(`/entradas-contables/${id}`, entrada)
-
-    if (result.success) {
-      console.log(`✅ Entrada contable ${id} updated successfully`)
-      return {
-        success: true,
-      }
-    }
-
-    return {
-      success: false,
-      error: result.error || "Error al actualizar la entrada contable",
-    }
-  } catch (error) {
-    console.error(`❌ Error updating entrada contable ${id}:`, error)
-    return {
-      success: false,
-      error: "Error de conexión",
-    }
+  const entradaConSistema = {
+    ...entrada,
+    sistemaAuxiliarId: 1, // ID por defecto para el sistema
   }
+
+  const result = await callLocalAPI<void>(`/EntradasContables/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(entradaConSistema),
+  })
+
+  if (result.success) {
+    console.log(`✅ Entrada contable ${id} updated in local API`)
+  }
+
+  return result
 }
 
 export async function deleteEntradaContable(id: number): Promise<ApiResponse<void>> {
-  try {
-    console.log(`🗑️ Deleting entrada contable ${id}...`)
+  console.log(`🗑️ Deleting entrada contable ${id} from local API...`)
 
-    const result = await apiClient.delete<void>(`/entradas-contables/${id}`)
+  const result = await callLocalAPI<void>(`/EntradasContables/${id}`, {
+    method: "DELETE",
+  })
 
-    if (result.success) {
-      console.log(`✅ Entrada contable ${id} deleted successfully`)
-      return {
-        success: true,
-      }
-    }
-
-    return {
-      success: false,
-      error: result.error || "Error al eliminar la entrada contable",
-    }
-  } catch (error) {
-    console.error(`❌ Error deleting entrada contable ${id}:`, error)
-    return {
-      success: false,
-      error: "Error de conexión",
-    }
+  if (result.success) {
+    console.log(`✅ Entrada contable ${id} deleted from local API`)
   }
+
+  return result
 }
 
 export async function contabilizarEntradas(entradaIds: number[]): Promise<ApiResponse<void>> {
-  try {
-    console.log(`📊 Contabilizando ${entradaIds.length} entradas...`)
+  console.log(`📊 Contabilizando ${entradaIds.length} entradas in local API...`)
 
-    const result = await apiClient.post<void>("/entradas-contables/contabilizar", entradaIds)
+  const result = await callLocalAPI<void>("/EntradasContables/contabilizar", {
+    method: "POST",
+    body: JSON.stringify(entradaIds),
+  })
 
-    if (result.success) {
-      console.log(`✅ ${entradaIds.length} entradas contabilizadas successfully`)
-      return {
-        success: true,
-      }
-    }
-
-    return {
-      success: false,
-      error: result.error || "Error al contabilizar las entradas",
-    }
-  } catch (error) {
-    console.error("❌ Error contabilizando entradas:", error)
-    return {
-      success: false,
-      error: "Error de conexión",
-    }
+  if (result.success) {
+    console.log(`✅ ${entradaIds.length} entradas contabilizadas in local API`)
   }
+
+  return result
 }
 
 export async function getEntradasContablesStats(
   filters?: EntradaContableFilters,
 ): Promise<ApiResponse<EntradaContableStats>> {
-  try {
-    console.log("📊 Getting entradas contables stats...")
-
-    let endpoint = "/entradas-contables/stats"
-    const params = new URLSearchParams()
-
-    if (filters?.fechaInicio) {
-      params.append("fechaInicio", filters.fechaInicio)
-    }
-    if (filters?.fechaFin) {
-      params.append("fechaFin", filters.fechaFin)
-    }
-    if (filters?.cuentaId) {
-      params.append("cuentaId", filters.cuentaId.toString())
-    }
-
-    if (params.toString()) {
-      endpoint += `?${params.toString()}`
-    }
-
-    const result = await apiClient.get<EntradaContableStats>(endpoint)
-
-    if (result.success && result.data) {
-      console.log("✅ Retrieved entradas contables stats")
-      return {
-        success: true,
-        data: result.data,
-      }
-    }
-
-    return {
-      success: false,
-      error: result.error || "Error al obtener las estadísticas",
-    }
-  } catch (error) {
-    console.error("❌ Error getting entradas contables stats:", error)
-    return {
-      success: false,
-      error: "Error de conexión",
-    }
-  }
+  console.log("📊 Getting entradas contables stats from local API...")
+  return await callLocalAPI<EntradaContableStats>(
+    `/EntradasContables/stats?${new URLSearchParams(filters as any).toString()}`,
+  )
 }

@@ -10,20 +10,16 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Plus, Trash2, AlertCircle } from "lucide-react"
-import {
-  createEntradaContable,
-  type CreateEntradaContableDto,
-  type DetalleAsiento,
-} from "@/lib/actions/entradas-contables"
+import type { CreateEntradaContableDto, DetalleAsiento } from "@/lib/actions/entradas-contables"
 
-interface NuevaEntradaContableModalProps {
+export interface NuevaEntradaContableModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  onSuccess: () => void
+  onSubmit: (data: CreateEntradaContableDto) => Promise<void>
+  loading: boolean
 }
 
-export function NuevaEntradaContableModal({ open, onOpenChange, onSuccess }: NuevaEntradaContableModalProps) {
-  const [loading, setLoading] = useState(false)
+export function NuevaEntradaContableModal({ open, onOpenChange, onSubmit, loading }: NuevaEntradaContableModalProps) {
   const [error, setError] = useState<string | null>(null)
   const [formData, setFormData] = useState<CreateEntradaContableDto>({
     descripcion: "",
@@ -39,7 +35,6 @@ export function NuevaEntradaContableModal({ open, onOpenChange, onSuccess }: Nue
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setLoading(true)
     setError(null)
 
     try {
@@ -59,30 +54,22 @@ export function NuevaEntradaContableModal({ open, onOpenChange, onSuccess }: Nue
         return
       }
 
-      const result = await createEntradaContable(formData)
+      await onSubmit(formData)
 
-      if (result.success) {
-        onSuccess()
-        onOpenChange(false)
-        // Reset form
-        setFormData({
-          descripcion: "",
-          fechaAsiento: new Date().toISOString().split("T")[0],
-          detalles: [
-            {
-              cuentaId: 65,
-              tipoMovimiento: "DB",
-              montoAsiento: 0,
-            },
-          ],
-        })
-      } else {
-        setError(result.error || "Error al crear la entrada contable")
-      }
+      // Reset form on success
+      setFormData({
+        descripcion: "",
+        fechaAsiento: new Date().toISOString().split("T")[0],
+        detalles: [
+          {
+            cuentaId: 65,
+            tipoMovimiento: "DB",
+            montoAsiento: 0,
+          },
+        ],
+      })
     } catch (err) {
       setError(`Error inesperado: ${err instanceof Error ? err.message : String(err)}`)
-    } finally {
-      setLoading(false)
     }
   }
 
