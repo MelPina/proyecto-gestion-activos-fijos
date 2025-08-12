@@ -77,8 +77,6 @@ export interface TipoPersonaStatsDto {
   cantidad: number
 }
 
-<<<<<<< HEAD
-=======
 export interface TipoActivoDto {
   id: number
   descripcion: string
@@ -101,7 +99,6 @@ export interface UpdateTipoActivoDto {
   activo: boolean
 }
 
->>>>>>> origin/dev-Mel
 export interface ActivoFijoDto {
   id: number
   descripcion: string
@@ -109,11 +106,7 @@ export interface ActivoFijoDto {
   departamentoDescripcion: string
   tipoActivoId: number
   tipoActivoDescripcion: string
-<<<<<<< HEAD
-  fechaAdquisicion: string // ISO string
-=======
   fechaAdquisicion: string
->>>>>>> origin/dev-Mel
   valor: number
   depreciacionAcumulada: number
   estado: number
@@ -124,11 +117,7 @@ export interface CreateActivoFijoDto {
   descripcion: string
   departamentoId?: number
   tipoActivoId: number
-<<<<<<< HEAD
-  fechaAdquisicion: string // ISO string
-=======
   fechaAdquisicion: string
->>>>>>> origin/dev-Mel
   valor: number
 }
 
@@ -136,11 +125,7 @@ export interface UpdateActivoFijoDto {
   descripcion: string
   departamentoId?: number
   tipoActivoId: number
-<<<<<<< HEAD
-  fechaAdquisicion: string // ISO string
-=======
   fechaAdquisicion: string
->>>>>>> origin/dev-Mel
   valor: number
   estado: number
 }
@@ -153,16 +138,6 @@ export interface ActivoFijoStatsDto {
   valorTotal: number
 }
 
-<<<<<<< HEAD
-export interface TipoActivoDto {
-  id: number
-  descripcion: string
-  cuenta_contable_compra: string
-  cuenta_contable_depreciacion: string
-  activo: boolean
-}
-
-=======
 export interface UsuarioDto {
   id: number
   nombre: string
@@ -357,4 +332,3 @@ export const apiClient = {
     }
   },
 }
->>>>>>> origin/dev-Mel
