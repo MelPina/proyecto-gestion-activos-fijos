@@ -93,13 +93,5 @@ export async function getAsientosDepreciacion(anio: number, mes?: number) {
   }
 }
 
-// 🔹 Obtener meses de proceso disponibles
-export async function getMesesProceso() {
-  try {
-    const response = await apiClient.get<{ id: number; descripcion: string }[]>("/depreciaciones/meses")
-    return response.data
-  } catch (error) {
-    console.error("Error obteniendo meses:", error)
-    return []
-  }
-}
+
+

@@ -46,9 +46,12 @@ namespace ActivosFijosAPI.Models
 
 
         [Required]
+        [ForeignKey("ActivoFijoId")]
         public virtual ActivoFijo? ActivoFijo { get; set; }
         [Required]
+        [ForeignKey("TipoActivod")]
         public virtual TipoActivo? TipoActivo { get; set; }
+
         public virtual ICollection<AsientoContable> AsientosContables { get; set; } = new List<AsientoContable>();
     }
 

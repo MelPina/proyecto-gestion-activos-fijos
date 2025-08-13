@@ -15,93 +15,104 @@ namespace ActivoFijoAPI.Services
             _context = context;
         }
 
-public async Task<IEnumerable<DepreciacionDto>> GetAllAsync(
-        string? search = null,
-        int? id = null,
-        int? anio = null,
-        int? mes = null,
-        int? activoFijoId = null,
-        DateTime? fechaAsiento = null,
-        string? cuentaCompra = null,
-        string? cuentaDepreciacion = null
-    )
-    {
-        var query = _context.Depreciaciones.AsQueryable();
-
-        // Filtro por búsqueda general
-        if (!string.IsNullOrEmpty(search))
+        public async Task<IEnumerable<DepreciacionDto>> GetAllAsync(
+            string? search = null,
+            int? id = null,
+            int? anio = null,
+            int? mes = null,
+            int? activoFijoId = null,
+            DateTime? fechaAsiento = null,
+            string? cuentaCompra = null,
+            string? cuentaDepreciacion = null
+        )
         {
-            query = query.Where(d =>
-                d.CuentaCompra.Contains(search) ||
-                d.CuentaDepreciacion.Contains(search)
-            );
+            var query = _context.Depreciaciones
+                .Include(d => d.ActivoFijo) // Incluimos para usar en cálculo
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(d =>
+                    d.CuentaCompra.Contains(search) ||
+                    d.CuentaDepreciacion.Contains(search)
+                );
+            }
+
+            if (id.HasValue)
+                query = query.Where(d => d.Id == id.Value);
+
+            if (anio.HasValue)
+                query = query.Where(d => d.AnioProceso == anio.Value);
+
+            if (mes.HasValue)
+                query = query.Where(d => d.MesProceso == mes.Value);
+
+            if (activoFijoId.HasValue)
+                query = query.Where(d => d.ActivoFijoId == activoFijoId.Value);
+
+            if (fechaAsiento.HasValue)
+                query = query.Where(d => d.FechaProceso.Date == fechaAsiento.Value.Date);
+
+            if (!string.IsNullOrEmpty(cuentaCompra))
+                query = query.Where(d => d.CuentaCompra == cuentaCompra);
+
+            if (!string.IsNullOrEmpty(cuentaDepreciacion))
+                query = query.Where(d => d.CuentaDepreciacion == cuentaDepreciacion);
+
+            var depreciaciones = await query
+                .OrderByDescending(d => d.FechaProceso)
+                .ToListAsync();
+
+            return depreciaciones.Select(d =>
+            {
+                var categoria = CategorizarActivo(d.ActivoFijo.TipoActivoId, d.CuentaDepreciacion);
+                var porcentaje = DefinirTasaDepreciacion(categoria);
+                var montoDepreciado = CalcularMontoDepreciado(d.ActivoFijo, d.FechaProceso, categoria, porcentaje) ?? 0;
+
+                return new DepreciacionDto
+                {
+                    Id = d.Id,
+                    Anio = d.AnioProceso,
+                    Mes = d.MesProceso,
+                    ActivoFijoId = d.ActivoFijoId,
+                    FechaProceso = d.FechaProceso,
+                    MontoDepreciado = montoDepreciado,
+                    DepreciacionAcumulada = -Math.Abs(montoDepreciado),
+                    CuentaCompra = d.CuentaCompra,
+                    CuentaDepreciacion = d.CuentaDepreciacion,
+                    FechaCreacion = d.FechaCreacion
+                };
+            });
         }
 
-        if (id.HasValue)
-            query = query.Where(d => d.Id == id.Value);
-
-        if (anio.HasValue)
-            query = query.Where(d => d.AnioProceso == anio.Value);
-
-        if (mes.HasValue)
-            query = query.Where(d => d.MesProceso == mes.Value);
-
-        if (activoFijoId.HasValue)
-            query = query.Where(d => d.ActivoFijoId == activoFijoId.Value);
-
-        if (fechaAsiento.HasValue)
-            query = query.Where(d => d.FechaProceso.Date == fechaAsiento.Value.Date);
-
-        if (!string.IsNullOrEmpty(cuentaCompra))
-            query = query.Where(d => d.CuentaCompra == cuentaCompra);
-
-        if (!string.IsNullOrEmpty(cuentaDepreciacion))
-            query = query.Where(d => d.CuentaDepreciacion == cuentaDepreciacion);
-
-        var depreciaciones = await query
-            .OrderByDescending(d => d.FechaProceso)
-            .ToListAsync();
-
-        // Mapeo a DTO
-        return depreciaciones.Select(d => new DepreciacionDto
+        public async Task<DepreciacionDto?> GetByIdAsync(int id)
         {
-            Id = d.Id,
-            Anio = d.AnioProceso,
-            Mes = d.MesProceso,
-            ActivoFijoId = d.ActivoFijoId,
-            FechaProceso = d.FechaProceso,
-            MontoDepreciado = d.MontoDepreciado,
-            DepreciacionAcumulada = d.MontoDepreciado * -1, // en negativo
-            CuentaCompra = d.CuentaCompra,
-            CuentaDepreciacion = d.CuentaDepreciacion,
-            FechaCreacion = d.FechaCreacion
-        });
-    }
+            var depreciacion = await _context.Depreciaciones
+                .Include(d => d.ActivoFijo)
+                .FirstOrDefaultAsync(d => d.Id == id);
 
-    public async Task<DepreciacionDto?> GetByIdAsync(int id)
-    {
-        var depreciacion = await _context.Depreciaciones
-            .FirstOrDefaultAsync(d => d.Id == id);
-
-        if (depreciacion == null) return null;
-
-        return new DepreciacionDto
-        {
-            Id = depreciacion.Id,
-            Anio = depreciacion.AnioProceso,
-            Mes = depreciacion.MesProceso,
-            ActivoFijoId = depreciacion.ActivoFijoId,
-            FechaProceso = depreciacion.FechaProceso,
-            MontoDepreciado = depreciacion.MontoDepreciado,
-            DepreciacionAcumulada = depreciacion.MontoDepreciado * -1, // negativo
-            CuentaCompra = depreciacion.CuentaCompra,
-            CuentaDepreciacion = depreciacion.CuentaDepreciacion,
-            FechaCreacion = depreciacion.FechaCreacion
-        };
-    }
+            if (depreciacion == null) return null;
 
 
 
+                var categoria = CategorizarActivo(depreciacion.ActivoFijo.TipoActivoId, depreciacion.CuentaDepreciacion);
+                var porcentaje = DefinirTasaDepreciacion(categoria);
+                var montoDepreciado = CalcularMontoDepreciado(depreciacion.ActivoFijo, depreciacion.FechaProceso, categoria, porcentaje) ?? 0;
+
+                return new DepreciacionDto
+                {
+                    Id = depreciacion.Id,
+                    Anio = depreciacion.AnioProceso,
+                    Mes = depreciacion.MesProceso,
+                    ActivoFijoId = depreciacion.ActivoFijoId,
+                    FechaProceso = depreciacion.FechaProceso,
+                    MontoDepreciado = montoDepreciado,
+                    DepreciacionAcumulada = -Math.Abs(montoDepreciado),
+                    CuentaCompra = depreciacion.CuentaCompra,
+                    CuentaDepreciacion = depreciacion.CuentaDepreciacion,
+                    FechaCreacion = depreciacion.FechaCreacion
+                };
+            }
 
         public int? CategorizarActivo(int tipoActivoId, string? cuentaDepreciacion)
         {
@@ -152,7 +163,7 @@ public async Task<IEnumerable<DepreciacionDto>> GetAllAsync(
             return Math.Round(monto, 2);
         }
 
-    
+        // Este método se queda igual, solo para reportes globales
         public decimal? CalcularDepreciacionAcumuladaTotalPorActivo(ActivoFijo activo, DateTime fechaProceso, int? categoria, decimal? porcentaje)
         {
             porcentaje = DefinirTasaDepreciacion(categoria);
@@ -180,7 +191,6 @@ public async Task<IEnumerable<DepreciacionDto>> GetAllAsync(
             if (acumulada > activo.Valor) acumulada = activo.Valor;
             return Math.Round(acumulada, 2);
         }
-
-        }
     }
-
+    
+}

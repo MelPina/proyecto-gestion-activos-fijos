@@ -29,6 +29,9 @@ namespace ActivosFijosAPI.Controllers
             try
             {
                 var depreciaciones = await _depreciacionService.GetAllAsync(search, id, anio, mes, activoFijoId, fechaAsiento, cuentaCompra,cuentaDepreciacion);
+                if (depreciaciones == null)
+                    return NotFound("Depreciacion no encontrado");
+
                 return Ok(depreciaciones);
             }
             catch (Exception ex)

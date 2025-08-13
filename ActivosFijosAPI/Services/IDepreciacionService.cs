@@ -24,10 +24,6 @@ namespace ActivosFijosAPI.Services
         decimal? DefinirTasaDepreciacion(int? categoria);
         decimal? CalcularMontoDepreciado(ActivoFijo activoFijo, DateTime fechaProceso, int? categoria, decimal? porcentaje);
         decimal? CalcularDepreciacionAcumuladaTotalPorActivo(ActivoFijo activoFijo, DateTime fechaProceso, int? categoria, decimal? porcentaje);
-
-        // CRUD
-
-        // Reportes
         
     
     }
