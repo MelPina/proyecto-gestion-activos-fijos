@@ -1,0 +1,39 @@
+version: '3.8'
+services:
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: gestion_activos
+      MYSQL_USER: gestion
+      MYSQL_PASSWORD: gestionpass
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  api:
+    build:
+      context: .
+      dockerfile: ActivosFijosAPI/Dockerfile
+    environment:
+      ConnectionStrings__DefaultConnection: "server=db;port=3306;database=gestion_activos;user=gestion;password=gestionpass"
+      ExternalApi__BaseUrl: "http://3.80.223.142:3001/api/public/entradas-contables"
+      ExternalApi__ApiKey: "ak_live_961bea0d3b66b4e10ba6ed563cfe430921fe2bf11ee29191"
+    depends_on:
+      - db
+    ports:
+      - "5000:80"
+
+  frontend:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+
+volumes:
+  db_data:

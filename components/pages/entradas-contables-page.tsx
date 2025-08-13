@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, Dispatch, SetStateAction } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -27,30 +27,6 @@ import { NuevaEntradaContableModal } from "@/components/modals/nueva-entrada-con
 import { EditarEntradaContableModal } from "@/components/modals/editar-entrada-contable-modal"
 import { DeleteEntradaContableModal } from "@/components/modals/delete-entrada-contable-modal"
 
-
-interface NuevaEntradaContableModalProps {
-  open: boolean;
-  onOpenChange: Dispatch<SetStateAction<boolean>>;
-  onSubmit: (data: CreateEntradaContableDto) => Promise<void>;
-  loading: boolean;
-}
-
-interface EditarEntradaContableModalProps {
-  open: boolean;
-  onOpenChange: Dispatch<SetStateAction<boolean>>;
-  entrada: EntradaContable | null; // Aceptar null aquí es crucial
-  onSubmit: (data: UpdateEntradaContableDto) => Promise<void>;
-  loading: boolean;
-}
-
-interface DeleteEntradaContableModalProps {
-  open: boolean;
-  onOpenChange: Dispatch<SetStateAction<boolean>>;
-  entrada: EntradaContable | null;
-  onConfirm: () => void;
-  loading: boolean;
-}
-
 export function EntradasContablesPage() {
   const [entradas, setEntradas] = useState<EntradaContable[]>([])
   const [stats, setStats] = useState<EntradaContableStats | null>(null)
@@ -61,13 +37,11 @@ export function EntradasContablesPage() {
   const [showNewModal, setShowNewModal] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
-  // El tipo `EntradaContable | null` es correcto aquí, pero los componentes que lo usan
-  // deben estar preparados para manejar el `null`.
   const [selectedEntrada, setSelectedEntrada] = useState<EntradaContable | null>(null)
   const [filters, setFilters] = useState<EntradaContableFilters>({
     fechaInicio: "",
     fechaFin: "",
-    cuentaId:undefined,
+    cuentaId: undefined,
   })
 
   const loadData = async () => {
@@ -194,11 +168,7 @@ export function EntradasContablesPage() {
   }
 
   const handleUpdate = async (data: UpdateEntradaContableDto) => {
-    // Se añade un chequeo para asegurar que selectedEntrada existe y tiene un id
-    if (!selectedEntrada?.id) {
-      setError("No hay entrada seleccionada para actualizar.")
-      return
-    }
+    if (!selectedEntrada?.id) return
 
     setLoading(true)
     setError(null)
@@ -243,15 +213,14 @@ export function EntradasContablesPage() {
     }
   }
 
-  const formatCurrency = (amount: number) => {
+  const formatCurrency = (amount: number | null | undefined) => {
+    if (amount === null || amount === undefined || isNaN(amount)) {
+      return "RD$0.00"
+    }
     return new Intl.NumberFormat("es-DO", {
       style: "currency",
       currency: "DOP",
     }).format(amount)
-  }
-
-  const getTotalMonto = (entrada: EntradaContable) => {
-    return entrada.detalles.reduce((sum, detalle) => sum + detalle.montoAsiento, 0)
   }
 
   useEffect(() => {
@@ -368,13 +337,12 @@ export function EntradasContablesPage() {
               <Input
                 id="cuentaId"
                 type="number"
-                value={filters.cuentaId}
+                value={filters.cuentaId || ""}
                 onChange={(e) =>
                   setFilters((prev) => ({ ...prev, cuentaId: Number.parseInt(e.target.value) || undefined }))
                 }
                 className="bg-[#1e2028] border-gray-700 text-white"
               />
-              
             </div>
           </div>
           <Button onClick={loadData} disabled={loading} className="bg-blue-600 hover:bg-blue-700">
@@ -443,10 +411,8 @@ export function EntradasContablesPage() {
                   <TableHead className="text-gray-300">Id. Transacción</TableHead>
                   <TableHead className="text-gray-300">Descripción</TableHead>
                   <TableHead className="text-gray-300">Fecha Asiento</TableHead>
-                  <TableHead className="text-gray-300">Monto Total</TableHead>
-                  <TableHead className="text-gray-300">Sistema</TableHead>
-                  <TableHead className="text-gray-300">Detalles</TableHead>
-                  <TableHead className="text-gray-300">Acciones</TableHead>
+                  {/* <TableHead className="text-gray-300">Monto</TableHead> */}
+                  {/* <TableHead className="text-gray-300">Acciones</TableHead> */}
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -460,19 +426,16 @@ export function EntradasContablesPage() {
                     </TableCell>
                     <TableCell className="text-white font-medium">{entrada.id}</TableCell>
                     <TableCell className="text-gray-300">{entrada.descripcion}</TableCell>
-                    <TableCell className="text-gray-300">{formatDate(entrada.fechaAsiento)}</TableCell>
-                    <TableCell className="text-gray-300">{formatCurrency(getTotalMonto(entrada))}</TableCell>
-                    <TableCell>
-                      <Badge variant="secondary" className="bg-blue-900/50 text-blue-300">
-                        Sistema {entrada.sistemaAuxiliarId}
-                      </Badge>
+                    <TableCell className="text-gray-300">
+                      {entrada.fechaAsiento ? formatDate(entrada.fechaAsiento) : "Fecha no disponible"}
                     </TableCell>
-                    <TableCell>
-                      <Badge variant="outline" className="border-gray-600 text-gray-300">
-                        {entrada.detalles.length} detalle{entrada.detalles.length !== 1 ? "s" : ""}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
+                    {/* <TableCell className="text-gray-300">
+                      {entrada.montoAsiento !== undefined
+                        ? formatCurrency(entrada.montoAsiento)
+                        : "Monto no definido"}
+                    </TableCell> */}
+
+                    {/* <TableCell>
                       <div className="flex items-center gap-2">
                         <Button
                           size="sm"
@@ -485,7 +448,7 @@ export function EntradasContablesPage() {
                         >
                           <Edit className="h-3 w-3" />
                         </Button>
-                        <Button
+                        {/* <Button
                           size="sm"
                           variant="outline"
                           onClick={() => {
@@ -495,12 +458,13 @@ export function EntradasContablesPage() {
                           className="border-red-600 text-red-400 hover:bg-red-900/50"
                         >
                           <Trash2 className="h-3 w-3" />
-                        </Button>
+                        </Button> 
                       </div>
-                    </TableCell>
+                    </TableCell>  */}
                   </TableRow>
                 ))}
               </TableBody>
+
             </Table>
           )}
         </CardContent>
@@ -522,13 +486,13 @@ export function EntradasContablesPage() {
         loading={loading}
       />
 
-      {/* <DeleteEntradaContableModal
+      <DeleteEntradaContableModal
         open={showDeleteModal}
         onOpenChange={setShowDeleteModal}
         entrada={selectedEntrada}
         onConfirm={() => selectedEntrada?.id && handleDelete(selectedEntrada.id)}
         loading={loading}
-      /> */}
+      />
     </div>
   )
 }
